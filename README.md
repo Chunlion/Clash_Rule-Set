@@ -4,12 +4,17 @@
 
 适用于 **Mihomo 核心** 的工具（OpenWrt Clash/Nikki 插件、Clashmi、FlClash、Clash Meta 等）。
 
-## 使用说明
+## YAML使用说明
 
-1. 下载 `Clash_Rule-Set.yaml`
+1. 下载 `Chunlion_Rule-Set_DNS-Leak.yaml`
 2. 将文件中的 `订阅链接` 替换为你的机场订阅 URL
 3. 将文件中的 `机场名` 替换为你的机场名称
 4. 导入 Clash / Mihomo 客户端
+
+## 全局覆写使用说明
+
+1. 下载 `Chunlion_Rule-Set_DNS-Leak_覆写.js`
+2. 将js内容复制粘贴到全局覆写脚本中
 
 ## 自定义分流
 
