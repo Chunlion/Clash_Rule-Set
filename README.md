@@ -17,8 +17,8 @@
 
 | 策略组    | 说明                           |
 |-----------|-------------------------------|
-| Bilibili  | B 站流量默认直连，可切换至港台节点 |
-| Steam     | Steam 游戏平台分流              |
+|   Wise    | Wise默认直连 |
+|   Games   | 游戏平台分流 |
 
 ## DNS 防泄漏说明
 
@@ -27,4 +27,4 @@
 1. **`enhanced-mode: fake-ip`** — 所有 DNS 请求返回虚假 IP，真实解析在代理侧完成，避免本地 DNS 泄漏
 2. **`nameserver-policy`** — 国内域名走国内加密 DNS（腾讯/阿里 DoH）；其余域名走 Cloudflare / Google DoH
 3. **`proxy-server-nameserver`** — 单独配置代理节点地址的解析 DNS，防止节点 IP 被污染
-4. **`respect-rules: true`** — DNS 查询遵循分流规则，确保境外域名的 DNS 请求同样走代理通道
+4. **`strict-route: true`** — 严格路由模式，打开后不影响速度，防止DNS泄露
