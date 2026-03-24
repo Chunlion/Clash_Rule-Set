@@ -33,3 +33,7 @@
 2. **`nameserver-policy`** — 国内域名走国内加密 DNS（腾讯/阿里 DoH）；其余域名走 Cloudflare / Google DoH
 3. **`proxy-server-nameserver`** — 单独配置代理节点地址的解析 DNS，防止节点 IP 被污染
 4. **`strict-route: true`** — 严格路由模式，打开后不影响速度，防止DNS泄露
+
+##提示
+ **如果导入Clash / Mihomo 客户端后无法正常使用，尝试关闭严格路由**
+ **想要使用本项目分流规则请把客户端中 DNS覆写 关闭**
