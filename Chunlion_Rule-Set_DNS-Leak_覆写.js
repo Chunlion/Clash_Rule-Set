@@ -138,7 +138,6 @@ function main(config) {
 
     // 游戏平台国内下载 (DIRECT)
     "steam_cn_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/steam@cn.mrs" },
-    "blizzard_cn": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/blizzard@cn.mrs" },
     "microsoft_cn": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft@cn.mrs" },
     "apple_cn": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple@cn.mrs" },
 
@@ -181,7 +180,6 @@ function main(config) {
     "RULE-SET,youtube_domain,YouTube",
     "RULE-SET,google_domain,Google",
     "RULE-SET,steam_cn_domain,DIRECT",
-    "RULE-SET,blizzard_cn,DIRECT",   // 战网国内下载
     "RULE-SET,microsoft_cn,DIRECT",  // Xbox/Windows 更新下载
     "RULE-SET,apple_cn,DIRECT",      // App Store 下载加速
     "RULE-SET,steam_domain,Games",
