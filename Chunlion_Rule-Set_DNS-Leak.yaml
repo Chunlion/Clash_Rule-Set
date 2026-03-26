@@ -230,7 +230,6 @@ rules:
   - RULE-SET,youtube_domain,YouTube                                     # YouTube
   - RULE-SET,google_domain,Google                                       # Google
   - RULE-SET,steam_cn_domain,DIRECT                                     # Steam中国
-  - RULE-SET,blizzard_cn,DIRECT                                         # Blizzard中国
   - RULE-SET,microsoft_cn,DIRECT                                        # Microsoft中国
   - RULE-SET,apple_cn,DIRECT                                            # Apple中国
   - RULE-SET,steam_domain,Games                                         # Steam
@@ -269,7 +268,6 @@ rules:
 rule-providers:
   #国内直连
   steam_cn_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/steam@cn.mrs"}
-  blizzard_cn: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/blizzard@cn.mrs"}
   microsoft_cn: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft@cn.mrs"}
   apple_cn: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple@cn.mrs"}
   #域名规则
