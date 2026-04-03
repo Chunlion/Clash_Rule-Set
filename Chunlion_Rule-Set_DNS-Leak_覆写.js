@@ -167,7 +167,6 @@ function main(config) {
     "twitter_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.mrs" },
     "netflix_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.mrs" },
     "ukwifi_ip": { type: "http", behavior: "classical", format: "text", interval: 86400, url: "https://raw.githubusercontent.com/iniwex5/tools/refs/heads/main/rules/UK-wifi-call.list" },
-    "steam_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/steam.mrs" },
     "cn_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs" }
   };
   // --- 6. 规则匹配 (Rules) ---
@@ -183,7 +182,6 @@ function main(config) {
     "RULE-SET,microsoft_cn,DIRECT",  // Xbox/Windows 更新下载
     "RULE-SET,apple_cn,DIRECT",      // App Store 下载加速
     "RULE-SET,steam_domain,Games",
-    "RULE-SET,steam_ip,Games,no-resolve",
     "RULE-SET,epic_domain,Games",         // Epic 商店 (代理)
     "RULE-SET,ea_domain,Games",           // EA / Origin (代理)
     "RULE-SET,ubisoft_domain,Games",      // Ubisoft / Uplay (代理)
