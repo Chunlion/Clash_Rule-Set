@@ -98,7 +98,7 @@ sniffer:
     - "+.sunlogin.net"                                                  # 跳过嗅探  向日葵远程控制
     - "+.push.apple.com"                                                # 跳过嗅探  苹果推送服务
 
-# DNS 设置
+# DNS 设置(开启严格路由可以仅保留nameserver)
 dns:
   enable: true                                                          # 解析服务  启用 Clash 内置 DNS 服务
   listen: 0.0.0.0:7874                                                  # 监听服务  DNS 服务监听地址与端口
@@ -117,6 +117,7 @@ dns:
     - "localhost.ptlogin2.qq.com"                                       # 真实解析  QQ 登录
     - "localhost.sec.qq.com"                                            # 真实解析  QQ 登录
     - "+.in-addr.arpa"                                                  # 真实解析  IPv4 反向解析
+    - "stun.*"
     - "+.ip6.arpa"
     - "time.*.com"                                                      # 真实解析  NTP 时间服务                      
     - "time.*.gov"                                                      # 真实解析  NTP 时间服务
@@ -240,7 +241,6 @@ rules:
   - RULE-SET,sony_domain,Games                                          # Sony
   - RULE-SET,xbox_domain,Games                                          # Xbox
   - RULE-SET,nintendo_domain,Games                                      # Nintendo
-  - RULE-SET,steam_ip,Games,no-resolve                                  # Steam
   - RULE-SET,onedrive_domain,OneDrive                                   # OneDrive
   - RULE-SET,microsoft_domain,Microsoft                                 # 微软服务
   - RULE-SET,appletv_domain,AppleTV                                     # Apple TV+
@@ -308,7 +308,6 @@ rule-providers:
   twitter_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.mrs"}
   netflix_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.mrs"}
   ukwifi_ip: { <<: *Anchor_CL, url: "https://raw.githubusercontent.com/iniwex5/tools/refs/heads/main/rules/UK-wifi-call.list"}
-  steam_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/steam.mrs"}
   cn_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs"}
 
 # ※※※※※※※※※※※※※※※ 配置结束 ※※※※※※※※※※※※※※※
