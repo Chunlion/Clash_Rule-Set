@@ -68,7 +68,7 @@ tun:
   auto-detect-interface: true                                           # 自动出口  自动识别默认出口网络接口 （仅内核模式有效）
   auto-route: true                                                      # 自动路由  自动添加系统路由表      （仅内核模式有效）
   auto-redirect: true                                                   # 自动定向  自动将流量重定向至 TUN  （仅内核模式有效）
-  strict-route: true                                                    # 路由模式  严格路由模式，打开后不影响速度，防止DNS泄露
+  strict-route: false                                                   # 路由模式  严格路由模式
   endpoint-independent-nat: true                                        # 端点无关  NAT（提高 NAT 类型兼容性，适用于 P2P 和游戏）
 
 # 嗅探功能
@@ -106,8 +106,8 @@ dns:
   enhanced-mode: fake-ip                                                # 增强模式  FDNS 增强模式（Fake-IP，用于防止 DNS 泄露）
   fake-ip-range: 198.18.0.1/16                                          # 虚拟地址  Fake-IP 虚拟地址池范围
   fake-ip-filter-mode: blacklist                                        # 过滤模式  Fake-IP 过滤模式（命中规则则返回真实 IP）
-  respect-rules: false                                                  # 遵循规则  不强制遵循规则顺序
-  prefer-h3: true                                                       # 开启 HTTP/3 支持，提升 DoH 解析速度
+  respect-rules: true                                                   # 遵循规则  强制遵循规则顺序
+  prefer-h3: false                                                      # 关闭 HTTP/3 支持
   fake-ip-filter:
     - '+.lan'                                                           # 真实解析  常见局域网域名后缀
     - "rule-set:cn_domain"                                              # 真实解析  大陆域名数据
@@ -126,13 +126,16 @@ dns:
   default-nameserver:
     - 223.5.5.5                                                         # 公共 DNS  阿里云
     - 119.29.29.29                                                      # 公共 DNS  腾讯
+  proxy-server-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  direct-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  direct-nameserver-follow-policy: true
   nameserver-policy:
-    "geosite:cn,private": 
-      - 223.5.5.5
-      - 119.29.29.29
-    "geosite:geolocation-!cn":
-      - "https://1.1.1.1/dns-query#一键代理"
-      - "https://8.8.8.8/dns-query#一键代理"
+    "rule-set:cn_domain,private_domain": [223.5.5.5, 119.29.29.29]
+    "geosite:cn,private": [223.5.5.5, 119.29.29.29]
   nameserver:
     - 223.5.5.5
     - 119.29.29.29
