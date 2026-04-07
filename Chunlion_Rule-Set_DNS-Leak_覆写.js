@@ -26,7 +26,6 @@ function main(config) {
     "default-nameserver": ["223.5.5.5", "119.29.29.29"],
     "nameserver": ["https://dns.alidns.com/dns-query", "https://doh.pub/dns-query"],
     "nameserver-policy": {
-      "rule-set:cn_domain": ["https://dns.alidns.com/dns-query", "https://doh.pub/dns-query"],
       "geosite:cn,private": ["https://dns.alidns.com/dns-query", "https://doh.pub/dns-query"],
       "geosite:geolocation-!cn": ["https://1.1.1.1/dns-query#一键代理", "https://8.8.8.8/dns-query#一键代理"],
     }
