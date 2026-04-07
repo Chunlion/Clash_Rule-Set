@@ -111,13 +111,13 @@ dns:
   fake-ip-filter:
     - '+.lan'                                                           # 真实解析  常见局域网域名后缀
     - "rule-set:cn_domain"                                              # 真实解析  大陆域名数据
+    - "rule-set:add_direct_domain"                                      # 真实解析  大陆冷门域名
     - "+.local"
     - "+.msftconnecttest.com"                                           # 真实解析  Windows 网络连接测试
     - "+.msftncsi.com"                                                  # 真实解析  Windows 网络连接测试
     - "localhost.ptlogin2.qq.com"                                       # 真实解析  QQ 登录
     - "localhost.sec.qq.com"                                            # 真实解析  QQ 登录
     - "+.in-addr.arpa"                                                  # 真实解析  IPv4 反向解析
-    - "stun.*"
     - "+.ip6.arpa"
     - "time.*.com"                                                      # 真实解析  NTP 时间服务                      
     - "time.*.gov"                                                      # 真实解析  NTP 时间服务
@@ -125,33 +125,19 @@ dns:
     - "localhost.work.weixin.qq.com"                                    # 真实解析  微信 Work
   default-nameserver:
     - 223.5.5.5                                                         # 公共 DNS  阿里云
-    - tls://180.184.1.1:853                                             # 公共 DNS  字节跳动 DoT
-  proxy-server-nameserver:
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-  nameserver:
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-  fallback:
-    - https://dns.cloudflare.com/dns-query#一键代理
-    - https://dns.google/dns-query#一键代理
-  fallback-filter:
-    geoip: true
-    geoip-code: CN
-    ipcidr:
-      - 240.0.0.0/4
-      - 0.0.0.0/32
-    domain:
-      - '+.google.com'
-      - '+.cloudflare.com'
-      - '+.facebook.com'
-      - '+.youtube.com'
+    - 119.29.29.29                                                      # 公共 DNS  腾讯
   nameserver-policy:
-    "rule-set:cn_domain": [https://dns.alidns.com/dns-query, https://doh.pub/dns-query]
-    "geosite:cn,private": [https://dns.alidns.com/dns-query, https://doh.pub/dns-query]
-    "geosite:apple": [https://doh.pub/dns-query, https://dns.itunes.apple.com/dns-query]
-    "geosite:steam": [https://doh.pub/dns-query, 1.1.1.1]
-
+    "geosite:cn,private": 
+      - 223.5.5.5
+      - 119.29.29.29
+    "geosite:geolocation-!cn":
+      - "https://1.1.1.1/dns-query#一键代理"
+      - "https://8.8.8.8/dns-query#一键代理"
+  nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
 
 
 # ※※※※※※※※※※※※※※※ 代理策略组 ※※※※※※※※※※※※※※※
