@@ -110,6 +110,8 @@ dns:
   prefer-h3: false                                                      # 关闭 HTTP/3 支持
   fake-ip-filter:
     - "+.lan"                                                           # 真实解析  常见局域网域名后缀
+    - "rule-set:cn_domain"
+    - "rule-set:add_direct_domain"
     - "+.local"
     - "+.msftconnecttest.com"                                           # 真实解析  Windows 网络连接测试
     - "+.msftncsi.com"                                                  # 真实解析  Windows 网络连接测试
