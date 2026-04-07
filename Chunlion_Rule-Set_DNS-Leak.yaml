@@ -109,9 +109,7 @@ dns:
   respect-rules: true                                                   # 遵循规则  强制遵循规则顺序
   prefer-h3: false                                                      # 关闭 HTTP/3 支持
   fake-ip-filter:
-    - '+.lan'                                                           # 真实解析  常见局域网域名后缀
-    - "rule-set:cn_domain"                                              # 真实解析  大陆域名数据
-    - "rule-set:add_direct_domain"                                      # 真实解析  大陆冷门域名
+    - "+.lan"                                                           # 真实解析  常见局域网域名后缀
     - "+.local"
     - "+.msftconnecttest.com"                                           # 真实解析  Windows 网络连接测试
     - "+.msftncsi.com"                                                  # 真实解析  Windows 网络连接测试
@@ -119,10 +117,10 @@ dns:
     - "localhost.sec.qq.com"                                            # 真实解析  QQ 登录
     - "+.in-addr.arpa"                                                  # 真实解析  IPv4 反向解析
     - "+.ip6.arpa"
+    - "stun.*"                                                          # 真实解析  STUN 服务
     - "time.*.com"                                                      # 真实解析  NTP 时间服务                      
     - "time.*.gov"                                                      # 真实解析  NTP 时间服务
     - "pool.ntp.org"                                                    # 真实解析  NTP 时间服务            
-    - "localhost.work.weixin.qq.com"                                    # 真实解析  微信 Work
   default-nameserver:
     - 223.5.5.5                                                         # 公共 DNS  阿里云
     - 119.29.29.29                                                      # 公共 DNS  腾讯
