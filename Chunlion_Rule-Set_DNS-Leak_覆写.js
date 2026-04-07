@@ -57,7 +57,7 @@ function main(config) {
     "auto-detect-interface": true,
     "auto-route": true,
     "auto-redirect": true,
-    "strict-route": true,// 开启严格路由，防止DNS泄露，不会影响速度
+    "strict-route": false,
     "endpoint-independent-nat": true
   };
 
