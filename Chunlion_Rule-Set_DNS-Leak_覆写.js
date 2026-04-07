@@ -17,18 +17,35 @@ function main(config) {
     "ipv6": false,
     "enhanced-mode": "fake-ip",
     "fake-ip-range": "198.18.0.1/16",
-    "fake-ip-filter": [
-      "+.lan", "rule-set:cn_domain", "+.local", "+.msftconnecttest.com",
-      "+.msftncsi.com", "localhost.ptlogin2.qq.com", "localhost.sec.qq.com",
-      "+.in-addr.arpa", "+.ip6.arpa", "time.*.com", "time.*.gov", "pool.ntp.org",
-      "localhost.work.weixin.qq.com"
-    ],
+    "respect-rules": true,
+    "prefer-h3": false,
     "default-nameserver": ["223.5.5.5", "119.29.29.29"],
-    "nameserver": ["https://dns.alidns.com/dns-query", "https://doh.pub/dns-query"],
+    "proxy-server-nameserver": ["223.5.5.5", "119.29.29.29"],
+    "direct-nameserver": ["223.5.5.5", "119.29.29.29"],
+    "direct-nameserver-follow-policy": true,
     "nameserver-policy": {
-      "geosite:cn,private": ["https://dns.alidns.com/dns-query", "https://doh.pub/dns-query"],
-      "geosite:geolocation-!cn": ["https://1.1.1.1/dns-query#一键代理", "https://8.8.8.8/dns-query#一键代理"],
-    }
+      "rule-set:cn_domain,private_domain": ["223.5.5.5", "119.29.29.29"],
+      "geosite:cn,private": ["223.5.5.5", "119.29.29.29"]
+    },
+    "nameserver": [
+      "https://dns.alidns.com/dns-query",
+      "https://doh.pub/dns-query"
+    ],
+    "fake-ip-filter": [
+      "+.lan",
+      "+.local",
+      "+.msftconnecttest.com",
+      "+.msftncsi.com",
+      "localhost.ptlogin2.qq.com",
+      "localhost.sec.qq.com",
+      "+.in-addr.arpa",
+      "+.ip6.arpa",
+      "stun.*",
+      "time.*.com",
+      "time.*.gov",
+      "pool.ntp.org",
+      "localhost.work.weixin.qq.com"
+    ]
   };
 
   // --- 3. TUN 配置 ---
