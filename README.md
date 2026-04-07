@@ -1,40 +1,50 @@
-# Clash_Rule-Set
+# 🚀 Clash Rule-Set (防泄漏强化版)
 
-基于 [Seven1echo/Yaml](https://github.com/Seven1echo/Yaml) 的 Rule-Set 分流文件修改而来，添加了自定义规则分流，并做了 DNS 防泄漏处理。
+本项目基于 [Seven1echo/Yaml](https://github.com/Seven1echo/Yaml) 的规则分流文件修改而来，深度定制了**自定义规则分流**，并在此基础上进行了**DNS 防泄漏处理**。
 
-适用于 **Mihomo 核心** 的工具（OpenWrt Clash/Nikki 插件、Clashmi、FlClash、Clash Meta 等）。
+✅ **全面兼容搭载 Mihomo 核心的客户端**，包括但不限于：  
+`OpenWrt Clash/Nikki 插件` | `Clashmi` | `FlClash` | `Clash Meta` 等。
 
-## YAML使用说明
+---
 
-1. 下载 `Chunlion_Rule-Set_DNS-Leak.yaml`
-2. 将文件中的 `订阅链接` 替换为你的机场订阅 URL
-3. 将文件中的 `机场名` 替换为你的机场名称
-4. 导入 Clash / Mihomo 客户端
+## 📖 使用指南
 
-## 全局覆写使用说明
+### 方法一：YAML 完整配置导入
+1. 下载本项目中的 `Chunlion_Rule-Set_DNS-Leak.yaml` 文件。
+2. 使用文本编辑器打开，将文件中的 `订阅链接` 替换为您购买的机场订阅 URL。
+3. 将文件中的 `机场名` 替换为您的机场名称。
+4. 保存修改，并直接导入到您的 Clash / Mihomo 客户端中即可使用。
 
-1. 下载 `Chunlion_Rule-Set_DNS-Leak_覆写.js`
-2. 将js内容复制粘贴到全局覆写脚本中
+### 方法二：JS 全局覆写 (脚本模式)
+1. 下载本项目中的 `Chunlion_Rule-Set_DNS-Leak_覆写.js` 文件。
+2. 打开该文件，将所有 JS 代码复制。
+3. 粘贴到客户端的**全局覆写（Script/Override）**输入框中并保存生效。
 
-## 自定义分流
+---
 
-在原版基础上新增了以下策略组与规则：
+## 🔀 自定义分流规则
 
-| 策略组    | 说明                           |
-|-----------|-------------------------------|
-|   Wise    | Wise默认直连 |
-|   Games   | 游戏平台分流，Steam下载直连 |
-|   UKwifi  | 英国SIM卡Wifi Calling |
-## DNS 防泄漏说明
+在原版规则的基础上，本项目重点增加了以下自定义策略组：
 
-配置采用以下四重防泄漏机制：
+| 策略组 | 规则说明 | 默认策略 |
+| :--- | :--- | :--- |
+| 🦉 **Wise** | Wise 跨境汇款相关服务直连 | `DIRECT` (直连) |
+| 🎮 **Games** | 游戏平台精准分流，Steam 游戏下载直连（不消耗机场流量） | `DIRECT` (直连) |
+| 🇬🇧 **UKwifi** | 英国 SIM 卡专属 Wifi Calling 规则优化 | 根据节点选择 |
 
-1. **`enhanced-mode: fake-ip`** — 所有 DNS 请求返回虚假 IP，真实解析在代理侧完成，避免本地 DNS 泄漏
-2. **`nameserver-policy`** — 国内域名走国内加密 DNS（腾讯/阿里 DoH）；其余域名走 Cloudflare / Google DoH
-3. **`proxy-server-nameserver`** — 单独配置代理节点地址的解析 DNS，防止节点 IP 被污染
-4. **`strict-route: true`** — 严格路由模式，打开后不影响速度，防止DNS泄露
+---
 
-## 提示
- 1. **如果导入Clash / Mihomo 客户端后无法正常使用，尝试关闭严格路由，关闭严格路由后可能会产生DNS泄露**
- 2. **想要使用本项目DNS规则请把客户端中 DNS覆写 关闭**
+## 🛡️ DNS 防泄漏机制说明
 
+为了最大程度保护隐私，本项目配置了以下**防泄漏机制**：
+
+1. **`enhanced-mode: fake-ip` (Fake-IP 模式)**  
+   所有 DNS 请求优先返回虚假 IP，真实的域名解析完全在代理服务器端完成，从根源避免本地 DNS 泄漏。
+2. **`nameserver-policy` (分流解析策略)**  
+   国内域名 ➡️ 走国内加密 DNS（腾讯/阿里 DoH），保证国内访问速度。  
+3. **`proxy-server-nameserver` (节点专属解析)**  
+   为代理节点的地址单独配置解析 DNS，有效防止节点 IP 在连接前就被污染或阻断。
+4. **`respect-rules: true` (遵循规则)**  
+   开启遵循规则模式，避免本地发起DNS请求。开启后**不影响速度**，是Mihomo内核用来防止DNS泄露的完美工具。
+
+---
