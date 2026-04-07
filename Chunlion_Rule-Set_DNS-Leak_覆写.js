@@ -23,21 +23,12 @@ function main(config) {
       "+.in-addr.arpa", "+.ip6.arpa", "time.*.com", "time.*.gov", "pool.ntp.org",
       "localhost.work.weixin.qq.com"
     ],
-    "default-nameserver": ["223.5.5.5", "tls://180.184.1.1:853"],
-    "proxy-server-nameserver": ["https://dns.alidns.com/dns-query", "https://doh.pub/dns-query"],
+    "default-nameserver": ["223.5.5.5", "119.29.29.29"],
     "nameserver": ["https://dns.alidns.com/dns-query", "https://doh.pub/dns-query"],
-    "fallback": ["https://dns.cloudflare.com/dns-query#一键代理", "https://dns.google/dns-query#一键代理"],
-    "fallback-filter": {
-      "geoip": true,
-      "geoip-code": "CN",
-      "ipcidr": ["240.0.0.0/4", "0.0.0.0/32"],
-      "domain": ["+.google.com", "+.cloudflare.com", "+.facebook.com", "+.youtube.com"]
-    },
     "nameserver-policy": {
       "rule-set:cn_domain": ["https://dns.alidns.com/dns-query", "https://doh.pub/dns-query"],
       "geosite:cn,private": ["https://dns.alidns.com/dns-query", "https://doh.pub/dns-query"],
-      "geosite:apple": ["https://doh.pub/dns-query", "https://dns.itunes.apple.com/dns-query"],
-      "geosite:steam": ["https://doh.pub/dns-query", "1.1.1.1"]
+      "geosite:geolocation-!cn": ["https://1.1.1.1/dns-query#一键代理", "https://8.8.8.8/dns-query#一键代理"],
     }
   };
 
