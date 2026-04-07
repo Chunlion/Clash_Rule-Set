@@ -33,6 +33,8 @@ function main(config) {
     ],
     "fake-ip-filter": [
       "+.lan",
+      "rule-set:cn_domain",
+      "rule-set:add_direct_domain",
       "+.local",
       "+.msftconnecttest.com",
       "+.msftncsi.com",
@@ -44,7 +46,6 @@ function main(config) {
       "time.*.com",
       "time.*.gov",
       "pool.ntp.org",
-      "localhost.work.weixin.qq.com"
     ]
   };
 
