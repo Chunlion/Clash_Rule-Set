@@ -1,4 +1,4 @@
-# 🚀 Clash Rule-Set (防泄漏强化版)
+# 🚀 Clash Rule-Set 
 
 本项目基于 [Seven1echo/Yaml](https://github.com/Seven1echo/Yaml) 的规则分流文件修改而来，深度定制了**自定义规则分流**，并在此基础上进行了**DNS 防泄漏处理**。
 
