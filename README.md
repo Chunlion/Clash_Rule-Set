@@ -1,68 +1,81 @@
-# 🚀 Clash Rule-Set 
+根据您提供的详细版本，我将之前的技术要点与您的文案进行了深度融合与优化。新版本保留了您的结构化布局，同时在技术细节处增加了基于配置文件的精确标注与补充。
 
-本项目基于 [Seven1echo/Yaml](https://github.com/Seven1echo/Yaml) 的规则分流文件修改而来，深度定制了**自定义规则分流**，并在此基础上进行了**DNS 防泄漏处理**。
+---
 
-✅ **全面兼容搭载 Mihomo 核心的客户端**，包括但不限于：  
-`OpenWrt Clash/Nikki 插件` | `Clashmi` | `FlClash` | `Clash Meta` 等。
+# 🚀 Chunlion Clash Rule-Set (DNS-Leak Version)
+
+[cite_start]本项目基于 [Seven1echo/Yaml](https://github.com/Seven1echo/Yaml) 的分流规则修改而来，深度定制了**金融、游戏及海外通讯**专属分流，并针对 **Mihomo (Clash Meta) 核心**进行了严苛的 **DNS 防泄漏底层优化**。 [cite: 1, 2]
+
+✅ **全面兼容主流 Mihomo 客户端**：
+`OpenWrt Clash/Nikki 插件` | `Clashmi` | `FlClash` | `Clash Verge Rev` | `Surfboard` 等。
+
+---
+
+## 🛠️ 核心配置参数
+
+在部署前，了解本配置的基础网络架构：
+* [cite_start]**混合端口 (Mixed-Port)**：`7893` [cite: 5]
+* [cite_start]**DNS 监听端口**：`7874` [cite: 29]
+* [cite_start]**管理面板**：集成 [Zashboard](https://github.com/Zephyruso/zashboard) 外部面板 [cite: 11]
+* [cite_start]**流量嗅探 (Sniffer)**：默认开启，支持 TLS/HTTP/QUIC 协议解析，提升分流精准度 [cite: 18, 20-21]
 
 ---
 
 ## 🚀 部署与使用
 
-本项目提供了两种使用方式，请根据您的客户端类型选择：
+### 方式一：完整 YAML 订阅配置（推荐所有客户端）
+1. 下载 `Chunlion_Rule-Set_DNS-Leak.yaml`。
+2. [cite_start]搜索并替换 `proxy-providers` 下的 `订阅链接` 为您的实际机场 URL。 [cite: 3, 4]
+3. 导入客户端即可使用。
 
-### 方式一：完整 YAML 订阅配置（适用于大多数客户端）
-如果您使用 Nikki、FlClash 或不支持脚本覆写的客户端：
-1. 下载本项目中的 `Chunlion_Rule-Set_DNS-Leak.yaml` 文件。
-2. 使用文本编辑器打开，将文件中的 `订阅链接` 替换为您的机场订阅 URL。
-   *(注：如果有多个机场，可复制 `机场1` 的格式继续添加)*
-3. 将修改后的 YAML 文件上传或导入到您的客户端中。
-
-### 方式二：JS 全局覆写脚本（强烈推荐 Clash Verge Rev 用户使用）
-如果您使用 `Clash Verge Rev`，推荐使用脚本模式，可保留您原有的订阅管理：
-1. 下载并打开 `Chunlion_Rule-Set_DNS-Leak_覆写.js`。
-2. 复制文件中的所有 JavaScript 代码。
-3. 在 Clash Verge Rev 中进入 **“订阅”** -> **“新建”** -> 选择 **“Script (脚本)”**。
-4. 将代码粘贴进去并保存，右键启用该脚本即可全局生效。
+### 方式二：JS 全局覆写脚本（推荐 Clash Verge Rev）
+1. 复制本项目提供的 `覆写.js` 代码。
+2. 在 Verge Rev 的 **“订阅”** -> **“新建”** -> **“Script”** 中粘贴。
+3. 启用该脚本，即可在不破坏原订阅的基础上实现本项目的所有功能。
 
 ---
 
-## 🔀 自定义独家分流规则
+## 🔀 独家定制分流规则
 
-在常规分流的基础上，本项目新增了以下专属策略组：
+针对您的特定需求，本项目对以下策略组进行了深度定制：
 
-| 策略组图标 | 策略组名称 | 规则说明 | 默认策略 |
+| 策略组图标 | 策略组名称 | 包含规则 / 逻辑说明 | 流量特征 [cite] |
 | :---: | :--- | :--- | :--- |
-| 🦉 | **Wise** | 专门针对 Wise 跨境汇款服务进行分流，保障资金应用网络环境的纯净。 | 默认通过对应节点 |
-| 🎮 | **Games** | **游戏平台精准分流**。<br>包含 Steam、Epic、EA、Ubisoft、Blizzard、Sony、Xbox、Nintendo。<br>💡 *特色：Steam/微软/苹果的**中国区下载流量自动直连**，不消耗机场流量。* | 默认代理 |
-| 🇬🇧 | **UKwifi** | 针对英国 SIM 卡（如 giffgaff 等）的 Wifi Calling 进行线路优化。 | `欧洲手动` / `直连` |
+| 🦉 | **Wise** | [cite_start]针对 Wise 跨境金融服务进行独立分流，保障资金操作安全。 | [cite: 43, 60] |
+| 🎮 | **Games** | [cite_start]精准覆盖 Steam, Epic, EA, Ubisoft, Blizzard, Sony, Xbox, Nintendo。 | [cite: 43, 51-54] |
+| 🚀 | **直连优化** | [cite_start]**自动分流**：Steam、微软、苹果的中国区 CDN 流量自动走 `DIRECT`。 | [cite: 49, 50, 62, 63] |
+| 🇬🇧 | **UKwifi** | [cite_start]专为英国 SIM 卡（如 giffgaff）Wifi Calling 优化的特定 IP 段分流。 | [cite: 43, 59] |
+| 🤖 | **AI Services** | [cite_start]涵盖 ChatGPT, Claude 等主流 AI 服务，默认优先选择美国节点。 | [cite: 41, 48] |
 
 ---
 
 ## 🔒 四重 DNS 防泄漏机制
 
-为了最大程度保护隐私，防止 ISP 劫持和 DNS 泄露，本项目在底层进行了严格的安全配置：
+[cite_start]本项目在底层预设了严格的隐私防护逻辑，从根源阻断 DNS 泄露[cite: 2]:
 
-1. **`enhanced-mode: fake-ip` (增强虚拟 IP 模式)**  
-   关闭 IPv6 DNS 解析 (`ipv6: false`)，优先返回虚假 IP，真实解析完全在代理服务端完成，避免本地 DNS 暴露。
-2. **`nameserver-policy` (精细化域名解析策略)**  
-   国内域名 (`cn_domain` / `private_domain`) ➡️ 走腾讯/阿里 DoH (`223.5.5.5` / `119.29.29.29`)，保障国内直连速度。  
-   其余海外域名 ➡️ 走代理专用解析，防污染。
-3. **`proxy-server-nameserver` (代理服务器防污染解析)**  
-   单独配置代理节点服务器地址的 DNS 解析，防止机场节点 IP 在握手前被墙。
-4. **`respect-rules: true` (遵循规则模式)**  
-   启用遵循规则，避免本地发起DNS请求，从根源阻断DNS泄漏的可能。
+1.  **Fake-IP 增强模式**：
+    * [cite_start]`enhanced-mode: fake-ip` [cite: 30]
+    * [cite_start]关闭 DNS 层的 IPv6 解析 (`ipv6: false`)，防止通过 IPv6 隧道泄露真实地理位置。 [cite: 30]
+2.  **精细化 Nameserver 策略**：
+    * [cite_start]国内域名与私有域使用腾讯/阿里公共 DNS (`223.5.5.5`, `119.29.29.29`) 直连解析。 [cite: 39, 40]
+    * 海外域名强制在远程代理端进行解析，彻底规避 ISP 污染。
+3.  **规则优先模式**：
+    * [cite_start]`respect-rules: true`：强制核心先进行规则匹配再处理 DNS，避免本地无效请求。 [cite: 31]
+4.  **代理服务器专用解析**：
+    * [cite_start]`proxy-server-nameserver` 独立配置，确保机场节点域名在解析阶段即受到保护。 [cite: 40]
 
 ---
 
 ## ⚠️ 常见问题与提示
 
 > [!WARNING]
-> - **无法正常联网？**  
->   尝试重启内核，仔细检查文件中`prefer-h3`是否为false。
-> - **DNS 规则不生效？**  
->   若要完美体验本项目的防泄漏机制，请务必在客户端设置中**关闭“DNS 覆写”或“系统 DNS 接管”**类功能，防止客户端自带设置覆盖本配置的防泄漏逻辑。
-> - **DNS仍然会有泄露？**  
->   ①将物理网卡的DNS服务器更改为**127.0.0.1**，并在Clash中打开Tun模式。注意，更改为本地DNS后，退出Clash Verge Rev会导致电脑无法正常联网！
->   ②在Clash Verge Rev中打开Tun模式，并开启严格路由，网页访问速度可能略有下降。
->   以上仅针对电脑端，手机端无需设置。
+> [cite_start]* **无法联网？** 请确认 `mixed-port` 没有被其他软件占用，且 `prefer-h3` 已设置为 `false` 以兼容部分旧版核心。 [cite: 5, 32]
+> * **DNS 依然有小规模泄露？**
+>     [cite_start]1.  **物理网卡设置**：建议将 Windows 网卡的 DNS 手动修改为 `127.0.0.1`，并配合 Clash 的 TUN 模式使用。 [cite: 13]
+>     [cite_start]2.  **开启严格路由**：在配置中将 `strict-route` 设为 `true`（注意：这可能会轻微影响访问速度）。 [cite: 17]
+>     3.  **关闭第三方覆写**：请务必关闭客户端自带的“系统 DNS 劫持”或“DNS 重定向”功能，以免冲突。
+
+---
+
+## ⚖️ 归属与免责
+[cite_start]本配置由原项目 [Seven1echo/Yaml](https://github.com/Seven1echo/Yaml) 优化而来。规则文件通过 `rule-providers` 每日自动更新 [cite: 3]，旨在提供安全、高效的网络环境，请在法律允许的范围内使用。
