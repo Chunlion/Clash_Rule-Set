@@ -3,7 +3,7 @@
 
 # 🚀 Chunlion Clash Rule-Set (DNS-Leak Version)
 
-本项目基于 [Seven1echo/Yaml](https://github.com/Seven1echo/Yaml) 的分流规则修改而来，深度定制了**金融、游戏及海外通讯**专属分流，并针对 **Mihomo (Clash Meta) 核心**进行了严苛的 **DNS 防泄漏底层优化**。 [cite: 1, 2]
+本项目基于 [Seven1echo/Yaml](https://github.com/Seven1echo/Yaml) 的分流规则修改而来，深度定制了**金融、游戏及海外通讯**专属分流，并针对 **Mihomo (Clash Meta) 核心**进行了严苛的 **DNS 防泄漏底层优化**。 
 
 ✅ **全面兼容主流 Mihomo 客户端**：
 `OpenWrt Clash/Nikki 插件` | `Clashmi` | `FlClash` | `Clash Verge Rev` | `Surfboard` 等。
