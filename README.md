@@ -14,10 +14,10 @@
 ## 🛠️ 核心配置参数
 
 在部署前，了解本配置的基础网络架构：
-* **混合端口 (Mixed-Port)**：`7893` [cite: 5]
-* **DNS 监听端口**：`7874` [cite: 29]
-* **管理面板**：集成 [Zashboard](https://github.com/Zephyruso/zashboard) 外部面板 [cite: 11]
-* **流量嗅探 (Sniffer)**：默认开启，支持 TLS/HTTP/QUIC 协议解析，提升分流精准度 [cite: 18, 20-21]
+* **混合端口 (Mixed-Port)**：`7893` 
+* **DNS 监听端口**：`7874` 
+* **管理面板**：集成 [Zashboard](https://github.com/Zephyruso/zashboard) 外部面板 
+* **流量嗅探 (Sniffer)**：默认开启，支持 TLS/HTTP/QUIC 协议解析，提升分流精准度 
 
 ---
 
@@ -30,7 +30,7 @@
 
 ### 方式二：JS 全局覆写脚本（推荐 Clash Verge Rev）
 1. 复制本项目提供的 `覆写.js` 代码。
-2. 在 Verge Rev 的 **“订阅”** -> **“新建”** -> **“Script”** 中粘贴。
+2. 在Clash Verge Rev 的 **“订阅”** -> **“新建”** -> **“Script”** 中粘贴。
 3. 启用该脚本，即可在不破坏原订阅的基础上实现本项目的所有功能。
 
 ---
@@ -39,8 +39,8 @@
 
 针对您的特定需求，本项目对以下策略组进行了深度定制：
 
-| 策略组图标 | 策略组名称 | 包含规则 / 逻辑说明 | 流量特征 [cite] |
-| :---: | :--- | :--- | :--- |
+| 策略组图标 | 策略组名称 | 逻辑说明 |
+| :---: | :--- | :--- |
 | 🦉 | **Wise** | 针对 Wise 跨境金融服务进行独立分流，保障资金操作安全。 
 | 🎮 | **Games** | 精准覆盖 Steam, Epic, EA, Ubisoft, Blizzard, Sony, Xbox, Nintendo。 
 | 🚀 | **直连优化** | **自动分流**：Steam、微软、苹果的中国区 CDN 流量自动走 `DIRECT`。 
