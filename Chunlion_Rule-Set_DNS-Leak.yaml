@@ -210,6 +210,7 @@ proxy-groups:
 # ※※※※※※※※※※※※※※※ 规则匹配 ※※※※※※※※※※※※※※※
 rules:
    # 服务分流
+  - RULE-SET,ads_domain,REJECT                                          # 屏蔽广告
   - RULE-SET,private_domain,DIRECT                                      # Private
   - RULE-SET,private_ip,DIRECT,no-resolve                               # Private
   - RULE-SET,speedtest_domain,Speedtest                                 # Speedtest
@@ -258,6 +259,7 @@ rule-providers:
   microsoft_cn: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft@cn.mrs"}
   apple_cn: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple@cn.mrs"}
   #域名规则
+  ads_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/privacy-protection-tools/anti-ad.github.io/master/docs/mihomo.mrs"}
   steam_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/steam.mrs"}
   epic_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/epicgames.mrs"}
   ea_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ea.mrs"}
