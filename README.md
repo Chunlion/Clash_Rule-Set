@@ -63,7 +63,11 @@
 
 ### ✅ 方式二：使用 JS 覆写（推荐 Clash Verge Rev）
 
+<<<<<<< HEAD
 1. 复制 `Chunlion_Rule-Set_DNS-Leak.js` 内容。
+=======
+1. 复制 `Chunlion_Rule-Set_DNS-Leak_覆写.js` 内容。
+>>>>>>> 54b7e383de5bc57ee6df42625bcb68fdea8e2d07
 2. Clash Verge Rev 中新建 `Script` 订阅并粘贴。
 3. 启用脚本后刷新订阅。
 
