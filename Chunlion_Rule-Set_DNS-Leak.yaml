@@ -246,12 +246,12 @@ rules:
   - RULE-SET,paypal_domain,PayPal                                       # PayPal
   - RULE-SET,ukwifi_ip,UKwifi                                           # UKwifi
   - RULE-SET,wise_domain,Wise                                           # Wise
+  - RULE-SET,add_direct_domain,DIRECT                                   # 直连域名
   - RULE-SET,geolocation-!cn,一键代理                                    # 排除国内
   - RULE-SET,google_ip,Google,no-resolve                                # Google
   - RULE-SET,telegram_ip,Telegram,no-resolve                            # Telegram
   - RULE-SET,twitter_ip,Twitter,no-resolve                              # Twitter
   - RULE-SET,netflix_ip,Netflix,no-resolve                              # Netflix
-  - RULE-SET,add_direct_domain,DIRECT                                   # 直连域名
   - RULE-SET,cn_domain,DIRECT                                           # 中国域名
   - RULE-SET,cn_ip,DIRECT,no-resolve                                    # 中国IP
   - MATCH,兜底流量                                                       # 兜底规则
