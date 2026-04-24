@@ -111,6 +111,7 @@ dns:
   fake-ip-filter:
     - "+.lan"                                                           # 真实解析  常见局域网域名后缀
     - "rule-set:cn_domain"
+    - "rule-set:private_domain"
     - "rule-set:add_direct_domain"
     - "+.local"
     - "+.msftconnecttest.com"                                           # 真实解析  Windows 网络连接测试
@@ -134,7 +135,7 @@ dns:
     - 119.29.29.29
   direct-nameserver-follow-policy: true
   nameserver-policy:
-    "rule-set:cn_domain,private_domain": [223.5.5.5, 119.29.29.29]
+    "rule-set:cn_domain,private_domain,add_direct_domain": [223.5.5.5, 119.29.29.29]
     "geosite:cn,private": [223.5.5.5, 119.29.29.29]
   nameserver:
     - https://dns.alidns.com/dns-query
@@ -234,6 +235,7 @@ rules:
   - RULE-SET,microsoft_domain,Microsoft                                 # 微软服务
   - RULE-SET,appletv_domain,AppleTV                                     # Apple TV+
   - RULE-SET,emby_domain,Emby                                           # Emby
+  - RULE-SET,emby_ip,Emby,no-resolve                                    # Emby IP
   - RULE-SET,apple_domain,Apple                                         # 苹果服务
   - RULE-SET,telegram_domain,Telegram                                   # Telegram
   - RULE-SET,tiktok_domain,TikTok                                       # TikTok

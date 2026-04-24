@@ -24,7 +24,7 @@ function main(config) {
     "direct-nameserver": ["223.5.5.5", "119.29.29.29"],
     "direct-nameserver-follow-policy": true,
     "nameserver-policy": {
-      "rule-set:cn_domain,private_domain": ["223.5.5.5", "119.29.29.29"],
+      "rule-set:cn_domain,private_domain,add_direct_domain": ["223.5.5.5", "119.29.29.29"],
       "geosite:cn,private": ["223.5.5.5", "119.29.29.29"]
     },
     "nameserver": [
@@ -34,6 +34,7 @@ function main(config) {
     "fake-ip-filter": [
       "+.lan",
       "rule-set:cn_domain",
+      "rule-set:private_domain",
       "rule-set:add_direct_domain",
       "+.local",
       "+.msftconnecttest.com",
@@ -83,6 +84,7 @@ function main(config) {
     { name: "AI Services", type: "select", proxies: aiProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AI.png" },
     { name: "GitHub", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/github(1).png" },
     { name: "AppleTV", type: "select", proxies: commonProxies, icon: "https://github.com/Seven1echo/Yaml/raw/main/icons/AppleTV.png" },
+    { name: "Emby", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Emby.png" },
     { name: "Apple", type: "select", proxies: commonProxies, icon: "https://github.com/Seven1echo/Yaml/raw/main/icons/Apple.png" },
     { name: "TikTok", type: "select", proxies: commonProxies, icon: "https://github.com/Seven1echo/Yaml/raw/main/icons/TikTok.png" },
     { name: "Twitter", type: "select", proxies: commonProxies, icon: "https://github.com/Seven1echo/Yaml/raw/main/icons/Twitter.png" },
@@ -129,6 +131,7 @@ function main(config) {
 
   // --- 5. 规则集 (Rule Providers) ---
   config["rule-providers"] = {
+    "ads_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/privacy-protection-tools/anti-ad.github.io/master/docs/mihomo.mrs" },
     "private_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs" },
     "speedtest_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ookla-speedtest.mrs" },
     "ai": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs" },
@@ -163,6 +166,7 @@ function main(config) {
     "onedrive_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/onedrive.mrs" },
     "microsoft_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs" },
     "appletv_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple-tvplus.mrs" },
+    "emby_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://github.com/666OS/rules/raw/release/mihomo/domain/Emby.mrs" },
     "apple_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs" },
 
     // IP 规则
@@ -171,6 +175,7 @@ function main(config) {
     "add_direct_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/Seven1echo/Yaml/refs/heads/main/rules/Seven1_Direct_Domain.mrs" },
     "private_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs" },
     "google_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.mrs" },
+    "emby_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://github.com/666OS/rules/raw/release/mihomo/ip/Emby.mrs" },
     "telegram_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs" },
     "twitter_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.mrs" },
     "netflix_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.mrs" },
@@ -179,6 +184,7 @@ function main(config) {
   };
   // --- 6. 规则匹配 (Rules) ---
   config["rules"] = [
+    "RULE-SET,ads_domain,REJECT",
     "RULE-SET,private_domain,DIRECT",
     "RULE-SET,private_ip,DIRECT,no-resolve",
     "RULE-SET,speedtest_domain,Speedtest",
@@ -200,6 +206,8 @@ function main(config) {
     "RULE-SET,onedrive_domain,OneDrive",
     "RULE-SET,microsoft_domain,Microsoft",
     "RULE-SET,appletv_domain,AppleTV",
+    "RULE-SET,emby_domain,Emby",
+    "RULE-SET,emby_ip,Emby,no-resolve",
     "RULE-SET,apple_domain,Apple",
     "RULE-SET,telegram_domain,Telegram",
     "RULE-SET,tiktok_domain,TikTok",
@@ -222,5 +230,5 @@ function main(config) {
   ];
 
   return config;
-  
+
 }

@@ -1,80 +1,179 @@
 
 ---
 
-# 🚀 Chunlion Clash Rule-Set (DNS-Leak Version)
+# Chunlion Clash Rule-Set (DNS-Leak Version)
 
-本项目基于 [Seven1echo/Yaml](https://github.com/Seven1echo/Yaml) 的分流规则修改而来，深度定制了**金融、游戏及海外通讯**专属分流，并针对 **Mihomo (Clash Meta) 核心**进行了严苛的 **DNS 防泄漏底层优化**。 
+本项目基于 [Seven1echo/Yaml](https://github.com/Seven1echo/Yaml) 改造，面向 Mihomo (Clash Meta) 核心，重点强化以下能力：
 
-✅ **全面兼容主流 Mihomo 客户端**：
-`OpenWrt Clash/Nikki 插件` | `Clashmi` | `FlClash` | `Clash Verge Rev` | `Surfboard` 等。
+- DNS 防泄露与解析稳定性
+- 游戏、金融、流媒体、AI 等场景分流
+- 统一的 YAML 与 JS 覆写脚本策略
 
----
-
-## 🛠️ 核心配置参数
-
-在部署前，了解本配置的基础网络架构：
-* **混合端口 (Mixed-Port)**：`7893` 
-* **DNS 监听端口**：`7874` 
-* **管理面板**：集成 [Zashboard](https://github.com/Zephyruso/zashboard) 外部面板 
-* **流量嗅探 (Sniffer)**：默认开启，支持 TLS/HTTP/QUIC 协议解析，提升分流精准度 
+适配客户端示例：OpenWrt Clash/Nikki 插件、Clashmi、FlClash、Clash Verge Rev、Surfboard 等。
 
 ---
 
-## 🚀 部署与使用
+## 项目文件说明
 
-### 方式一：完整 YAML 订阅配置（推荐所有客户端）
-1. 下载 `Chunlion_Rule-Set_DNS-Leak.yaml`。
-2. 搜索并替换 `proxy-providers` 下的 `订阅链接` 为您的实际机场 URL。 
-3. 导入客户端即可使用。
-
-### 方式二：JS 全局覆写脚本（推荐 Clash Verge Rev）
-1. 复制本项目提供的 `覆写.js` 代码。
-2. 在Clash Verge Rev 的 **“订阅”** -> **“新建”** -> **“Script”** 中粘贴。
-3. 启用该脚本，即可在不破坏原订阅的基础上实现本项目的所有功能。
+- Chunlion_Rule-Set_DNS-Leak.yaml
+    - 完整配置文件，适合大多数客户端直接导入。
+    - 内含 proxy-providers、proxy-groups、rule-providers、rules、DNS 与 TUN 全量配置。
+- Chunlion_Rule-Set_DNS-Leak_覆写.js
+    - Clash Verge Rev 场景下的全局覆写脚本。
+    - 在不改动原订阅内容的前提下，注入与 YAML 对齐的策略。
 
 ---
 
-## 🔀 独家定制分流规则
+## 核心设计目标
 
-针对您的特定需求，本项目对以下策略组进行了深度定制：
-
-| 策略组图标 | 策略组名称 | 逻辑说明 |
-| :---: | :--- | :--- |
-| 🦉 | **Wise** | 针对 Wise 跨境金融服务进行独立分流，保障资金操作安全。 
-| 🎮 | **Games** | 精准覆盖 Steam, Epic, EA, Ubisoft, Blizzard, Sony, Xbox, Nintendo。 
-| 🚀 | **直连优化** | **自动分流**：Steam、微软、苹果的中国区 CDN 流量自动走 `DIRECT`。 
-| 🇬🇧 | **UKwifi** | 专为英国 SIM 卡（如 giffgaff）Wifi Calling 优化的特定 IP 段分流。
-| 🤖 | **AI Services** | 涵盖 ChatGPT, Claude 等主流 AI 服务，默认优先选择美国节点。 
+1. 降低 DNS 泄露概率
+2. 提高规则命中精度（域名 + IP 双层）
+3. 保持多区域策略组可控（手动/自动/故障转移）
+4. 在不同客户端之间保证行为一致
 
 ---
 
-## 🔒 四重 DNS 防泄漏机制
+## 关键配置参数
 
-本项目在底层预设了严格的隐私防护逻辑，从根源阻断 DNS 泄露
-
-1.  **Fake-IP 增强模式**：
-    * `enhanced-mode: fake-ip` 
-    * 关闭 DNS 层的 IPv6 解析 (`ipv6: false`)，防止通过 IPv6 隧道泄露真实地理位置。 
-2.  **精细化 Nameserver 策略**：
-    * 国内域名与私有域使用腾讯/阿里公共 DNS (`223.5.5.5`, `119.29.29.29`) 直连解析。 
-    * 海外域名强制在远程代理端进行解析，彻底规避 ISP 污染。
-3.  **规则优先模式**：
-    * `respect-rules: true`：强制核心先进行规则匹配再处理 DNS，避免本地无效请求。 
-4.  **代理服务器专用解析**：
-    * `proxy-server-nameserver` 独立配置，确保机场节点域名在解析阶段即受到保护。 
+- Mixed-Port：7893
+- DNS 监听端口：7874
+- 工作模式：rule
+- TUN：开启（mixed 栈）
+- Sniffer：开启（TLS/HTTP/QUIC）
+- 控制面板：Zashboard（external-ui-url 已预置）
 
 ---
 
-## ⚠️ 常见问题与提示
+## 快速上手
 
-> [!WARNING]
-> * **无法联网？** 请确认 `mixed-port` 没有被其他软件占用，且 `prefer-h3` 已设置为 `false` 以兼容部分旧版核心。 
-> * **DNS 依然有小规模泄露？**
->     1.  **物理网卡设置**：建议将 Windows 网卡的 DNS 手动修改为 `127.0.0.1`，并配合 Clash 的 TUN 模式使用。 
->     2.  **开启严格路由**：在配置中将 `strict-route` 设为 `true`（注意：这可能会轻微影响访问速度）。 
->     3.  **关闭第三方覆写**：请务必关闭客户端自带的“系统 DNS 劫持”或“DNS 重定向”功能，以免冲突。
+### 方式一：使用 YAML（推荐）
+
+1. 下载 Chunlion_Rule-Set_DNS-Leak.yaml。
+2. 修改 proxy-providers 下的 订阅链接 与 机场名。
+3. 导入客户端并启用配置。
+
+### 方式二：使用 JS 覆写（推荐 Clash Verge Rev）
+
+1. 复制 Chunlion_Rule-Set_DNS-Leak_覆写.js 内容。
+2. Clash Verge Rev 中新建 Script 订阅并粘贴。
+3. 启用脚本后刷新订阅。
+
+说明：JS 脚本已与 YAML 保持策略一致，适合不方便直接维护完整 YAML 的用户。
 
 ---
 
-## ⚖️ 归属与免责
-本配置由原项目 [Seven1echo/Yaml](https://github.com/Seven1echo/Yaml) 优化而来。规则文件通过 `rule-providers` 每日自动更新，旨在提供安全、高效的网络环境，请在法律允许的范围内使用。
+## 策略分流详解
+
+### 服务策略组
+
+- AI Services：AI 服务统一分流，优先可用美区路径。
+- Games：Steam、Epic、EA、Ubisoft、Blizzard、Sony、Xbox、Nintendo。
+- Wise：金融场景独立策略组。
+- Emby：独立媒体策略组，同时包含域名与 IP 规则命中。
+- UKwifi：英国 WiFi Calling 专用 IP 分流。
+- 兜底流量：未命中规则统一进入最终策略。
+
+### 区域策略组
+
+每个区域均包含三种角色：
+
+- 手动组：便于固定节点。
+- 自动组（url-test）：自动测延迟选优。
+- 故障转移组（fallback）：自动组不可用时切换。
+
+区域覆盖：香港、台湾、日本、韩国、新加坡、美国、欧洲、其他。
+
+---
+
+## DNS 防泄露机制（重点）
+
+### 1) Fake-IP 增强模式
+
+- enhanced-mode: fake-ip
+- fake-ip-range: 198.18.0.1/16
+- DNS ipv6: false（DNS 层关闭 IPv6 解析）
+
+### 2) 规则优先解析
+
+- respect-rules: true
+- 先规则匹配，再走 DNS 解析路径。
+
+### 3) 分角色 DNS 服务器
+
+- default-nameserver：223.5.5.5、119.29.29.29
+- proxy-server-nameserver：223.5.5.5、119.29.29.29
+- direct-nameserver：223.5.5.5、119.29.29.29
+
+### 4) nameserver-policy 精细化
+
+已对以下规则集定向到国内 DNS：
+
+- rule-set:cn_domain
+- rule-set:private_domain
+- rule-set:add_direct_domain
+
+这能减少直连域名被错误送往远端解析的概率，提升稳定性。
+
+### 5) fake-ip-filter 增强
+
+已将以下项纳入真实解析路径：
+
+- rule-set:cn_domain
+- rule-set:private_domain
+- rule-set:add_direct_domain
+- 常见局域网/NTP/STUN/Windows 探测域名
+
+### 6) TUN + DNS 劫持
+
+- dns-hijack: any:53 与 tcp://any:53
+- 配合 auto-route/auto-redirect，尽量减少系统层绕行。
+
+---
+
+## 规则更新说明（当前版本）
+
+相较早期版本，当前配置已补强：
+
+1. 广告规则
+     - 新增 ads_domain，并在规则前列执行 REJECT。
+2. Emby 双通道规则
+     - 同时使用 emby_domain 与 emby_ip，提升命中率。
+3. DNS 策略增强
+     - nameserver-policy 增加 add_direct_domain。
+     - fake-ip-filter 增加 private_domain。
+
+---
+
+## 常见问题
+
+### 无法联网或部分站点超时
+
+- 检查 mixed-port 是否被占用。
+- 确认客户端没有叠加其他 DNS 覆写脚本。
+- 旧内核建议保持 prefer-h3: false。
+
+### 怀疑仍有 DNS 泄露
+
+- Windows 网卡 DNS 可改为 127.0.0.1 并配合 TUN。
+- 可尝试 strict-route: true（可能牺牲少量性能）。
+- 关闭客户端内额外 DNS 劫持插件，避免重复重定向。
+
+### 节点很多但区域组为空
+
+- 检查节点命名是否包含地区关键字（如 HK、JP、US 等）。
+- 如机场命名不规范，可在区域正则中补充关键字。
+
+---
+
+## 安全与合规
+
+- 请勿公开泄露订阅链接与机场信息。
+- 本仓库规则来自公开规则源，按需自动更新。
+- 请在当地法律法规允许范围内使用。
+
+---
+
+## 致谢
+
+- 原始项目与思路来源：[Seven1echo/Yaml](https://github.com/Seven1echo/Yaml)
+- 规则数据来源：MetaCubeX、Koolson、及其他公开规则维护者
