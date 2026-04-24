@@ -218,12 +218,12 @@ function main(config) {
     "RULE-SET,paypal_domain,PayPal",
     "RULE-SET,ukwifi_ip,UKwifi",
     "RULE-SET,wise_domain,Wise",
+    "RULE-SET,add_direct_domain,DIRECT",
     "RULE-SET,geolocation-!cn,一键代理",
     "RULE-SET,google_ip,Google,no-resolve",
     "RULE-SET,telegram_ip,Telegram,no-resolve",
     "RULE-SET,twitter_ip,Twitter,no-resolve",
     "RULE-SET,netflix_ip,Netflix,no-resolve",
-    "RULE-SET,add_direct_domain,DIRECT",
     "RULE-SET,cn_domain,DIRECT",
     "RULE-SET,cn_ip,DIRECT,no-resolve",
     "MATCH,兜底流量"
