@@ -173,6 +173,8 @@
 - Windows 网卡 DNS 可改为 127.0.0.1 并配合 TUN模式。
 - 可尝试 strict-route: true（可能牺牲少量性能，不推荐）。
 - 关闭客户端内额外 DNS 劫持插件，避免重复重定向。
+- 禁用浏览器中使用安全DNS，并保持实验性功能Experimental QUIC protocol关闭。
+- WebRTC泄露可通过安装浏览器插件[WebRTC Network Limiter](https://chromewebstore.google.com/detail/webrtc-network-limiter/npeicpdbkakmehahjeeohfdhnlpdklia)解决。
 
 ### 📍 节点很多但区域组为空
 
