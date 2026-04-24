@@ -6,15 +6,15 @@
 
 # ※※※※※※※※※※※※※※※ 锚点区域 ※※※※※※※※※※※※※※※
 # ① 订阅锚点
-Anchor_PR: &Anchor_PR {type: http, interval: 86400, proxy: DIRECT, health-check: {enable: true, url: 'https://www.g.cn/generate_204', interval: 300}, filter: "^(?!.*(到期|过期|剩余|网址|官网|邮箱|订阅|套餐|流量|说明|重置)).*$"}
+Anchor_PR: &Anchor_PR {type: http, interval: 86400, proxy: DIRECT, health-check: {enable: true, url: 'https://cp.cloudflare.com/generate_204', interval: 300}, filter: "^(?!.*(到期|过期|剩余|网址|官网|邮箱|订阅|套餐|流量|说明|重置)).*$"}
 # ② 出站锚点
 Anchor_OB: &Anchor_OB {type: select, proxies: [一键代理,香港手动, 台湾手动, 日本手动, 韩国手动, 新加坡手动, 美国手动, 欧洲手动, 香港自动, 台湾自动, 日本自动, 韩国自动, 新加坡自动, 美国自动, 欧洲自动, 香港故转, 台湾故转, 日本故转, 韩国故转, 新加坡故转, 美国故转, 欧洲故转, 其他手动, DIRECT, REJECT]}
 Anchor_AI: &Anchor_AI {type: select, proxies: [美国手动,一键代理,香港手动, 台湾手动, 日本手动, 韩国手动, 新加坡手动, 欧洲手动, 香港自动, 台湾自动, 日本自动, 韩国自动, 新加坡自动, 美国自动, 欧洲自动, 香港故转, 台湾故转, 日本故转, 韩国故转, 新加坡故转, 美国故转, 欧洲故转, 其他手动, DIRECT, REJECT]}
 Anchor_UK: &Anchor_UK {type: select, proxies: [欧洲手动,DIRECT]}
 # ③ 策略锚点
 Anchor_HS: &Anchor_HS {type: select, include-all: true}
-Anchor_FB: &Anchor_FB {type: fallback, url: 'https://www.g.cn/generate_204', interval: 300, lazy: false, timeout: 2000, max-failed-times: 3, hidden: true}
-Anchor_UT: &Anchor_UT {type: url-test, url: 'https://www.g.cn/generate_204', interval: 300, lazy: false, tolerance: 50, timeout: 2000, max-failed-times: 3, hidden: true, include-all: true}
+Anchor_FB: &Anchor_FB {type: fallback, url: 'https://cp.cloudflare.com/generate_204', interval: 300, lazy: true, timeout: 2000, max-failed-times: 3, hidden: true}
+Anchor_UT: &Anchor_UT {type: url-test, url: 'https://cp.cloudflare.com/generate_204', interval: 300, lazy: true, tolerance: 50, timeout: 2000, max-failed-times: 3, hidden: true, include-all: true}
 # ④ 规则锚点
 Anchor_DN: &Anchor_DN {type: http, interval: 86400, behavior: domain, format: mrs}
 Anchor_IP: &Anchor_IP {type: http, interval: 86400, behavior: ipcidr, format: mrs}
@@ -48,7 +48,7 @@ bind-address: "*"                                                       # 监听
 tcp-concurrent: true                                                    # 并发连接  提升多任务性能
 unified-delay: true                                                     # 统一延迟  减少节点延迟抖动
 log-level: info                                                         # 日志级别  silent（静默）/ error（错误）/ warning（警告）/ info（信息）/ debug（调试）
-ipv6: true                                                              # 网络协议  是否启用 IPv6 支持
+ipv6: false                                                             # 网络协议  是否启用 IPv6 支持
 profile:
   store-selected: true                                                  # 保存选择  记住上次选择的节点和策略组
   store-fake-ip: true                                                   # 保存映射  Fake-IP 映射以加快 DNS 命中
@@ -123,13 +123,23 @@ dns:
     - "stun.*"                                                          # 真实解析  STUN 服务
     - "time.*.com"                                                      # 真实解析  NTP 时间服务                      
     - "time.*.gov"                                                      # 真实解析  NTP 时间服务
-    - "pool.ntp.org"                                                    # 真实解析  NTP 时间服务            
+    - "pool.ntp.org"                                                    # 真实解析  NTP 时间服务      
+    - "+.ntp.org"                                                       # NTP 时间同步
+    - "+.pool.ntp.org"
+    - "+._tcp.*"                     
+    - "+._udp.*"
+    - "+.stun.*.*"                   
+    - "+.stun.*.*.*"
+    - "+.xbox.com"                   
+    - "+.xboxlive.com"
+    - "+.turn.*"                     
+    - "+.turn.*.*"      
   default-nameserver:
     - 223.5.5.5                                                         # 公共 DNS  阿里云
     - 119.29.29.29                                                      # 公共 DNS  腾讯
   proxy-server-nameserver:
-    - 223.5.5.5
-    - 119.29.29.29
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
   direct-nameserver:
     - 223.5.5.5
     - 119.29.29.29
@@ -215,6 +225,7 @@ rules:
   - RULE-SET,ads_domain,REJECT                                          # 屏蔽广告
   - RULE-SET,private_domain,DIRECT                                      # Private
   - RULE-SET,private_ip,DIRECT,no-resolve                               # Private
+  - RULE-SET,ukwifi_ip,UKwifi                                           # UKwifi
   - RULE-SET,steam_cn_domain,DIRECT                                     # Steam中国
   - RULE-SET,microsoft_cn,DIRECT                                        # Microsoft中国
   - RULE-SET,apple_cn,DIRECT                                            # Apple中国
@@ -235,7 +246,6 @@ rules:
   - RULE-SET,microsoft_domain,Microsoft                                 # 微软服务
   - RULE-SET,appletv_domain,AppleTV                                     # Apple TV+
   - RULE-SET,emby_domain,Emby                                           # Emby
-  - RULE-SET,emby_ip,Emby,no-resolve                                    # Emby IP
   - RULE-SET,apple_domain,Apple                                         # 苹果服务
   - RULE-SET,telegram_domain,Telegram                                   # Telegram
   - RULE-SET,tiktok_domain,TikTok                                       # TikTok
@@ -244,14 +254,14 @@ rules:
   - RULE-SET,disney_domain,Disney                                       # Disney+
   - RULE-SET,spotify_domain,Spotify                                     # Spotify
   - RULE-SET,paypal_domain,PayPal                                       # PayPal
-  - RULE-SET,ukwifi_ip,UKwifi                                           # UKwifi
   - RULE-SET,wise_domain,Wise                                           # Wise
   - RULE-SET,add_direct_domain,DIRECT                                   # 直连域名
-  - RULE-SET,geolocation-!cn,一键代理                                    # 排除国内
+  - RULE-SET,emby_ip,Emby,no-resolve                                    # Emby IP
   - RULE-SET,google_ip,Google,no-resolve                                # Google
   - RULE-SET,telegram_ip,Telegram,no-resolve                            # Telegram
   - RULE-SET,twitter_ip,Twitter,no-resolve                              # Twitter
   - RULE-SET,netflix_ip,Netflix,no-resolve                              # Netflix
+  - RULE-SET,geolocation-!cn,一键代理                                    # 排除国内
   - RULE-SET,cn_domain,DIRECT                                           # 中国域名
   - RULE-SET,cn_ip,DIRECT,no-resolve                                    # 中国IP
   - MATCH,兜底流量                                                       # 兜底规则
@@ -290,7 +300,7 @@ rule-providers:
   disney_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/disney.mrs"}
   spotify_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/spotify.mrs"}
   paypal_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/paypal.mrs"}
-  wise_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/wise.mrs"}
+  wise_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/wise.mrs"}
   geolocation-!cn: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs"}
   cn_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs"}
   add_direct_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Seven1echo/Yaml/refs/heads/main/rules/Seven1_Direct_Domain.mrs"}

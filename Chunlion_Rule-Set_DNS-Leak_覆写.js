@@ -5,7 +5,7 @@ function main(config) {
   config["mixed-port"] = 7893;
   config["mode"] = "rule";
   config["allow-lan"] = true;
-  config["ipv6"] = true;
+  config["ipv6"] = false;
   config["log-level"] = "info";
   config["tcp-concurrent"] = true;
   config["unified-delay"] = true;
@@ -20,7 +20,10 @@ function main(config) {
     "respect-rules": true,
     "prefer-h3": false,
     "default-nameserver": ["223.5.5.5", "119.29.29.29"],
-    "proxy-server-nameserver": ["223.5.5.5", "119.29.29.29"],
+    "proxy-server-nameserver": [
+      "https://dns.alidns.com/dns-query",
+      "https://doh.pub/dns-query"
+    ],
     "direct-nameserver": ["223.5.5.5", "119.29.29.29"],
     "direct-nameserver-follow-policy": true,
     "nameserver-policy": {
@@ -47,6 +50,17 @@ function main(config) {
       "time.*.com",
       "time.*.gov",
       "pool.ntp.org",
+      "+.ntp.org",
+      "+.pool.ntp.org",
+      "+._tcp.*",
+      "+._udp.*",
+      "WORKGROUP",
+      "+.stun.*.*",
+      "+.stun.*.*.*",
+      "+.xbox.com",
+      "+.xboxlive.com",
+      "+.turn.*",
+      "+.turn.*.*"
     ]
   };
 
@@ -114,9 +128,9 @@ function main(config) {
         "欧洲": '^(?i)(?=.*(奥地利|比利时|保加利亚|克罗地亚|塞浦路斯|捷克|丹麦|爱沙尼亚|芬兰|法国|德国|希腊|匈牙利|爱尔兰|意大利|拉脱维亚|立陶宛|卢森堡|荷兰|波兰|葡萄牙|罗马尼亚|斯洛伐克|斯洛文尼亚|西班牙|瑞典|英国|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|🇬🇧|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU)).*$'
       };
       return [
-        { name: `${region}故转`, type: "fallback", url: "https://www.g.cn/generate_204", interval: 300, proxies: [`${region}手动`, `${region}自动`], icon: `https://github.com/Seven1echo/Yaml/raw/main/icons/${regMap[region]}.png`, hidden: true },
+        { name: `${region}故转`, type: "fallback", url: "https://cp.cloudflare.com/generate_204", interval: 300, proxies: [`${region}手动`, `${region}自动`], icon: `https://github.com/Seven1echo/Yaml/raw/main/icons/${regMap[region]}.png`, hidden: true },
         { name: `${region}手动`, type: "select", "include-all": true, filter: filterMap[region], icon: `https://github.com/Seven1echo/Yaml/raw/main/icons/${regMap[region]}.png` },
-        { name: `${region}自动`, type: "url-test", url: "https://www.g.cn/generate_204", interval: 300, tolerance: 50, "include-all": true, filter: filterMap[region], icon: `https://github.com/Seven1echo/Yaml/raw/main/icons/${regMap[region]}.png`, hidden: true }
+        { name: `${region}自动`, type: "url-test", url: "https://cp.cloudflare.com/generate_204", interval: 300, tolerance: 50, "include-all": true, filter: filterMap[region], icon: `https://github.com/Seven1echo/Yaml/raw/main/icons/${regMap[region]}.png`, hidden: true }
       ];
     }).flat(),
 
@@ -187,22 +201,23 @@ function main(config) {
     "RULE-SET,ads_domain,REJECT",
     "RULE-SET,private_domain,DIRECT",
     "RULE-SET,private_ip,DIRECT,no-resolve",
+    "RULE-SET,ukwifi_ip,UKwifi",
+    "RULE-SET,steam_cn_domain,DIRECT",
+    "RULE-SET,microsoft_cn,DIRECT",
+    "RULE-SET,apple_cn,DIRECT",
     "RULE-SET,speedtest_domain,Speedtest",
     "RULE-SET,ai,AI Services",
     "RULE-SET,github_domain,GitHub",
     "RULE-SET,youtube_domain,YouTube",
     "RULE-SET,google_domain,Google",
-    "RULE-SET,steam_cn_domain,DIRECT",
-    "RULE-SET,microsoft_cn,DIRECT",  // Xbox/Windows 更新下载
-    "RULE-SET,apple_cn,DIRECT",      // App Store 下载加速
     "RULE-SET,steam_domain,Games",
-    "RULE-SET,epic_domain,Games",         // Epic 商店 (代理)
-    "RULE-SET,ea_domain,Games",           // EA / Origin (代理)
-    "RULE-SET,ubisoft_domain,Games",      // Ubisoft / Uplay (代理)
-    "RULE-SET,blizzard_domain,Games",     // 战网 (代理)
-    "RULE-SET,sony_domain,Games",         // PlayStation (代理)
-    "RULE-SET,xbox_domain,Games",         // Xbox (代理)
-    "RULE-SET,nintendo_domain,Games",     // 任天堂 (代理)
+    "RULE-SET,epic_domain,Games",
+    "RULE-SET,ea_domain,Games",
+    "RULE-SET,ubisoft_domain,Games",
+    "RULE-SET,blizzard_domain,Games",
+    "RULE-SET,sony_domain,Games",
+    "RULE-SET,xbox_domain,Games",
+    "RULE-SET,nintendo_domain,Games",
     "RULE-SET,onedrive_domain,OneDrive",
     "RULE-SET,microsoft_domain,Microsoft",
     "RULE-SET,appletv_domain,AppleTV",
@@ -216,14 +231,13 @@ function main(config) {
     "RULE-SET,disney_domain,Disney",
     "RULE-SET,spotify_domain,Spotify",
     "RULE-SET,paypal_domain,PayPal",
-    "RULE-SET,ukwifi_ip,UKwifi",
     "RULE-SET,wise_domain,Wise",
     "RULE-SET,add_direct_domain,DIRECT",
-    "RULE-SET,geolocation-!cn,一键代理",
     "RULE-SET,google_ip,Google,no-resolve",
     "RULE-SET,telegram_ip,Telegram,no-resolve",
     "RULE-SET,twitter_ip,Twitter,no-resolve",
     "RULE-SET,netflix_ip,Netflix,no-resolve",
+    "RULE-SET,geolocation-!cn,一键代理",
     "RULE-SET,cn_domain,DIRECT",
     "RULE-SET,cn_ip,DIRECT,no-resolve",
     "MATCH,兜底流量"
