@@ -1,7 +1,7 @@
 # 名称： Chunlion_Rule-Set_DNS-Leak
 # 项目地址：https://github.com/Chunlion/Clash_Rule-Set
 # 说明： ①本文件适用于Mihomo核心的工具使用； ②使用前需补充完整 “订阅链接” 与 “机场名”;  ③订阅链接和机场名请勿随意泄露，以免造成不必要的麻烦； 
-# 原作者频道：https://t.me/Seven1gogogo，项目地址：https://github.com/Seven1echo/Yaml，此分流文件添加了我需要的规则(Wise,Games等)，并且做了防止DNS泄露的配置，欢迎参考修改。
+# 原作者频道：https://t.me/Seven1gogogo，项目地址：https://github.com/Seven1echo/Yaml，此分流文件添加了我需要的规则(Wise,Games，Emby，去广告等)，并且做了防止DNS泄露的配置，欢迎参考修改。
 
 
 # ※※※※※※※※※※※※※※※ 锚点区域 ※※※※※※※※※※※※※※※
@@ -150,6 +150,7 @@ proxy-groups:
   - {name: AI Services,   <<: *Anchor_AI, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AI.png}
   - {name: GitHub,    <<: *Anchor_OB, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/github(1).png}
   - {name: AppleTV,   <<: *Anchor_OB, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/AppleTV.png}
+  - {name: Emby,      <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Emby.png}
   - {name: Apple,     <<: *Anchor_OB, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Apple.png}
   - {name: TikTok,    <<: *Anchor_OB, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/TikTok.png}
   - {name: Twitter,   <<: *Anchor_OB, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Twitter.png}
@@ -213,14 +214,14 @@ rules:
   - RULE-SET,ads_domain,REJECT                                          # 屏蔽广告
   - RULE-SET,private_domain,DIRECT                                      # Private
   - RULE-SET,private_ip,DIRECT,no-resolve                               # Private
+  - RULE-SET,steam_cn_domain,DIRECT                                     # Steam中国
+  - RULE-SET,microsoft_cn,DIRECT                                        # Microsoft中国
+  - RULE-SET,apple_cn,DIRECT                                            # Apple中国
   - RULE-SET,speedtest_domain,Speedtest                                 # Speedtest
   - RULE-SET,ai,AI Services                                             # AI Services
   - RULE-SET,github_domain,GitHub                                       # GitHub
   - RULE-SET,youtube_domain,YouTube                                     # YouTube
   - RULE-SET,google_domain,Google                                       # Google
-  - RULE-SET,steam_cn_domain,DIRECT                                     # Steam中国
-  - RULE-SET,microsoft_cn,DIRECT                                        # Microsoft中国
-  - RULE-SET,apple_cn,DIRECT                                            # Apple中国
   - RULE-SET,steam_domain,Games                                         # Steam
   - RULE-SET,epic_domain,Games                                          # Epic
   - RULE-SET,ea_domain,Games                                            # EA
@@ -232,6 +233,7 @@ rules:
   - RULE-SET,onedrive_domain,OneDrive                                   # OneDrive
   - RULE-SET,microsoft_domain,Microsoft                                 # 微软服务
   - RULE-SET,appletv_domain,AppleTV                                     # Apple TV+
+  - RULE-SET,emby_domain,Emby                                           # Emby
   - RULE-SET,apple_domain,Apple                                         # 苹果服务
   - RULE-SET,telegram_domain,Telegram                                   # Telegram
   - RULE-SET,tiktok_domain,TikTok                                       # TikTok
@@ -268,7 +270,6 @@ rule-providers:
   sony_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/sony.mrs"}
   xbox_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/xbox.mrs"}
   nintendo_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/nintendo.mrs"}
-
   private_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs"}
   speedtest_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ookla-speedtest.mrs"}
   ai: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs"}
@@ -278,6 +279,7 @@ rule-providers:
   onedrive_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/onedrive.mrs"}
   microsoft_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs"}
   appletv_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple-tvplus.mrs"}
+  emby_domain: { <<: *Anchor_DN, url: "https://github.com/666OS/rules/raw/release/mihomo/domain/Emby.mrs"}
   apple_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs"}
   telegram_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs"}
   tiktok_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.mrs"}
@@ -293,6 +295,7 @@ rule-providers:
   #IP规则
   private_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs"}
   google_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.mrs"}
+  emby_ip: { <<: *Anchor_IP, url: "https://github.com/666OS/rules/raw/release/mihomo/ip/Emby.mrs"}
   telegram_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs"}
   twitter_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.mrs"}
   netflix_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.mrs"}
@@ -300,3 +303,4 @@ rule-providers:
   cn_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs"}
 
 # ※※※※※※※※※※※※※※※ 配置结束 ※※※※※※※※※※※※※※※
+
