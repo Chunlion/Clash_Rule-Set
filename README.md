@@ -112,7 +112,7 @@
 ### 3️⃣ 分角色 DNS 服务器
 
 - default-nameserver：223.5.5.5、119.29.29.29
-- proxy-server-nameserver：223.5.5.5、119.29.29.29
+- proxy-server-nameserver：https://dns.alidns.com/dns-query、https://doh.pub/dns-query
 - direct-nameserver：223.5.5.5、119.29.29.29
 
 ### 4️⃣ nameserver-policy 精细化
@@ -151,7 +151,11 @@
    - 同时使用 emby_domain 与 emby_ip，提升命中率。
 3. DNS 策略增强
    - nameserver-policy 增加 add_direct_domain。
-   - fake-ip-filter 增加 private_domain。
+   - fake-ip-filter 增加 private_domain 以及更多局域网/NTP/STUN/TURN/Xbox 探测域名防御泄露。
+   - proxy-server-nameserver 升级使用 DoH (alidns 和 doh.pub)。
+4. 测速与直连优化
+   - 测试链接统一替换为更贴近落地延迟的 `cp.cloudflare.com/generate_204`。
+   - 修正了 `add_direct_domain`（直连域名）的规则层级，确保其优先级高于 `geolocation-!cn`。
 
 ---
 
@@ -162,11 +166,12 @@
 - 检查 mixed-port 是否被占用。
 - 确认客户端没有叠加其他 DNS 覆写脚本。
 - 旧内核建议保持 prefer-h3: false。
+- 如果节点使用的是ipv6，请自己修改配置文件中关于ipv6的部分。
 
 ### 🧪 怀疑仍有 DNS 泄露
 
-- Windows 网卡 DNS 可改为 127.0.0.1 并配合 TUN。
-- 可尝试 strict-route: true（可能牺牲少量性能）。
+- Windows 网卡 DNS 可改为 127.0.0.1 并配合 TUN模式。
+- 可尝试 strict-route: true（可能牺牲少量性能，不推荐）。
 - 关闭客户端内额外 DNS 劫持插件，避免重复重定向。
 
 ### 📍 节点很多但区域组为空
