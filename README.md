@@ -13,7 +13,7 @@
 - 🎮 游戏、金融、流媒体、AI 等场景分流
 - 🔄 统一的 YAML 与 JS 覆写脚本策略
 
-适配客户端示例：OpenWrt Clash/Nikki 插件、Clashmi、FlClash、Clash Verge Rev、Surfboard 等。
+适配客户端示例：`OpenWrt` `Clash/Nikki 插件`、`Clashmi`、`FlClash`、`Clash Verge Rev`、`Surfboard` 等。
 
 ---
 
@@ -57,14 +57,14 @@
 
 ### ✅ 方式一：使用 YAML（推荐）
 
-1. 下载 Chunlion_Rule-Set_DNS-Leak.yaml。
-2. 修改 proxy-providers 下的 订阅链接 与 机场名。
+1. 下载 `Chunlion_Rule-Set_DNS-Leak.yaml`。
+2. 修改 `proxy-providers` 下的 `订阅链接` 与 `机场名`。
 3. 导入客户端并启用配置。
 
 ### ✅ 方式二：使用 JS 覆写（推荐 Clash Verge Rev）
 
-1. 复制 Chunlion_Rule-Set_DNS-Leak_覆写.js 内容。
-2. Clash Verge Rev 中新建 Script 订阅并粘贴。
+1. 复制 `Chunlion_Rule-Set_DNS-Leak_覆写.js` 内容。
+2. Clash Verge Rev 中新建 `Script` 订阅并粘贴。
 3. 启用脚本后刷新订阅。
 
 > 💡 说明：JS 脚本已与 YAML 保持策略一致，适合不方便直接维护完整 YAML 的用户。
@@ -100,28 +100,28 @@
 
 ### 1️⃣ Fake-IP 增强模式
 
-- enhanced-mode: fake-ip
-- fake-ip-range: 198.18.0.1/16
-- DNS ipv6: false（DNS 层关闭 IPv6 解析）
+- `enhanced-mode: fake-ip`
+- `fake-ip-range: 198.18.0.1/16`
+- `DNS ipv6: false`（DNS 层关闭 IPv6 解析）
 
 ### 2️⃣ 规则优先解析
 
-- respect-rules: true
+- `respect-rules: true`
 - 先规则匹配，再走 DNS 解析路径。
 
 ### 3️⃣ 分角色 DNS 服务器
 
-- default-nameserver：223.5.5.5、119.29.29.29
-- proxy-server-nameserver：https://dns.alidns.com/dns-query、https://doh.pub/dns-query
-- direct-nameserver：223.5.5.5、119.29.29.29
+- `default-nameserver：223.5.5.5、119.29.29.29`
+- `proxy-server-nameserver：https://dns.alidns.com/dns-query、https://doh.pub/dns-query`
+- `direct-nameserver：223.5.5.5、119.29.29.29`
 
 ### 4️⃣ nameserver-policy 精细化
 
 已对以下规则集定向到国内 DNS：
 
-- rule-set:cn_domain
-- rule-set:private_domain
-- rule-set:add_direct_domain
+- `rule-set:cn_domain`
+- `rule-set:private_domain`
+- `rule-set:add_direct_domain`
 
 这能减少直连域名被错误送往远端解析的概率，提升稳定性。
 
@@ -129,15 +129,15 @@
 
 已将以下项纳入真实解析路径：
 
-- rule-set:cn_domain
-- rule-set:private_domain
-- rule-set:add_direct_domain
+- `rule-set:cn_domain`
+- `rule-set:private_domain`
+- `rule-set:add_direct_domain`
 - 常见局域网/NTP/STUN/Windows 探测域名
 
 ### 6️⃣ TUN + DNS 劫持
 
-- dns-hijack: any:53 与 tcp://any:53
-- 配合 auto-route/auto-redirect，尽量减少系统层绕行。
+- `dns-hijack: any:53 与 tcp://any:53`
+- 配合 `auto-route/auto-redirect`，尽量减少系统层绕行。
 
 ---
 
@@ -146,13 +146,13 @@
 相较早期版本，当前配置已补强：
 
 1. 广告规则
-   - 新增 ads_domain，并在规则前列执行 REJECT。
+   - 新增 `ads_domain`，并在规则前列执行 REJECT。
 2. Emby 双通道规则
-   - 同时使用 emby_domain 与 emby_ip，提升命中率。
+   - 同时使用 `emby_domain` 与 `emby_ip`，提升命中率。
 3. DNS 策略增强
-   - nameserver-policy 增加 add_direct_domain。
-   - fake-ip-filter 增加 private_domain 以及更多局域网/NTP/STUN/TURN/Xbox 探测域名防御泄露。
-   - proxy-server-nameserver 升级使用 DoH (alidns 和 doh.pub)。
+   - `nameserver-policy` 增加 `add_direct_domain`。
+   - `fake-ip-filter` 增加 `private_domain` 以及更多局域网/NTP/STUN/TURN/Xbox 探测域名防御泄露。
+   - `proxy-server-nameserver` 升级使用 `DoH (alidns 和 doh.pub)`。
 4. 测速与直连优化
    - 测试链接统一替换为更贴近落地延迟的 `cp.cloudflare.com/generate_204`。
    - 修正了 `add_direct_domain`（直连域名）的规则层级，确保其优先级高于 `geolocation-!cn`。
@@ -163,18 +163,19 @@
 
 ### 🌐 无法联网或部分站点超时
 
-- 检查 mixed-port 是否被占用。
+- 检查 `mixed-port` 是否被占用。
 - 确认客户端没有叠加其他 DNS 覆写脚本。
-- 旧内核建议保持 prefer-h3: false。
-- 如果节点使用的是ipv6，请自己修改配置文件中关于ipv6的部分。
+- 旧内核建议保持 `prefer-h3: false`。
+- 如果节点使用的是`ipv6`，请自己修改配置文件中关于`ipv6`的部分。
 
 ### 🧪 怀疑仍有 DNS 泄露
 
-- Windows 网卡 DNS 可改为 127.0.0.1 并配合 TUN模式。
-- 可尝试 strict-route: true（可能牺牲少量性能，不推荐）。
+- Windows 网卡 DNS 可改为 `127.0.0.1` 并配合 `TUN模式`。
+- 可尝试 `strict-route: true`（可能牺牲少量性能，不推荐）。
 - 关闭客户端内额外 DNS 劫持插件，避免重复重定向。
-- 禁用浏览器中使用安全DNS，并保持实验性功能Experimental QUIC protocol关闭。
-- WebRTC泄露可通过安装浏览器插件[WebRTC Network Limiter](https://chromewebstore.google.com/detail/webrtc-network-limiter/npeicpdbkakmehahjeeohfdhnlpdklia)解决。
+- 禁用浏览器中`使用安全DNS`，并保持实验性功能`Experimental QUIC protocol`关闭。
+- `WebRTC泄露`可通过安装浏览器插件[WebRTC Network Limiter](https://chromewebstore.google.com/detail/webrtc-network-limiter/npeicpdbkakmehahjeeohfdhnlpdklia)解决。
+- 尝试`禁用Windows智能多宿主名称解析`，`本地组策略编辑器`-`计算机配置`-`管理模板`-`网络`-`DNS客户端`-`禁用智能多宿主名称解析`-选择`已启用`。
 
 ### 📍 节点很多但区域组为空
 
