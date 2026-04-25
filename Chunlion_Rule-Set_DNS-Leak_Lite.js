@@ -117,7 +117,7 @@ function main(config) {
   const Anchor_UK = ['欧洲节点', 'DIRECT'];
 
   // 区域正则锚点转译
-  const regexHK = '^(?i)(?=.*(香港|🇭🇰|\\bHK\\b|Hong(?:\\s?Kong)?|HKG)).*$';
+  const regexHK = '^(?i)(?=.*(香港|🇭🇰|\\bHK\\b|Hong(?:\\s?Kong)?|HKG|HK)).*$';
   const regexTW = '^(?i)(?=.*(台湾|台灣|🇹🇼|\\bTW\\b|\\bTPE\\b|\\bTSA\\b|\\bKHH\\b|taiwan|TPE|TSA|KHH)).*$';
   const regexJP = '^(?i)(?=.*(日本|🇯🇵|\\bJP\\b|Japan|NRT|HND|KIX|CTS|FUK)).*$';
   const regexKR = '^(?i)(?=.*(韩国|韓國|🇰🇷|首尔|首爾|\\bKR\\b|\\bKOR\\b|Korea|Seoul|South)).*$';

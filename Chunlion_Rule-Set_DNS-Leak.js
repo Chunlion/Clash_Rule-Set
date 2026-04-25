@@ -154,7 +154,7 @@ function main(config) {
     ...["香港", "台湾", "日本", "韩国", "新加坡", "美国", "欧洲"].map(region => {
       const regMap = { "香港": "HK", "台湾": "TW", "日本": "JP", "韩国": "KR", "新加坡": "SG", "美国": "US", "欧洲": "EU" };
       const filterMap = {
-        "香港": '^(?i)(?=.*(香港|🇭🇰|\\bHK\\b|Hong(?:\\s?Kong)?|HKG)).*$',
+        "香港": '^(?i)(?=.*(香港|🇭🇰|\\bHK\\b|Hong(?:\\s?Kong)?|HKG|HK)).*$',
         "台湾": '^(?i)(?=.*(台湾|台灣|🇹🇼|\\bTW\\b|\\bTPE\\b|\\bTSA\\b|\\bKHH\\b|taiwan|TPE|TSA|KHH)).*$',
         "日本": '^(?i)(?=.*(日本|🇯🇵|\\bJP\\b|Japan|NRT|HND|KIX|CTS|FUK)).*$',
         "韩国": '^(?i)(?=.*(韩国|韓國|🇰🇷|首尔|首爾|\\bKR\\b|\\bKOR\\b|Korea|Seoul|South)).*$',

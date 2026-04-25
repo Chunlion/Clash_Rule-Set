@@ -20,7 +20,7 @@ Anchor_DN: &Anchor_DN {type: http, interval: 86400, behavior: domain, format: mr
 Anchor_IP: &Anchor_IP {type: http, interval: 86400, behavior: ipcidr, format: mrs}
 Anchor_CL: &Anchor_CL {type: http, interval: 86400, behavior: classical, format: text}
 # ⑤ 区域锚点
-Anchor_HK: &Anchor_HK '^(?i)(?=.*(香港|🇭🇰|\bHK\b|Hong(?:\s?Kong)?|HKG)).*$'
+Anchor_HK: &Anchor_HK '^(?i)(?=.*(香港|🇭🇰|\bHK\b|Hong(?:\s?Kong)?|HKG|HK)).*$'
 Anchor_TW: &Anchor_TW '^(?i)(?=.*(台湾|台灣|🇹🇼|\bTW\b|\bTPE\b|\bTSA\b|\bKHH\b|taiwan|TPE|TSA|KHH)).*$'
 Anchor_JP: &Anchor_JP '^(?i)(?=.*(日本|🇯🇵|\bJP\b|Japan|NRT|HND|KIX|CTS|FUK)).*$'
 Anchor_KR: &Anchor_KR '^(?i)(?=.*(韩国|韓國|🇰🇷|首尔|首爾|\bKR\b|\bKOR\b|Korea|Seoul|South)).*$'
