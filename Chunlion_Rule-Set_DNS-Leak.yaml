@@ -79,7 +79,7 @@ sniffer:
   force-dns-mapping: true                                               # 强制映射  DNS 映射（对纯 IP 连接尝试 DNS 映射）
   sniff:
     QUIC:
-      ports: [443]                                                      # 嗅探参数  QUIC 协议流量（HTTP/3 常用端口）
+      ports: [443, 8443]                                                # 嗅探参数  QUIC 协议流量（HTTP/3 常用端口）
     TLS:
       ports: [443, 8443]                                                # 嗅探参数  HTTPS（TLS）常用及备用端口
     HTTP:
@@ -101,6 +101,7 @@ sniffer:
 # DNS 设置(开启严格路由可以仅保留nameserver)
 dns:
   enable: true                                                          # 解析服务  启用 Clash 内置 DNS 服务
+  cache-algorithm: arc                                                  # 缓存算法  自适应替换缓存（较LRU命中率更优）
   listen: 0.0.0.0:7874                                                  # 监听服务  DNS 服务监听地址与端口
   ipv6: false                                                           # 网络协议  关闭 IPv6 DNS 解析支持(防止DNS泄露)
   enhanced-mode: fake-ip                                                # 增强模式  FDNS 增强模式（Fake-IP，用于防止 DNS 泄露）
@@ -110,8 +111,8 @@ dns:
   prefer-h3: false                                                      # 关闭 HTTP/3 支持
   fake-ip-filter:
     - "+.lan"                                                           # 真实解析  常见局域网域名后缀
-    - "rule-set:cn_domain"
-    - "rule-set:private_domain"
+    - "geosite:cn"                    
+    - "geosite:private"                
     - "rule-set:add_direct_domain"
     - "+.local"
     - "+.msftconnecttest.com"                                           # 真实解析  Windows 网络连接测试
@@ -145,11 +146,17 @@ dns:
     - 119.29.29.29
   direct-nameserver-follow-policy: true
   nameserver-policy:
-    "rule-set:cn_domain,private_domain,add_direct_domain": [223.5.5.5, 119.29.29.29]
+    "rule-set:add_direct_domain": [223.5.5.5, 119.29.29.29]   
     "geosite:cn,private": [223.5.5.5, 119.29.29.29]
   nameserver:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
+  fallback:  
+    - https://1.1.1.1/dns-query
+    - https://8.8.8.8/dns-query
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
 
 
 # ※※※※※※※※※※※※※※※ 代理策略组 ※※※※※※※※※※※※※※※

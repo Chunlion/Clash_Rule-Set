@@ -43,6 +43,7 @@ proxy-providers:
 # 基础配置
 mixed-port: 7893                                                        # 监听端口  HTTP + SOCKS5 混合代理端口
 mode: rule                                                              # 工作模式  rule（规则模式）/ global（全局模式）/ direct（直连模式）
+find-process-mode: strict                                               # 进程匹配  匹配进程名进行规则分流
 allow-lan: true                                                         # 局域连接  是否允许局域网设备连接
 bind-address: "*"                                                       # 监听接口  监听的网络接口（* 表示所有接口）
 tcp-concurrent: true                                                    # 并发连接  提升多任务性能
@@ -72,12 +73,11 @@ sniffer:
   force-dns-mapping: true                                               # 强制映射  DNS 映射（对纯 IP 连接尝试 DNS 映射）
   sniff:
     QUIC:
-      ports: [443]                                                      # 嗅探参数  QUIC 协议流量（HTTP/3 常用端口）
+      ports: [443, 8443]                                                # 嗅探参数  QUIC 协议流量（HTTP/3 常用端口及备用）
     TLS:
       ports: [443, 8443]                                                # 嗅探参数  HTTPS（TLS）常用及备用端口
     HTTP:
       ports: [80, 8080-8880]                                            # 嗅探参数  HTTP 及常见 Web / 代理端口段
-      override-destination: true                                        # 嗅探成功  HTTP 嗅探成功后覆盖目标地址
   force-domain:
     - "+.netflix.com"                                                   # 强制嗅探  Netflix 主域名
     - "+.nflxvideo.net"                                                 # 强制嗅探  Netflix CDN
@@ -94,6 +94,7 @@ sniffer:
 # DNS 设置(开启严格路由可以仅保留nameserver)
 dns:
   enable: true                                                          # 解析服务  启用 Clash 内置 DNS 服务
+  cache-algorithm: arc                                                  # 缓存算法  自适应替换缓存（较LRU命中率更优）
   listen: 0.0.0.0:7874                                                  # 监听服务  DNS 服务监听地址与端口
   ipv6: false                                                           # 网络协议  关闭 IPv6 DNS 解析支持(防止DNS泄露)
   enhanced-mode: fake-ip                                                # 增强模式  FDNS 增强模式（Fake-IP，用于防止 DNS 泄露）
@@ -143,6 +144,12 @@ dns:
   nameserver:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
+  fallback:  
+    - https://1.1.1.1/dns-query
+    - https://8.8.8.8/dns-query
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
 
 
 # ※※※※※※※※※※※※※※※ 代理策略组 ※※※※※※※※※※※※※※※

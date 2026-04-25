@@ -37,7 +37,7 @@ function main(config) {
     'parse-pure-ip': true,
     'force-dns-mapping': true,
     'sniff': {
-      'QUIC': { 'ports': [443] },
+      'QUIC': { 'ports': [443, 8443] },
       'TLS': { 'ports': [443, 8443] },
       'HTTP': { 'ports': [80, '8080-8880'], 'override-destination': true }
     },
@@ -60,6 +60,7 @@ function main(config) {
   // ==================== DNS 设置 ====================
   config['dns'] = {
     'enable': true,
+    'cache-algorithm': 'arc',
     'listen': '0.0.0.0:7874',
     'ipv6': false,
     'enhanced-mode': 'fake-ip',
@@ -102,7 +103,12 @@ function main(config) {
       'rule-set:add_direct_domain': ['223.5.5.5', '119.29.29.29'],
       'geosite:cn,private': ['223.5.5.5', '119.29.29.29']
     },
-    'nameserver': ['https://dns.alidns.com/dns-query', 'https://doh.pub/dns-query']
+    'nameserver': ['https://dns.alidns.com/dns-query', 'https://doh.pub/dns-query'],
+    'fallback': ['https://1.1.1.1/dns-query', 'https://8.8.8.8/dns-query'],
+    'fallback-filter': {
+      'geoip': true,
+      'geoip-code': ['CN']
+    }
   };
 
   // ==================== 策略组 ====================

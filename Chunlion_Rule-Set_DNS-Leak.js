@@ -1,79 +1,114 @@
-// Clash Verge Rev 全局覆写脚本 - 策略分流版
+/**
+ * 名称： Chunlion_Rule-Set_DNS-Leak 覆写脚本
+ * 说明： 基于 YAML 配置文件生成的 JS 脚本，用于 Clash Verge 等客户端的 Merge 覆写。
+ */
 
 function main(config) {
-  // --- 1. 基础设置 ---
-  config["mixed-port"] = 7893;
-  config["mode"] = "rule";
-  config["allow-lan"] = true;
-  config["ipv6"] = false;
-  config["log-level"] = "info";
-  config["tcp-concurrent"] = true;
-  config["unified-delay"] = true;
+  // ==================== 基础配置 ====================
+  config['mixed-port'] = 7893;
+  config['mode'] = 'rule';
+  config['allow-lan'] = true;
+  config['bind-address'] = '*';
+  config['tcp-concurrent'] = true;
+  config['unified-delay'] = true;
+  config['log-level'] = 'info';
+  config['ipv6'] = false;
+  config['profile'] = {
+    'store-selected': true,
+    'store-fake-ip': true
+  };
 
-  // --- 2. DNS 配置 ---
-  config["dns"] = {
-    "enable": true,
-    "listen": "0.0.0.0:7874",
-    "ipv6": false,
-    "enhanced-mode": "fake-ip",
-    "fake-ip-range": "198.18.0.1/16",
-    "respect-rules": true,
-    "prefer-h3": false,
-    "default-nameserver": ["223.5.5.5", "119.29.29.29"],
-    "proxy-server-nameserver": [
-      "https://dns.alidns.com/dns-query",
-      "https://doh.pub/dns-query"
-    ],
-    "direct-nameserver": ["223.5.5.5", "119.29.29.29"],
-    "direct-nameserver-follow-policy": true,
-    "nameserver-policy": {
-      "rule-set:cn_domain,private_domain,add_direct_domain": ["223.5.5.5", "119.29.29.29"],
-      "geosite:cn,private": ["223.5.5.5", "119.29.29.29"]
+  // ==================== TUN 配置 ====================
+  config['tun'] = {
+    'enable': true,
+    'stack': 'mixed',
+    'dns-hijack': ['any:53', 'tcp://any:53'],
+    'auto-detect-interface': true,
+    'auto-route': true,
+    'auto-redirect': true,
+    'strict-route': false,
+    'endpoint-independent-nat': true
+  };
+
+  // ==================== 嗅探功能 ====================
+  config['sniffer'] = {
+    'enable': true,
+    'override-destination': true,
+    'parse-pure-ip': true,
+    'force-dns-mapping': true,
+    'sniff': {
+      'QUIC': { 'ports': [443, 8443] },
+      'TLS': { 'ports': [443, 8443] },
+      'HTTP': { 'ports': [80, '8080-8880'], 'override-destination': true }
     },
-    "nameserver": [
-      "https://dns.alidns.com/dns-query",
-      "https://doh.pub/dns-query"
+    'force-domain': [
+      '+.netflix.com',
+      '+.nflxvideo.net',
+      '+.amazonaws.com',
+      '+.media.dssott.com'
     ],
-    "fake-ip-filter": [
-      "+.lan",
-      "rule-set:cn_domain",
-      "rule-set:private_domain",
-      "rule-set:add_direct_domain",
-      "+.local",
-      "+.msftconnecttest.com",
-      "+.msftncsi.com",
-      "localhost.ptlogin2.qq.com",
-      "localhost.sec.qq.com",
-      "+.in-addr.arpa",
-      "+.ip6.arpa",
-      "stun.*",
-      "time.*.com",
-      "time.*.gov",
-      "pool.ntp.org",
-      "+.ntp.org",
-      "+.pool.ntp.org",
-      "+._tcp.*",
-      "+._udp.*",
-      "WORKGROUP",
-      "+.stun.*.*",
-      "+.stun.*.*.*",
-      "+.xbox.com",
-      "+.xboxlive.com",
-      "+.turn.*",
-      "+.turn.*.*"
+    'skip-domain': [
+      '+.apple.com',
+      'Mijia Cloud',
+      'dlg.io.mi.com',
+      '+.oray.com',
+      '+.sunlogin.net',
+      '+.push.apple.com'
     ]
   };
 
-  // --- 3. TUN 配置 ---
-  config["tun"] = {
-    "enable": true,
-    "stack": "mixed",
-    "dns-hijack": ["any:53", "tcp://any:53"],
-    "auto-detect-interface": true,
-    "auto-route": true,
-    "auto-redirect": true,
-    "strict-route": false,
-    "endpoint-independent-nat": true
+  // ==================== DNS 设置 ====================
+  config['dns'] = {
+    'enable': true,
+    'cache-algorithm': 'arc',
+    'listen': '0.0.0.0:7874',
+    'ipv6': false,
+    'enhanced-mode': 'fake-ip',
+    'fake-ip-range': '198.18.0.1/16',
+    'fake-ip-filter-mode': 'blacklist',
+    'respect-rules': true,
+    'prefer-h3': false,
+    'fake-ip-filter': [
+      '+.lan',
+      'geosite:cn',
+      'geosite:private',
+      'rule-set:add_direct_domain',
+      '+.local',
+      '+.msftconnecttest.com',
+      '+.msftncsi.com',
+      'localhost.ptlogin2.qq.com',
+      'localhost.sec.qq.com',
+      '+.in-addr.arpa',
+      '+.ip6.arpa',
+      'stun.*',
+      'time.*.com',
+      'time.*.gov',
+      'pool.ntp.org',
+      '+.ntp.org',
+      '+.pool.ntp.org',
+      '+._tcp.*',
+      '+._udp.*',
+      '+.stun.*.*',
+      '+.stun.*.*.*',
+      '+.xbox.com',
+      '+.xboxlive.com',
+      '+.turn.*',
+      '+.turn.*.*'
+    ],
+    'default-nameserver': ['223.5.5.5', '119.29.29.29'],
+    'proxy-server-nameserver': ['https://dns.alidns.com/dns-query', 'https://doh.pub/dns-query'],
+    'direct-nameserver': ['223.5.5.5', '119.29.29.29'],
+    'direct-nameserver-follow-policy': true,
+    'nameserver-policy': {
+      'rule-set:add_direct_domain': ['223.5.5.5', '119.29.29.29'],
+      'geosite:cn,private': ['223.5.5.5', '119.29.29.29']
+    },
+    'nameserver': ['https://dns.alidns.com/dns-query', 'https://doh.pub/dns-query'],
+    'fallback': ['https://1.1.1.1/dns-query', 'https://8.8.8.8/dns-query'],
+    'fallback-filter': {
+      'geoip': true,
+      'geoip-code': ['CN']
+    }
   };
 
   // --- 4. 策略组 (Proxy Groups) ---
