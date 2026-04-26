@@ -18,6 +18,17 @@ function main(config) {
     'store-fake-ip': true
   };
 
+  // ==================== 地理数据 ====================
+  config['geo-auto-update'] = true; // 自动更新 geodata
+  config['geo-update-interval'] = 24; // 更新间隔  单位：小时
+  config['geodata-mode'] = true; // 数据分流  使用数据集进行规则与分流匹配
+  config['geox-url'] = {
+    'geosite': 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat',
+    'geoip': 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat',
+    'mmdb': 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.metadb',
+    'asn': 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/GeoLite2-ASN.mmdb'
+  }
+
   // ==================== TUN 配置 ====================
   config['tun'] = {
     'enable': true,
@@ -129,6 +140,7 @@ function main(config) {
   config['proxy-groups'] = [
     { name: '一键代理', type: 'select', proxies: ['全局最优', '稳定备用', '香港节点', '台湾节点', '日本节点', '韩国节点', '新加坡节点', '美国节点', '欧洲节点', '其他节点', 'DIRECT', 'REJECT'], icon: 'https://github.com/Seven1echo/Yaml/raw/main/icons/Rocket.png' },
     { name: 'Streaming', type: 'select', proxies: Anchor_OB, icon: 'https://github.com/Seven1echo/Yaml/raw/main/icons/YouTube.png' },
+    { name: 'Emby', type: 'select', proxies: Anchor_OB, icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Emby.png' },
     { name: 'Google', type: 'select', proxies: Anchor_OB, icon: 'https://github.com/Seven1echo/Yaml/raw/main/icons/Google.png' },
     { name: 'AI Services', type: 'select', proxies: Anchor_AI, icon: 'https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AI.png' },
     { name: 'TikTok', type: 'select', proxies: Anchor_OB, icon: 'https://github.com/Seven1echo/Yaml/raw/main/icons/TikTok.png' },
@@ -153,8 +165,9 @@ function main(config) {
   config['rules'] = [
     // 特殊自定义规则
     "RULE-SET,ukwifi_ip,UKwifi",
-    "RULE-SET,emby_domain,Streaming",
-    "RULE-SET,emby_ip,Streaming,no-resolve",
+    "RULE-SET,emby_domain,Emby",
+    "RULE-SET,emby_ip,Emby,no-resolve",
+    "RULE-SET,add_emby,Emby",
     "RULE-SET,add_direct_domain,DIRECT",
     // 服务分流
     "GEOSITE,private,DIRECT",
@@ -188,8 +201,8 @@ function main(config) {
     emby_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://github.com/666OS/rules/raw/release/mihomo/domain/Emby.mrs" },
     emby_ip: { type: 'http', interval: 86400, behavior: 'ipcidr', format: 'mrs', url: "https://github.com/666OS/rules/raw/release/mihomo/ip/Emby.mrs" },
     ukwifi_ip: { type: 'http', interval: 86400, behavior: 'classical', format: 'text', url: "https://raw.githubusercontent.com/iniwex5/tools/refs/heads/main/rules/UK-wifi-call.list" },
-    add_direct_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/Seven1echo/Yaml/refs/heads/main/rules/Seven1_Direct_Domain.mrs" }
+    add_direct_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/Seven1echo/Yaml/refs/heads/main/rules/Seven1_Direct_Domain.mrs" },
+    add_emby: { type: 'http', interval: 86400, behavior: 'classical', format: 'text', url: "https://raw.githubusercontent.com/ForestSun2023/Emby-Rule/main/EMBY.yaml" }
   };
-
   return config;
 }

@@ -54,6 +54,16 @@ profile:
   store-selected: true                                                  # 保存选择  记住上次选择的节点和策略组
   store-fake-ip: true                                                   # 保存映射  Fake-IP 映射以加快 DNS 命中
 
+# 地理数据
+geo-auto-update: true                                                   # 自动更新  geodata
+geo-update-interval: 24                                                 # 更新间隔  单位：小时
+geodata-mode: true                                                      # 数据分流  使用数据集进行规则与分流匹配
+geox-url:
+  geosite: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat
+  geoip:   https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat
+  mmdb:    https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.metadb
+  asn:     https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/GeoLite2-ASN.mmdb
+  
 # TUN配置
 tun:
   enable: true                                                          # 网卡模式  是否启用 TUN 虚拟网卡模式  
@@ -156,6 +166,7 @@ dns:
 proxy-groups:
   - {name: 一键代理, type: select, proxies: [全局最优, 稳定备用, 香港节点, 台湾节点, 日本节点, 韩国节点, 新加坡节点, 美国节点, 欧洲节点, 其他节点], icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Rocket.png}
   - {name: Streaming,   <<: *Anchor_OB, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/YouTube.png}
+  - {name: Emby,    <<: *Anchor_OB, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Emby.png}
   - {name: Google,    <<: *Anchor_OB, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Google.png}
   - {name: AI Services,   <<: *Anchor_AI, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AI.png}
   - {name: TikTok,    <<: *Anchor_OB, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/TikTok.png}
@@ -181,8 +192,9 @@ proxy-groups:
 rules:
    # 特殊自定义规则（无法被标准 Geo 替代的，保留外部调用）
   - RULE-SET,ukwifi_ip,UKwifi                                           # UKwifi
-  - RULE-SET,emby_domain,Streaming                                      # Emby
-  - RULE-SET,emby_ip,Streaming,no-resolve                               # Emby IP
+  - RULE-SET,emby_domain,Emby                                           # Emby
+  - RULE-SET,emby_ip,Emby,no-resolve                                    # Emby IP
+  - RULE-SET,add_emby,Emby                                              # Emby
   - RULE-SET,add_direct_domain,DIRECT                                   # 直连域名
 
   # 服务分流
@@ -218,6 +230,5 @@ rule-providers:
   emby_ip: { <<: *Anchor_IP, url: "https://github.com/666OS/rules/raw/release/mihomo/ip/Emby.mrs"}
   ukwifi_ip: { <<: *Anchor_CL, url: "https://raw.githubusercontent.com/iniwex5/tools/refs/heads/main/rules/UK-wifi-call.list"}
   add_direct_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Seven1echo/Yaml/refs/heads/main/rules/Seven1_Direct_Domain.mrs"}
-
+  add_emby: { <<: *Anchor_CL, url: "https://raw.githubusercontent.com/ForestSun2023/Emby-Rule/main/EMBY.yaml"}
 # ※※※※※※※※※※※※※※※ 配置结束 ※※※※※※※※※※※※※※※
-
