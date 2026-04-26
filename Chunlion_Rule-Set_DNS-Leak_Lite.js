@@ -104,8 +104,24 @@ function main(config) {
       '+.stun.*.*.*',
       '+.xbox.com',
       '+.xboxlive.com',
+      '+.srv.nintendo.net',
+      '+.stun.playstation.net',
+      'stun.l.google.com',
+      'stun1.l.google.com',
+      'stun2.l.google.com',
+      'stun3.l.google.com',
+      'stun4.l.google.com',
       '+.turn.*',
-      '+.turn.*.*'
+      '+.turn.*.*',
+      '+.turn.*.*.*',
+      '+.stun.cloudflare.com',
+      '+.webrtc.org',
+      '+.zoom.us',
+      '+.teams.microsoft.com',
+      '+.skype.com',
+      '+.meet.google.com',
+      '+.push.apple.com',
+      '+.push-apple.com.akadns.net'
     ],
     'default-nameserver': ['223.5.5.5', '119.29.29.29'],
     'proxy-server-nameserver': ['https://dns.alidns.com/dns-query', 'https://doh.pub/dns-query'],
@@ -129,14 +145,14 @@ function main(config) {
   const Anchor_UK = ['欧洲节点', 'DIRECT'];
 
   // 区域正则锚点转译
-  const regexHK = '^(?i)(?=.*(香港|🇭🇰|\\bHK\\b|Hong(?:\\s?Kong)?|HKG|HK)).*$';
-  const regexTW = '^(?i)(?=.*(台湾|台灣|🇹🇼|\\bTW\\b|\\bTPE\\b|\\bTSA\\b|\\bKHH\\b|taiwan|TPE|TSA|KHH)).*$';
-  const regexJP = '^(?i)(?=.*(日本|🇯🇵|\\bJP\\b|Japan|NRT|HND|KIX|CTS|FUK)).*$';
-  const regexKR = '^(?i)(?=.*(韩国|韓國|🇰🇷|首尔|首爾|\\bKR\\b|\\bKOR\\b|Korea|Seoul|South)).*$';
-  const regexSG = '^(?i)(?=.*(新加坡|🇸🇬|\\bSG\\b|Singapore|SIN|XSP)).*$';
-  const regexUS = '^(?i)(?=.*(美国|美國|🇺🇸|\\bUS\\b|\\bUSA\\b|SJC|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD)).*$';
-  const regexEU = '^(?i)(?=.*(奥地利|奥地利共和国|比利时|保加利亚|克罗地亚|塞浦路斯|捷克|丹麦|爱沙尼亚|芬兰|法国|德国|希腊|匈牙利|爱尔兰|意大利|拉脱维亚|立陶宛|卢森堡|荷兰|波兰|葡萄牙|罗马尼亚|斯洛伐克|斯洛文尼亚|西班牙|瑞典|英国|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|🇬🇧|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU)).*$';
-  const regexOT = '^(?!.*(DIRECT|直接连接|香港|台湾|台灣|日本|韩国|韓國|新加坡|美国|美國|奥地利|比利时|保加利亚|克罗地亚|塞浦路斯|捷克|丹麦|爱沙尼亚|芬兰|法国|德国|希腊|匈牙利|爱尔兰|意大利|拉脱维亚|立陶宛|卢森堡|荷兰|波兰|葡萄牙|罗马尼亚|斯洛伐克|斯洛文尼亚|西班牙|瑞典|英国|🇭🇰|🇹🇼|🇸🇬|🇯🇵|🇰🇷|🇺🇸|🇬🇧|HK|TW|SG|JP|KR|US|GB|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU|HKG|TPE|TSA|KHH|SIN|XSP|NRT|HND|KIX|CTS|FUK|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD|LHR|LGW)).*$';
+  const regexHK = '^(?i)(?=.*(香港|🇭🇰|\\bHK\\b|Hong(?:\\s?Kong)?|HKG|HKT|HK)).*$';
+  const regexTW = '^(?i)(?=.*(台湾|台灣|🇹🇼|\\bTW\\b|\\bTPE\\b|\\bTSA\\b|\\bKHH\\b|Taiwan|Taipei|Kaohsiung|taiwan|TPE|TSA|KHH)).*$';
+  const regexJP = '^(?i)(?=.*(日本|🇯🇵|\\bJP\\b|Japan|Tokyo|Osaka|TYO|OSA|NRT|HND|KIX|CTS|FUK)).*$';
+  const regexKR = '^(?i)(?=.*(韩国|韓國|🇰🇷|首尔|首爾|\\bKR\\b|\\bKOR\\b|Korea|Seoul|SEL|ICN|South)).*$';
+  const regexSG = '^(?i)(?=.*(新加坡|🇸🇬|\\bSG\\b|Singapore|SGP|SIN|XSP)).*$';
+  const regexUS = '^(?i)(?=.*(美国|美國|🇺🇸|\\bUS\\b|\\bUSA\\b|United\\s?States|America|SJC|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD)).*$';
+  const regexEU = '^(?i)(?=.*(奥地利|奥地利共和国|比利时|保加利亚|克罗地亚|塞浦路斯|捷克|丹麦|爱沙尼亚|芬兰|法国|德国|希腊|匈牙利|爱尔兰|意大利|拉脱维亚|立陶宛|卢森堡|荷兰|波兰|葡萄牙|罗马尼亚|斯洛伐克|斯洛文尼亚|西班牙|瑞典|英国|London|United\\s?Kingdom|England|Germany|France|Netherlands|Amsterdam|Frankfurt|Paris|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|🇬🇧|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU|LHR|LGW)).*$';
+  const regexOT = '^(?!.*(DIRECT|直接连接|香港|台湾|台灣|日本|韩国|韓國|新加坡|美国|美國|奥地利|比利时|保加利亚|克罗地亚|塞浦路斯|捷克|丹麦|爱沙尼亚|芬兰|法国|德国|希腊|匈牙利|爱尔兰|意大利|拉脱维亚|立陶宛|卢森堡|荷兰|波兰|葡萄牙|罗马尼亚|斯洛伐克|斯洛文尼亚|西班牙|瑞典|英国|London|Germany|France|Netherlands|Tokyo|Osaka|Seoul|Singapore|Taipei|🇭🇰|🇹🇼|🇸🇬|🇯🇵|🇰🇷|🇺🇸|🇬🇧|HK|TW|SG|SGP|JP|TYO|OSA|KR|SEL|ICN|US|USA|GB|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU|HKG|HKT|TPE|TSA|KHH|SIN|XSP|NRT|HND|KIX|CTS|FUK|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD|LHR|LGW)).*$';
 
   config['proxy-groups'] = [
     { name: '一键代理', type: 'select', proxies: ['全局最优', '稳定备用', '香港节点', '台湾节点', '日本节点', '韩国节点', '新加坡节点', '美国节点', '欧洲节点', '其他节点', 'DIRECT', 'REJECT'], icon: 'https://github.com/Seven1echo/Yaml/raw/main/icons/Rocket.png' },
@@ -191,9 +207,9 @@ function main(config) {
     "GEOIP,google,Google,no-resolve",
     "GEOIP,netflix,Streaming,no-resolve",
     // 区域划分兜底
-    "GEOSITE,geolocation-!cn,一键代理",
     "GEOSITE,cn,DIRECT",
     "GEOIP,cn,DIRECT,no-resolve",
+    "GEOSITE,geolocation-!cn,一键代理",
     "MATCH,兜底流量"
   ];
 
