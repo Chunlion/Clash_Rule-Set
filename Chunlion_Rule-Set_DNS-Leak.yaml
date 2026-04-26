@@ -43,8 +43,9 @@ proxy-providers:
 # 基础配置
 mixed-port: 7893                                                        # 监听端口  HTTP + SOCKS5 混合代理端口
 mode: rule                                                              # 工作模式  rule（规则模式）/ global（全局模式）/ direct（直连模式）
-allow-lan: true                                                         # 局域连接  是否允许局域网设备连接
-bind-address: "*"                                                       # 监听接口  监听的网络接口（* 表示所有接口）
+find-process-mode: strict                                               # 进程匹配  Windows / Clash Verge Rev 更适合保持 strict
+allow-lan: false                                                        # 局域连接  桌面端默认关闭，避免暴露代理入口
+bind-address: 127.0.0.1                                                 # 监听接口  仅监听本机回环地址
 tcp-concurrent: true                                                    # 并发连接  提升多任务性能
 unified-delay: true                                                     # 统一延迟  减少节点延迟抖动
 log-level: info                                                         # 日志级别  silent（静默）/ error（错误）/ warning（警告）/ info（信息）/ debug（调试）
@@ -54,11 +55,19 @@ profile:
   store-fake-ip: true                                                   # 保存映射  Fake-IP 映射以加快 DNS 命中
 
 # 管理面板
-external-controller: 0.0.0.0:9090                                       # 面板地址
+external-controller: 127.0.0.1:9090                                     # 面板地址
 external-ui-name: zashboard                                             # 面板名称
 external-ui: ui                                                         # 面板目录
 secret: ""                                                              # 面板密码 （留空表示不启用）
 external-ui-url: https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip
+geo-auto-update: true                                                   # 自动更新  geodata
+geo-update-interval: 24                                                 # 更新间隔  单位：小时
+geodata-mode: true                                                      # 数据分流  使用 geosite / geoip 数据库
+geox-url:
+  geosite: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat
+  geoip: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat
+  mmdb: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.metadb
+  asn: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/GeoLite2-ASN.mmdb
 
 # TUN配置
 tun:
@@ -102,7 +111,7 @@ sniffer:
 dns:
   enable: true                                                          # 解析服务  启用 Clash 内置 DNS 服务
   cache-algorithm: arc                                                  # 缓存算法  自适应替换缓存（较LRU命中率更优）
-  listen: 0.0.0.0:7874                                                  # 监听服务  DNS 服务监听地址与端口
+  listen: 127.0.0.1:7874                                                # 监听服务  仅监听本机，避免 DNS 暴露到局域网
   ipv6: false                                                           # 网络协议  关闭 IPv6 DNS 解析支持(防止DNS泄露)
   enhanced-mode: fake-ip                                                # 增强模式  FDNS 增强模式（Fake-IP，用于防止 DNS 泄露）
   fake-ip-range: 198.18.0.1/16                                          # 虚拟地址  Fake-IP 虚拟地址池范围

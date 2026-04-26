@@ -7,8 +7,9 @@ function main(config) {
   // ==================== 基础配置 ====================
   config['mixed-port'] = 7893;
   config['mode'] = 'rule';
-  config['allow-lan'] = true;
-  config['bind-address'] = '*';
+  config['find-process-mode'] = 'strict';
+  config['allow-lan'] = false;
+  config['bind-address'] = '127.0.0.1';
   config['tcp-concurrent'] = true;
   config['unified-delay'] = true;
   config['log-level'] = 'info';
@@ -16,6 +17,15 @@ function main(config) {
   config['profile'] = {
     'store-selected': true,
     'store-fake-ip': true
+  };
+  config['geo-auto-update'] = true;
+  config['geo-update-interval'] = 24;
+  config['geodata-mode'] = true;
+  config['geox-url'] = {
+    'geosite': 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat',
+    'geoip': 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat',
+    'mmdb': 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.metadb',
+    'asn': 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/GeoLite2-ASN.mmdb'
   };
 
   // ==================== TUN 配置 ====================
@@ -61,7 +71,7 @@ function main(config) {
   config['dns'] = {
     'enable': true,
     'cache-algorithm': 'arc',
-    'listen': '0.0.0.0:7874',
+    'listen': '127.0.0.1:7874',
     'ipv6': false,
     'enhanced-mode': 'fake-ip',
     'fake-ip-range': '198.18.0.1/16',
@@ -107,7 +117,7 @@ function main(config) {
     'fallback': ['https://1.1.1.1/dns-query', 'https://8.8.8.8/dns-query'],
     'fallback-filter': {
       'geoip': true,
-      'geoip-code': ['CN']
+      'geoip-code': 'CN'
     }
   };
 

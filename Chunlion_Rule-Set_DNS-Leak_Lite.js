@@ -7,8 +7,9 @@ function main(config) {
   // ==================== 基础配置 ====================
   config['mixed-port'] = 7893;
   config['mode'] = 'rule';
-  config['allow-lan'] = true;
-  config['bind-address'] = '*';
+  config['find-process-mode'] = 'strict';
+  config['allow-lan'] = false;
+  config['bind-address'] = '127.0.0.1';
   config['tcp-concurrent'] = true;
   config['unified-delay'] = true;
   config['log-level'] = 'info';
@@ -72,7 +73,7 @@ function main(config) {
   config['dns'] = {
     'enable': true,
     'cache-algorithm': 'arc',
-    'listen': '0.0.0.0:7874',
+    'listen': '127.0.0.1:7874',
     'ipv6': false,
     'enhanced-mode': 'fake-ip',
     'fake-ip-range': '198.18.0.1/16',
@@ -118,7 +119,7 @@ function main(config) {
     'fallback': ['https://1.1.1.1/dns-query', 'https://8.8.8.8/dns-query'],
     'fallback-filter': {
       'geoip': true,
-      'geoip-code': ['CN']
+      'geoip-code': 'CN'
     }
   };
 
@@ -202,7 +203,7 @@ function main(config) {
     emby_ip: { type: 'http', interval: 86400, behavior: 'ipcidr', format: 'mrs', url: "https://github.com/666OS/rules/raw/release/mihomo/ip/Emby.mrs" },
     ukwifi_ip: { type: 'http', interval: 86400, behavior: 'classical', format: 'text', url: "https://raw.githubusercontent.com/iniwex5/tools/refs/heads/main/rules/UK-wifi-call.list" },
     add_direct_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/Seven1echo/Yaml/refs/heads/main/rules/Seven1_Direct_Domain.mrs" },
-    add_emby: { type: 'http', interval: 86400, behavior: 'classical', format: 'text', url: "https://raw.githubusercontent.com/ForestSun2023/Emby-Rule/main/EMBY.yaml" }
+    add_emby: { type: 'http', interval: 86400, behavior: 'classical', format: 'yaml', url: "https://raw.githubusercontent.com/ForestSun2023/Emby-Rule/main/EMBY.yaml" }
   };
   return config;
 }
