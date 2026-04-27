@@ -118,7 +118,6 @@ function main(config) {
       '+.teams.microsoft.com',
       '+.skype.com',
       '+.meet.google.com',
-      '+.push.apple.com',
       '+.push-apple.com.akadns.net'
     ],
     'default-nameserver': ['223.5.5.5', '119.29.29.29'],
@@ -161,24 +160,28 @@ function main(config) {
     { name: "Emby", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Emby.png" },
     { name: "Apple", type: "select", proxies: commonProxies, icon: "https://github.com/Seven1echo/Yaml/raw/main/icons/Apple.png" },
     { name: "Telegram", type: "select", proxies: commonProxies, icon: "https://github.com/Seven1echo/Yaml/raw/main/icons/Telegram.png" },
+    { name: "Twitter", type: "select", proxies: commonProxies, icon: "https://github.com/Seven1echo/Yaml/raw/main/icons/Twitter.png" },
     { name: "TikTok", type: "select", proxies: commonProxies, icon: "https://github.com/Seven1echo/Yaml/raw/main/icons/TikTok.png" },
     { name: "Microsoft", type: "select", proxies: commonProxies, icon: "https://github.com/Seven1echo/Yaml/raw/main/icons/Microsoft.png" },
+    { name: "PayPal", type: "select", proxies: commonProxies, icon: "https://github.com/Seven1echo/Yaml/raw/main/icons/PayPal.png" },
     { name: "Wise", type: "select", proxies: commonProxies, icon: "https://fastly.jsdelivr.net/gh/Chunlion/Clash-Icons@main/wise.png" },
     { name: "Games", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Game.png" },
     { name: "UKwifi", type: "select", proxies: ["欧洲手动", "DIRECT"], icon: "https://www.giffgaff.design/iconography/icons/library/coverage-signal.svg" },
     { name: "兜底流量", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png" },
 
     // 区域自动/手动组
+    // 地区词决定归属；IEPL / IPLC / BGP / Game / 倍率等线路标签不参与地区判断。
+    // 没有明确地区词的节点进入“其他手动”，避免把线路标签误当成地区特征。
     ...["香港", "台湾", "日本", "韩国", "新加坡", "美国", "欧洲"].map(region => {
       const regMap = { "香港": "HK", "台湾": "TW", "日本": "JP", "韩国": "KR", "新加坡": "SG", "美国": "US", "欧洲": "EU" };
       const filterMap = {
-        "香港": '^(?i)(?=.*(香港|🇭🇰|\\bHK\\b|Hong(?:\\s?Kong)?|HKG|HKT|HK)).*$',
+        "香港": '^(?i)(?=.*(香港|🇭🇰|\\bHK\\b|Hong(?:\\s?Kong)?|HKG|HKT|HK|HKBN)).*$',
         "台湾": '^(?i)(?=.*(台湾|台灣|🇹🇼|\\bTW\\b|\\bTPE\\b|\\bTSA\\b|\\bKHH\\b|Taiwan|Taipei|Kaohsiung|taiwan|TPE|TSA|KHH)).*$',
         "日本": '^(?i)(?=.*(日本|🇯🇵|\\bJP\\b|Japan|Tokyo|Osaka|TYO|OSA|NRT|HND|KIX|CTS|FUK)).*$',
         "韩国": '^(?i)(?=.*(韩国|韓國|🇰🇷|首尔|首爾|\\bKR\\b|\\bKOR\\b|Korea|Seoul|SEL|ICN|South)).*$',
         "新加坡": '^(?i)(?=.*(新加坡|🇸🇬|\\bSG\\b|Singapore|SGP|SIN|XSP)).*$',
-        "美国": '^(?i)(?=.*(美国|美國|🇺🇸|\\bUS\\b|\\bUSA\\b|United\\s?States|America|SJC|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD)).*$',
-        "欧洲": '^(?i)(?=.*(奥地利|比利时|保加利亚|克罗地亚|塞浦路斯|捷克|丹麦|爱沙尼亚|芬兰|法国|德国|希腊|匈牙利|爱尔兰|意大利|拉脱维亚|立陶宛|卢森堡|荷兰|波兰|葡萄牙|罗马尼亚|斯洛伐克|斯洛文尼亚|西班牙|瑞典|英国|London|United\\s?Kingdom|England|Germany|France|Netherlands|Amsterdam|Frankfurt|Paris|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|🇬🇧|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU|LHR|LGW)).*$'
+        "美国": '^(?i)(?=.*(美国|美國|🇺🇸|\\bUS\\b|\\bUSA\\b|\\bNA\\b|United\\s?States|America|SJC|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD)).*$',
+        "欧洲": '^(?i)(?=.*(奥地利|比利时|保加利亚|克罗地亚|塞浦路斯|捷克|丹麦|爱沙尼亚|芬兰|法国|德国|希腊|匈牙利|爱尔兰|意大利|拉脱维亚|立陶宛|卢森堡|荷兰|波兰|葡萄牙|罗马尼亚|斯洛伐克|斯洛文尼亚|西班牙|瑞典|英国|London|United\\s?Kingdom|England|Germany|France|Netherlands|Amsterdam|Frankfurt|Paris|LON|UK|GB|GBR|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|🇬🇧|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU|LHR|LGW)).*$'
       };
       return [
         { name: `${region}故转`, type: "fallback", url: "https://cp.cloudflare.com/generate_204", interval: 300, proxies: [`${region}手动`, `${region}自动`], icon: `https://github.com/Seven1echo/Yaml/raw/main/icons/${regMap[region]}.png`, hidden: true },
@@ -191,7 +194,7 @@ function main(config) {
       name: "其他手动",
       type: "select",
       "include-all": true,
-      filter: '^(?!.*(DIRECT|直接连接|香港|台湾|台灣|日本|韩国|韓國|新加坡|美国|美國|奥地利|比利时|保加利亚|克罗地亚|塞浦路斯|捷克|丹麦|爱沙尼亚|芬兰|法国|德国|希腊|匈牙利|爱尔兰|意大利|拉脱维亚|立陶宛|卢森堡|荷兰|波兰|葡萄牙|罗马尼亚|斯洛伐克|斯洛文尼亚|西班牙|瑞典|英国|London|Germany|France|Netherlands|Tokyo|Osaka|Seoul|Singapore|Taipei|🇭🇰|🇹🇼|🇸🇬|🇯🇵|🇰🇷|🇺🇸|🇬🇧|HK|TW|SG|SGP|JP|TYO|OSA|KR|SEL|ICN|US|USA|GB|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU|HKG|HKT|TPE|TSA|KHH|SIN|XSP|NRT|HND|KIX|CTS|FUK|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD|LHR|LGW)).*$',
+      filter: '^(?!.*(DIRECT|直接连接|香港|台湾|台灣|日本|韩国|韓國|新加坡|美国|美國|奥地利|比利时|保加利亚|克罗地亚|塞浦路斯|捷克|丹麦|爱沙尼亚|芬兰|法国|德国|希腊|匈牙利|爱尔兰|意大利|拉脱维亚|立陶宛|卢森堡|荷兰|波兰|葡萄牙|罗马尼亚|斯洛伐克|斯洛文尼亚|西班牙|瑞典|英国|London|Germany|France|Netherlands|Tokyo|Osaka|Seoul|Singapore|Taipei|Kaohsiung|🇭🇰|🇹🇼|🇸🇬|🇯🇵|🇰🇷|🇺🇸|🇬🇧|HK|HKBN|TW|SG|SGP|JP|TYO|OSA|KR|SEL|ICN|US|USA|NA|GB|GBR|LON|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU|HKG|HKT|TPE|TSA|KHH|SIN|XSP|NRT|HND|KIX|CTS|FUK|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD|LHR|LGW)).*$',
       icon: "https://github.com/Seven1echo/Yaml/raw/main/icons/OT.png"
     }
   ];
@@ -279,16 +282,16 @@ function main(config) {
     "RULE-SET,apple_domain,Apple",
     "RULE-SET,telegram_domain,Telegram",
     "RULE-SET,tiktok_domain,TikTok",
-    "RULE-SET,twitter_domain,一键代理",
+    "RULE-SET,twitter_domain,Twitter",
     "RULE-SET,netflix_domain,Streaming",
     "RULE-SET,disney_domain,Streaming",
     "RULE-SET,spotify_domain,Streaming",
-    "RULE-SET,paypal_domain,一键代理",
+    "RULE-SET,paypal_domain,PayPal",
     "RULE-SET,wise_domain,Wise",
     "RULE-SET,add_direct_domain,DIRECT",
     "RULE-SET,google_ip,Google,no-resolve",
     "RULE-SET,telegram_ip,Telegram,no-resolve",
-    "RULE-SET,twitter_ip,一键代理,no-resolve",
+    "RULE-SET,twitter_ip,Twitter,no-resolve",
     "RULE-SET,netflix_ip,Streaming,no-resolve",
     "RULE-SET,cn_domain,DIRECT",
     "RULE-SET,cn_ip,DIRECT,no-resolve",
