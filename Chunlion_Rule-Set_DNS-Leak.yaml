@@ -282,6 +282,7 @@ rules:
   - RULE-SET,spotify_domain,Streaming                                   # Spotify
   - RULE-SET,paypal_domain,PayPal                                       # PayPal
   - RULE-SET,wise_domain,Wise                                           # Wise
+  - RULE-SET,add_emby,Emby                                              # Emby 补充
   - RULE-SET,add_direct_domain,DIRECT                                   # 直连域名
   - RULE-SET,emby_ip,Emby,no-resolve                                    # Emby IP
   - RULE-SET,google_ip,Google,no-resolve                                # Google
@@ -319,6 +320,7 @@ rule-providers:
   microsoft_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs"}
   appletv_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple-tvplus.mrs"}
   emby_domain: { <<: *Anchor_DN, url: "https://github.com/666OS/rules/raw/release/mihomo/domain/Emby.mrs"}
+  add_emby: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash-Icons/main/Emby.mrs"}
   apple_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs"}
   telegram_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs"}
   tiktok_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.mrs"}

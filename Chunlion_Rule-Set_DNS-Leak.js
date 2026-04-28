@@ -237,6 +237,7 @@ function main(config) {
     "microsoft_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs" },
     "appletv_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple-tvplus.mrs" },
     "emby_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://github.com/666OS/rules/raw/release/mihomo/domain/Emby.mrs" },
+    "add_emby": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/Chunlion/Clash-Icons/main/Emby.mrs" },
     "apple_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs" },
 
     // IP 规则
@@ -288,6 +289,7 @@ function main(config) {
     "RULE-SET,spotify_domain,Streaming",
     "RULE-SET,paypal_domain,PayPal",
     "RULE-SET,wise_domain,Wise",
+    "RULE-SET,add_emby,Emby",
     "RULE-SET,add_direct_domain,DIRECT",
     "RULE-SET,google_ip,Google,no-resolve",
     "RULE-SET,telegram_ip,Telegram,no-resolve",
