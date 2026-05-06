@@ -122,8 +122,10 @@ dns:
   prefer-h3: false                                                      # 关闭 HTTP/3 支持
   fake-ip-filter:
     - "+.lan"                                                           # 真实解析  常见局域网域名后缀
-    - "geosite:cn"                    
-    - "geosite:private"                
+    - "geosite:cn"
+    - "geosite:private"
+    - "rule-set:cn_domain"
+    - "rule-set:private_domain"
     - "rule-set:add_direct_domain"
     - "+.local"
     - "+.msftconnecttest.com"                                           # 真实解析  Windows 网络连接测试
@@ -172,7 +174,9 @@ dns:
     - 119.29.29.29
   direct-nameserver-follow-policy: true
   nameserver-policy:
-    "rule-set:add_direct_domain": [223.5.5.5, 119.29.29.29]   
+    "rule-set:cn_domain": [223.5.5.5, 119.29.29.29]
+    "rule-set:private_domain": [223.5.5.5, 119.29.29.29]
+    "rule-set:add_direct_domain": [223.5.5.5, 119.29.29.29]
     "geosite:cn,private": [223.5.5.5, 119.29.29.29]
   nameserver:
     - https://dns.alidns.com/dns-query
@@ -319,7 +323,7 @@ rule-providers:
   onedrive_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/onedrive.mrs"}
   microsoft_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs"}
   appletv_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple-tvplus.mrs"}
-  emby_domain: { <<: *Anchor_DN, url: "https://github.com/666OS/rules/raw/release/mihomo/domain/Emby.mrs"}
+  emby_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/666OS/rules/release/mihomo/domain/Emby.mrs"}
   add_emby: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash-Icons/main/Emby.mrs"}
   apple_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs"}
   telegram_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs"}
@@ -336,7 +340,7 @@ rule-providers:
   #IP规则
   private_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs"}
   google_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.mrs"}
-  emby_ip: { <<: *Anchor_IP, url: "https://github.com/666OS/rules/raw/release/mihomo/ip/Emby.mrs"}
+  emby_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/666OS/rules/release/mihomo/ip/Emby.mrs"}
   telegram_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs"}
   twitter_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.mrs"}
   netflix_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.mrs"}

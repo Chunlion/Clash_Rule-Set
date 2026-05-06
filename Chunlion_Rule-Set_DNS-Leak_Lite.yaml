@@ -243,8 +243,8 @@ rules:
 
 # 规则来源 (
 rule-providers:
-  emby_domain: { <<: *Anchor_DN, url: "https://github.com/666OS/rules/raw/release/mihomo/domain/Emby.mrs"}
-  emby_ip: { <<: *Anchor_IP, url: "https://github.com/666OS/rules/raw/release/mihomo/ip/Emby.mrs"}
+  emby_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/666OS/rules/release/mihomo/domain/Emby.mrs"}
+  emby_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/666OS/rules/release/mihomo/ip/Emby.mrs"}
   ukwifi_ip: { <<: *Anchor_CL, url: "https://raw.githubusercontent.com/iniwex5/tools/refs/heads/main/rules/UK-wifi-call.list"}
   add_direct_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Seven1echo/Yaml/refs/heads/main/rules/Seven1_Direct_Domain.mrs"}
   add_emby: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash-Icons/main/Emby.mrs"}

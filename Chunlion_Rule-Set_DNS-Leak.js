@@ -82,6 +82,8 @@ function main(config) {
       '+.lan',
       'geosite:cn',
       'geosite:private',
+      'rule-set:cn_domain',
+      'rule-set:private_domain',
       'rule-set:add_direct_domain',
       '+.local',
       '+.msftconnecttest.com',
@@ -125,6 +127,8 @@ function main(config) {
     'direct-nameserver': ['223.5.5.5', '119.29.29.29'],
     'direct-nameserver-follow-policy': true,
     'nameserver-policy': {
+      'rule-set:cn_domain': ['223.5.5.5', '119.29.29.29'],
+      'rule-set:private_domain': ['223.5.5.5', '119.29.29.29'],
       'rule-set:add_direct_domain': ['223.5.5.5', '119.29.29.29'],
       'geosite:cn,private': ['223.5.5.5', '119.29.29.29']
     },
@@ -215,7 +219,7 @@ function main(config) {
     "disney_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/disney.mrs" },
     "spotify_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/spotify.mrs" },
     "paypal_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/paypal.mrs" },
-    "wise_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/wise.mrs" },
+    "wise_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/wise.mrs" },
 
     // 游戏平台国内下载 (DIRECT)
     "steam_cn_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/steam@cn.mrs" },
@@ -236,7 +240,7 @@ function main(config) {
     "onedrive_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/onedrive.mrs" },
     "microsoft_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs" },
     "appletv_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple-tvplus.mrs" },
-    "emby_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://github.com/666OS/rules/raw/release/mihomo/domain/Emby.mrs" },
+    "emby_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/666OS/rules/release/mihomo/domain/Emby.mrs" },
     "add_emby": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/Chunlion/Clash-Icons/main/Emby.mrs" },
     "apple_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs" },
 
@@ -246,7 +250,7 @@ function main(config) {
     "add_direct_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/Seven1echo/Yaml/refs/heads/main/rules/Seven1_Direct_Domain.mrs" },
     "private_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs" },
     "google_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.mrs" },
-    "emby_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://github.com/666OS/rules/raw/release/mihomo/ip/Emby.mrs" },
+    "emby_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/666OS/rules/release/mihomo/ip/Emby.mrs" },
     "telegram_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs" },
     "twitter_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.mrs" },
     "netflix_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.mrs" },

@@ -216,8 +216,8 @@ function main(config) {
 
   // ==================== 规则来源 ====================
   config['rule-providers'] = {
-    emby_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://github.com/666OS/rules/raw/release/mihomo/domain/Emby.mrs" },
-    emby_ip: { type: 'http', interval: 86400, behavior: 'ipcidr', format: 'mrs', url: "https://github.com/666OS/rules/raw/release/mihomo/ip/Emby.mrs" },
+    emby_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/666OS/rules/release/mihomo/domain/Emby.mrs" },
+    emby_ip: { type: 'http', interval: 86400, behavior: 'ipcidr', format: 'mrs', url: "https://raw.githubusercontent.com/666OS/rules/release/mihomo/ip/Emby.mrs" },
     ukwifi_ip: { type: 'http', interval: 86400, behavior: 'classical', format: 'text', url: "https://raw.githubusercontent.com/iniwex5/tools/refs/heads/main/rules/UK-wifi-call.list" },
     add_direct_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/Seven1echo/Yaml/refs/heads/main/rules/Seven1_Direct_Domain.mrs" },
     add_emby: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/Chunlion/Clash-Icons/main/Emby.mrs" }

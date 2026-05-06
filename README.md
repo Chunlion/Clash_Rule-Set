@@ -1,11 +1,15 @@
 
 ---
 
-# 🚀 Chunlion Clash Rule-Set (DNS-Leak Version)
+# 🚀 Chunlion Clash Rule-Set
 
 > 🛡️ 面向 Mihomo (Clash Meta) 的高可用分流与 DNS 防泄露配置
 >
 > ⚡ 主打：稳定、清晰、可维护
+
+[![Mihomo](https://img.shields.io/badge/Core-Mihomo-blue)](https://github.com/MetaCubeX/mihomo)
+[![DNS](https://img.shields.io/badge/DNS-Fake--IP-success)](#-dns-防泄露机制重点)
+[![Format](https://img.shields.io/badge/Format-YAML%20%2B%20JS-orange)](#-项目文件说明)
 
 本项目基于 [Seven1echo/Yaml](https://github.com/Seven1echo/Yaml) 改造，面向 Mihomo (Clash Meta) 核心，重点强化以下能力：
 
@@ -15,19 +19,28 @@
 
 适配客户端示例：`OpenWrt` `Clash/Nikki 插件`、`Clashmi`、`FlClash`、`Clash Verge Rev`、`Surfboard` 等。
 
+> [!IMPORTANT]
+> 使用前请先替换配置中的 `订阅链接` 与 `机场名`。不要公开分享已填入订阅信息的配置文件。
+
 ---
 
 ## 📦 项目文件说明
 
-### 🧩 文件一：Chunlion_Rule-Set_DNS-Leak.yaml
+| 文件 | 类型 | 适合场景 | 说明 |
+| :-- | :-- | :-- | :-- |
+| `Chunlion_Rule-Set_DNS-Leak.yaml` | 完整 YAML | 直接导入客户端 | 含完整分流、规则源、DNS、TUN、面板配置 |
+| `Chunlion_Rule-Set_DNS-Leak.js` | 完整 JS 覆写 | Clash Verge Rev Script | 不改原订阅，注入完整策略与规则 |
+| `Chunlion_Rule-Set_DNS-Leak_Lite.yaml` | 轻量 YAML | 规则源更少、启动更轻 | 保留核心 DNS、防泄露和常用服务分流 |
+| `Chunlion_Rule-Set_DNS-Leak_Lite.js` | 轻量 JS 覆写 | Clash Verge Rev 轻量脚本 | 适合只想保留必要规则的用户 |
 
-- ✅ 完整配置文件，适合大多数客户端直接导入。
-- ✅ 内含 proxy-providers、proxy-groups、rule-providers、rules、DNS 与 TUN 全量配置。
+### 怎么选
 
-### 🛠️ 文件二：Chunlion_Rule-Set_DNS-Leak.js
-
-- ✅ Clash Verge Rev 场景下的全局覆写脚本。
-- ✅ 在不改动原订阅内容的前提下，注入与 YAML 对齐的策略。
+| 需求 | 推荐 |
+| :-- | :-- |
+| 想要完整服务分流、规则命中更细 | `Chunlion_Rule-Set_DNS-Leak.yaml` 或 `Chunlion_Rule-Set_DNS-Leak.js` |
+| 设备性能一般、订阅节点多、希望少一点规则源 | `Chunlion_Rule-Set_DNS-Leak_Lite.yaml` 或 `Chunlion_Rule-Set_DNS-Leak_Lite.js` |
+| 使用 Clash Verge Rev 且已有订阅 | 优先用 `.js` 覆写脚本 |
+| OpenWrt / Nikki / FlClash / Surfboard 等直接导入 | 优先用 `.yaml` |
 
 ---
 
@@ -50,28 +63,26 @@
 | TUN          | 开启（mixed） | 提升全局接管能力           |
 | Sniffer      | 开启          | 支持 TLS / HTTP / QUIC     |
 | 控制面板     | Zashboard     | external-ui-url 已预置     |
+| 规则格式     | MRS / GEOSITE | 减少文本规则体积与加载压力 |
 
 ---
 
 ## 🚀 快速上手
 
-### ✅ 方式一：使用 YAML（推荐）
+### 方式一：使用 YAML（推荐直接导入）
 
-1. 下载 `Chunlion_Rule-Set_DNS-Leak.yaml`。
+1. 下载 `Chunlion_Rule-Set_DNS-Leak.yaml` 或 `Chunlion_Rule-Set_DNS-Leak_Lite.yaml`。
 2. 修改 `proxy-providers` 下的 `订阅链接` 与 `机场名`。
 3. 导入客户端并启用配置。
+4. 启用 TUN 后刷新规则源与订阅。
 
-### ✅ 方式二：使用 JS 覆写（推荐 Clash Verge Rev）
+### 方式二：使用 JS 覆写（推荐 Clash Verge Rev）
 
-
-1. 复制 `Chunlion_Rule-Set_DNS-Leak.js` 内容。
-
-1. 复制 `Chunlion_Rule-Set_DNS-Leak_覆写.js` 内容。
-
+1. 复制 `Chunlion_Rule-Set_DNS-Leak.js` 或 `Chunlion_Rule-Set_DNS-Leak_Lite.js` 内容。
 2. Clash Verge Rev 中新建 `Script` 订阅并粘贴。
 3. 启用脚本后刷新订阅。
 
-> 💡 说明：JS 脚本已与 YAML 保持策略一致，适合不方便直接维护完整 YAML 的用户。
+> 💡 说明：JS 脚本适合“原订阅继续由客户端管理，只用脚本注入规则”的场景。
 
 ---
 
@@ -81,6 +92,7 @@
 
 | 策略组        | 用途                                                          |
 | :------------ | :------------------------------------------------------------ |
+| 🚀 一键代理    | 常用入口策略，统一承接大部分境外流量                          |
 | 🤖 AI Services | AI 服务统一分流，优先可用美区路径                             |
 | 🎮 Games       | 覆盖 Steam、Epic、EA、Ubisoft、Blizzard、Sony、Xbox、Nintendo |
 | 💳 Wise        | 金融场景独立策略                                              |
@@ -97,6 +109,8 @@
 - 🔁 故障转移组（fallback）：自动组不可用时切换。
 
 区域覆盖：香港、台湾、日本、韩国、新加坡、美国、欧洲、其他。
+
+> Lite 版会减少后台测速与外部规则源数量，更适合节点很多或客户端资源有限的环境。
 
 ---
 
@@ -126,6 +140,7 @@
 - `rule-set:cn_domain`
 - `rule-set:private_domain`
 - `rule-set:add_direct_domain`
+- `geosite:cn,private`
 
 这能减少直连域名被错误送往远端解析的概率，提升稳定性。
 
@@ -136,6 +151,8 @@
 - `rule-set:cn_domain`
 - `rule-set:private_domain`
 - `rule-set:add_direct_domain`
+- `geosite:cn`
+- `geosite:private`
 - 常见局域网/NTP/STUN/Windows 探测域名
 
 ### 6️⃣ TUN + DNS 劫持
@@ -150,16 +167,35 @@
 相较早期版本，当前配置已补强：
 
 1. 广告规则
-   - 新增 `ads_domain`，并在规则前列执行 REJECT。
+   - 完整版新增 `ads_domain`，并在规则前列执行 REJECT。
 2. Emby 双通道规则
    - 同时使用 `emby_domain` 与 `emby_ip`，提升命中率。
 3. DNS 策略增强
-   - `nameserver-policy` 增加 `add_direct_domain`。
-   - `fake-ip-filter` 增加 `private_domain` 以及更多局域网/NTP/STUN/TURN/Xbox 探测域名防御泄露。
+   - `nameserver-policy` 增加 `cn_domain`、`private_domain`、`add_direct_domain`。
+   - `fake-ip-filter` 增加国内、私有、直连规则以及更多局域网/NTP/STUN/TURN/Xbox 探测域名。
    - `proxy-server-nameserver` 升级使用 `DoH (alidns 和 doh.pub)`。
 4. 测速与直连优化
    - 测试链接统一替换为更贴近落地延迟的 `cp.cloudflare.com/generate_204`。
    - 修正了 `add_direct_domain`（直连域名）的规则层级，确保其优先级高于 `geolocation-!cn`。
+5. 规则源优化
+   - Emby 规则源使用 `raw.githubusercontent.com`，减少 GitHub 页面跳转。
+   - 完整版 YAML 与 JS 的 Wise 规则源保持一致。
+
+---
+
+## 🧪 维护与自检
+
+修改配置后建议做三类检查：
+
+1. YAML 语法检查：确认客户端可以正常导入。
+2. JS 语法检查：用 `node --check Chunlion_Rule-Set_DNS-Leak.js` 检查覆写脚本。
+3. 规则源检查：确认 `rule-providers` 中的 URL 可以访问，且 `rules` 引用的规则源都存在。
+
+常见维护原则：
+
+- 规则顺序比数量更重要，直连、私有、特殊规则应放在泛规则前。
+- DNS 相关配置要和规则层级保持一致，避免直连域名走远端解析。
+- 节点分组正则只按地区关键词归类，线路标签如 IEPL / IPLC / BGP / 倍率不参与地区判断。
 
 ---
 
