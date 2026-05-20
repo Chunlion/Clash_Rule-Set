@@ -45,18 +45,17 @@ function main(config) {
   // ==================== 嗅探功能 ====================
   config['sniffer'] = {
     'enable': true,
-    'override-destination': true,
-    'parse-pure-ip': true,
+    'override-destination': false,
+    'parse-pure-ip': false,
     'force-dns-mapping': true,
     'sniff': {
-      'QUIC': { 'ports': [443, 8443] },
+      'HTTP': { 'ports': [80, '8080-8880'], 'override-destination': true },
       'TLS': { 'ports': [443, 8443] },
-      'HTTP': { 'ports': [80, '8080-8880'], 'override-destination': true }
+      'QUIC': { 'ports': [443, 8443] }
     },
     'force-domain': [
       '+.netflix.com',
       '+.nflxvideo.net',
-      '+.amazonaws.com',
       '+.media.dssott.com'
     ],
     'skip-domain': [
@@ -64,8 +63,7 @@ function main(config) {
       'Mijia Cloud',
       'dlg.io.mi.com',
       '+.oray.com',
-      '+.sunlogin.net',
-      '+.push.apple.com'
+      '+.sunlogin.net'
     ]
   };
 
@@ -82,10 +80,10 @@ function main(config) {
     'prefer-h3': false,
     'fake-ip-filter': [
       '+.lan',
+      '+.local',
       'geosite:cn',
       'geosite:private',
       'rule-set:add_direct_domain',
-      '+.local',
       '+.msftconnecttest.com',
       '+.msftncsi.com',
       'localhost.ptlogin2.qq.com',
@@ -93,35 +91,15 @@ function main(config) {
       '+.in-addr.arpa',
       '+.ip6.arpa',
       'stun.*',
-      'time.*.com',
-      'time.*.gov',
-      'pool.ntp.org',
-      '+.ntp.org',
-      '+.pool.ntp.org',
-      '+._tcp.*',
-      '+._udp.*',
       '+.stun.*.*',
-      '+.stun.*.*.*',
-      '+.xbox.com',
-      '+.xboxlive.com',
-      '+.srv.nintendo.net',
-      '+.stun.playstation.net',
-      'stun.l.google.com',
-      'stun1.l.google.com',
-      'stun2.l.google.com',
-      'stun3.l.google.com',
-      'stun4.l.google.com',
-      '+.turn.*',
       '+.turn.*.*',
-      '+.turn.*.*.*',
-      '+.stun.cloudflare.com',
-      '+.webrtc.org',
-      '+.zoom.us',
-      '+.teams.microsoft.com',
-      '+.skype.com',
-      '+.meet.google.com',
-      '+.push-apple.com.akadns.net'
+      '+.ntp.org',
+      'time.windows.com',
+      'time.apple.com',
+      'time-ios.apple.com',
+      'time.google.com'
     ],
+    // 默认 DNS 用于解析 DoH / DoT 服务器域名，节点 DNS 避免解析代理节点时产生循环。
     'default-nameserver': ['223.5.5.5', '119.29.29.29'],
     'proxy-server-nameserver': ['https://dns.alidns.com/dns-query', 'https://doh.pub/dns-query'],
     'direct-nameserver': ['223.5.5.5', '119.29.29.29'],

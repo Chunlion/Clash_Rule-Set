@@ -84,30 +84,31 @@ tun:
 
 # 嗅探功能
 sniffer:
-  enable: true                                                          # 启用嗅探  提升分流准确性
-  override-destination: true                                            # 成功解析  使用嗅探到的域名覆盖原始目标地址
-  parse-pure-ip: true                                                   # 反向解析  解析纯 IP 连接（尝试反向解析获得域名）
-  force-dns-mapping: true                                               # 强制映射  DNS 映射（对纯 IP 连接尝试 DNS 映射）
+  enable: true                                                          # 启用嗅探  提升透明代理 / TUN 场景下的域名分流准确性
+  override-destination: false                                           # 覆盖目标  全局不覆盖目标地址，降低误嗅探导致异常的概率
+  parse-pure-ip: false                                                  # 纯 IP 嗅探  不强制嗅探所有纯 IP 连接，减少游戏、P2P、IoT、远控异常
+  force-dns-mapping: true                                               # 强制映射  对 DNS 映射流量进行嗅探，适合 Fake-IP / TUN 场景
+
   sniff:
-    QUIC:
-      ports: [443, 8443]                                                # 嗅探参数  QUIC 协议流量（HTTP/3 常用端口）
-    TLS:
-      ports: [443, 8443]                                                # 嗅探参数  HTTPS（TLS）常用及备用端口
     HTTP:
-      ports: [80, 8080-8880]                                            # 嗅探参数  HTTP 及常见 Web / 代理端口段
-      override-destination: true                                        # 嗅探成功  HTTP 嗅探成功后覆盖目标地址
+      ports: [80, 8080-8880]                                            # 嗅探参数  HTTP 明文流量及常见 Web / 代理端口段
+      override-destination: true                                        # 覆盖目标  HTTP 明文流量可安全使用嗅探域名覆盖原始目标
+    TLS:
+      ports: [443, 8443]                                                # 嗅探参数  HTTPS / TLS SNI，常用端口及备用端口
+    QUIC:
+      ports: [443, 8443]                                                # 嗅探参数  QUIC / HTTP/3 常用端口及备用端口
+
   force-domain:
     - "+.netflix.com"                                                   # 强制嗅探  Netflix 主域名
-    - "+.nflxvideo.net"                                                 # 强制嗅探  Netflix CDN
-    - "+.amazonaws.com"                                                 # 强制嗅探  AWS 云服务
+    - "+.nflxvideo.net"                                                 # 强制嗅探  Netflix 视频 CDN
     - "+.media.dssott.com"                                              # 强制嗅探  Disney+ 流媒体
+
   skip-domain:
-    - "+.apple.com"                                                     # 跳过嗅探  苹果服务
-    - Mijia Cloud                                                       # 跳过嗅探  米家云服务
-    - dlg.io.mi.com                                                     # 跳过嗅探  小米设备通信
-    - "+.oray.com"                                                      # 跳过嗅探  花生壳服务
-    - "+.sunlogin.net"                                                  # 跳过嗅探  向日葵远程控制
-    - "+.push.apple.com"                                                # 跳过嗅探  苹果推送服务
+    - "+.apple.com"                                                     # 跳过嗅探  苹果服务，减少推送、iCloud、系统服务异常
+    - "Mijia Cloud"                                                     # 跳过嗅探  米家云服务，避免设备通信异常
+    - "dlg.io.mi.com"                                                   # 跳过嗅探  小米设备通信
+    - "+.oray.com"                                                      # 跳过嗅探  花生壳服务，避免远程访问异常
+    - "+.sunlogin.net"                                                  # 跳过嗅探  向日葵远程控制，避免远控连接异常
 
 # DNS 设置(开启严格路由可以仅保留nameserver)
 dns:
@@ -121,72 +122,59 @@ dns:
   respect-rules: true                                                   # 遵循规则  强制遵循规则顺序
   prefer-h3: false                                                      # 关闭 HTTP/3 支持
   fake-ip-filter:
-    - "+.lan"                                                           # 真实解析  常见局域网域名后缀
-    - "geosite:cn"
-    - "geosite:private"
-    - "rule-set:cn_domain"
-    - "rule-set:private_domain"
-    - "rule-set:add_direct_domain"
-    - "+.local"
+    - "+.lan"                                                           # 真实解析  局域网域名，避免路由器、NAS、打印机访问异常
+    - "+.local"                                                         # 真实解析  mDNS / Bonjour / 本地域名
+    - "geosite:cn"                                                      # 真实解析  国内域名，配合国内直连规则使用
+    - "geosite:private"                                                 # 真实解析  私有网络 / 内网相关域名
+    - "rule-set:cn_domain"                                              # 真实解析  完整版国内域名规则集
+    - "rule-set:private_domain"                                         # 真实解析  完整版私有域名规则集
+    - "rule-set:add_direct_domain"                                      # 真实解析  自定义直连域名规则集
     - "+.msftconnecttest.com"                                           # 真实解析  Windows 网络连接测试
-    - "+.msftncsi.com"                                                  # 真实解析  Windows 网络连接测试
-    - "localhost.ptlogin2.qq.com"                                       # 真实解析  QQ 登录
-    - "localhost.sec.qq.com"                                            # 真实解析  QQ 登录
+    - "+.msftncsi.com"                                                  # 真实解析  Windows NCSI 网络状态检测
+    - "localhost.ptlogin2.qq.com"                                       # 真实解析  QQ 登录相关
+    - "localhost.sec.qq.com"                                            # 真实解析  QQ 安全登录相关
     - "+.in-addr.arpa"                                                  # 真实解析  IPv4 反向解析
-    - "+.ip6.arpa"
-    - "stun.*"                                                          # 真实解析  STUN 服务
-    - "time.*.com"                                                      # 真实解析  NTP 时间服务                      
-    - "time.*.gov"                                                      # 真实解析  NTP 时间服务
-    - "pool.ntp.org"                                                    # 真实解析  NTP 时间服务      
-    - "+.ntp.org"                                                       # NTP 时间同步
-    - "+.pool.ntp.org"
-    - "+._tcp.*"                     
-    - "+._udp.*"
-    - "+.stun.*.*"                   
-    - "+.stun.*.*.*"
-    - "+.xbox.com"                   
-    - "+.xboxlive.com"
-    - "+.srv.nintendo.net"
-    - "+.stun.playstation.net"
-    - "stun.l.google.com"
-    - "stun1.l.google.com"
-    - "stun2.l.google.com"
-    - "stun3.l.google.com"
-    - "stun4.l.google.com"
-    - "+.turn.*"                     
-    - "+.turn.*.*"
-    - "+.turn.*.*.*"
-    - "+.stun.cloudflare.com"
-    - "+.webrtc.org"
-    - "+.zoom.us"
-    - "+.teams.microsoft.com"
-    - "+.skype.com"
-    - "+.meet.google.com"
-    - "+.push-apple.com.akadns.net"
+    - "+.ip6.arpa"                                                      # 真实解析  IPv6 反向解析
+    - "stun.*"                                                          # 真实解析  常见 STUN 服务
+    - "+.stun.*.*"                                                      # 真实解析  多级 STUN 域名
+    - "+.turn.*.*"                                                      # 真实解析  TURN 中继服务
+    - "+.ntp.org"                                                       # 真实解析  NTP 时间同步服务
+    - "time.windows.com"                                                # 真实解析  Windows 时间同步
+    - "time.apple.com"                                                  # 真实解析  Apple 时间同步
+    - "time-ios.apple.com"                                              # 真实解析  iOS 时间同步
+    - "time.google.com"                                                 # 真实解析  Google 时间同步
+
   default-nameserver:
-    - 223.5.5.5                                                         # 公共 DNS  阿里云
-    - 119.29.29.29                                                      # 公共 DNS  腾讯
+    - 223.5.5.5                                                         # 默认 DNS  阿里云，用于解析 DoH / DoT 服务器域名
+    - 119.29.29.29                                                      # 默认 DNS  腾讯，用于解析 DoH / DoT 服务器域名
+
   proxy-server-nameserver:
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query                                  # 节点解析  解析代理节点域名，避免解析节点域名时产生循环
+    - https://doh.pub/dns-query                                         # 节点解析  腾讯 DoH，作为代理节点域名解析备用
+
   direct-nameserver:
-    - 223.5.5.5
-    - 119.29.29.29
-  direct-nameserver-follow-policy: true
+    - 223.5.5.5                                                         # 直连解析  直连域名使用国内 DNS 重新解析
+    - 119.29.29.29                                                      # 直连解析  直连域名备用 DNS
+
+  direct-nameserver-follow-policy: true                                 # 策略跟随  直连解析时遵循 nameserver-policy
+
   nameserver-policy:
-    "rule-set:cn_domain": [223.5.5.5, 119.29.29.29]
-    "rule-set:private_domain": [223.5.5.5, 119.29.29.29]
-    "rule-set:add_direct_domain": [223.5.5.5, 119.29.29.29]
-    "geosite:cn,private": [223.5.5.5, 119.29.29.29]
+    "rule-set:cn_domain": [223.5.5.5, 119.29.29.29]                     # 策略解析  完整版国内域名规则集使用国内 DNS
+    "rule-set:private_domain": [223.5.5.5, 119.29.29.29]                # 策略解析  完整版私有域名规则集使用国内 DNS
+    "rule-set:add_direct_domain": [223.5.5.5, 119.29.29.29]             # 策略解析  自定义直连域名使用国内 DNS
+    "geosite:cn,private": [223.5.5.5, 119.29.29.29]                     # 策略解析  国内 / 私有域名使用国内 DNS
+
   nameserver:
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-  fallback:  
-    - https://1.1.1.1/dns-query
-    - https://8.8.8.8/dns-query
+    - https://dns.alidns.com/dns-query                                  # 默认解析  阿里 DoH，普通域名默认解析
+    - https://doh.pub/dns-query                                         # 默认解析  腾讯 DoH，普通域名备用解析
+
+  fallback:
+    - https://1.1.1.1/dns-query                                         # 后备解析  Cloudflare DoH，用于境外域名防污染
+    - https://8.8.8.8/dns-query                                         # 后备解析  Google DoH，用于境外域名防污染
+
   fallback-filter:
-    geoip: true
-    geoip-code: CN
+    geoip: true                                                         # 污染过滤  启用 GeoIP 判断
+    geoip-code: CN                                                      # 污染过滤  国内结果走 nameserver，非国内异常结果使用 fallback
 
 
 # ※※※※※※※※※※※※※※※ 代理策略组 ※※※※※※※※※※※※※※※
