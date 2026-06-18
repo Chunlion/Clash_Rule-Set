@@ -117,9 +117,10 @@ function main(config) {
   };
 
   // ==================== 策略组 ====================
-  const Anchor_OB = ['一键代理', '全局最优', '稳定备用', '香港节点', '台湾节点', '日本节点', '韩国节点', '新加坡节点', '美国节点', '欧洲节点', '其他节点', 'DIRECT', 'REJECT'];
-  const Anchor_AI = ['美国节点', '一键代理', '香港节点', '台湾节点', '日本节点', '韩国节点', '新加坡节点', '欧洲节点', '其他节点', 'DIRECT', 'REJECT'];
+  const Anchor_OB = ['一键代理', '全局最优', '稳定备用', '香港节点', '台湾节点', '日本节点', '韩国节点', '新加坡节点', '美国节点', '欧洲节点', '家宽节点', '其他节点', 'DIRECT', 'REJECT'];
+  const Anchor_AI = ['家宽节点', '美国节点', '一键代理', '香港节点', '台湾节点', '日本节点', '韩国节点', '新加坡节点', '欧洲节点', '其他节点', 'DIRECT', 'REJECT'];
   const Anchor_UK = ['欧洲节点', 'DIRECT'];
+  const homeIcon = 'https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/05icon/home.png';
 
   // 区域正则锚点转译
   // 地区词决定归属；IEPL / IPLC / BGP / Game / 倍率等线路标签不参与地区判断。
@@ -130,11 +131,12 @@ function main(config) {
   const regexKR = '^(?i)(?=.*(韩国|韓國|🇰🇷|首尔|首爾|\\bKR\\b|\\bKOR\\b|Korea|Seoul|SEL|ICN|South)).*$';
   const regexSG = '^(?i)(?=.*(新加坡|🇸🇬|\\bSG\\b|Singapore|SGP|SIN|XSP)).*$';
   const regexUS = '^(?i)(?=.*(美国|美國|🇺🇸|\\bUS\\b|\\bUSA\\b|\\bNA\\b|United\\s?States|America|SJC|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD)).*$';
+  const regexHOME = '^(?i)(?=.*(家宽|家庭宽带|宽带|住宅|民宅|\\bResidential\\b|\\bHome\\b|\\bISP\\b|Broadband)).*$';
   const regexEU = '^(?i)(?=.*(奥地利|奥地利共和国|比利时|保加利亚|克罗地亚|塞浦路斯|捷克|丹麦|爱沙尼亚|芬兰|法国|德国|希腊|匈牙利|爱尔兰|意大利|拉脱维亚|立陶宛|卢森堡|荷兰|波兰|葡萄牙|罗马尼亚|斯洛伐克|斯洛文尼亚|西班牙|瑞典|英国|London|United\\s?Kingdom|England|Germany|France|Netherlands|Amsterdam|Frankfurt|Paris|LON|UK|GB|GBR|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|🇬🇧|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU|LHR|LGW)).*$';
   const regexOT = '^(?!.*(DIRECT|直接连接|香港|台湾|台灣|日本|韩国|韓國|新加坡|美国|美國|奥地利|比利时|保加利亚|克罗地亚|塞浦路斯|捷克|丹麦|爱沙尼亚|芬兰|法国|德国|希腊|匈牙利|爱尔兰|意大利|拉脱维亚|立陶宛|卢森堡|荷兰|波兰|葡萄牙|罗马尼亚|斯洛伐克|斯洛文尼亚|西班牙|瑞典|英国|London|Germany|France|Netherlands|Tokyo|Osaka|Seoul|Singapore|Taipei|Kaohsiung|🇭🇰|🇹🇼|🇸🇬|🇯🇵|🇰🇷|🇺🇸|🇬🇧|HK|HKBN|TW|SG|SGP|JP|TYO|OSA|KR|SEL|ICN|US|USA|NA|GB|GBR|LON|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU|HKG|HKT|TPE|TSA|KHH|SIN|XSP|NRT|HND|KIX|CTS|FUK|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD|LHR|LGW)).*$';
 
   config['proxy-groups'] = [
-    { name: '一键代理', type: 'select', proxies: ['全局最优', '稳定备用', '香港节点', '台湾节点', '日本节点', '韩国节点', '新加坡节点', '美国节点', '欧洲节点', '其他节点', 'DIRECT', 'REJECT'], icon: 'https://github.com/Seven1echo/Yaml/raw/main/icons/Rocket.png' },
+    { name: '一键代理', type: 'select', proxies: ['全局最优', '稳定备用', '香港节点', '台湾节点', '日本节点', '韩国节点', '新加坡节点', '美国节点', '欧洲节点', '家宽节点', '其他节点', 'DIRECT', 'REJECT'], icon: 'https://github.com/Seven1echo/Yaml/raw/main/icons/Rocket.png' },
     { name: 'Streaming', type: 'select', proxies: Anchor_OB, icon: 'https://github.com/Seven1echo/Yaml/raw/main/icons/YouTube.png' },
     { name: 'Emby', type: 'select', proxies: Anchor_OB, icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Emby.png' },
     { name: 'Google', type: 'select', proxies: Anchor_OB, icon: 'https://github.com/Seven1echo/Yaml/raw/main/icons/Google.png' },
@@ -154,6 +156,7 @@ function main(config) {
     { name: '新加坡节点', type: 'select', 'include-all': true, filter: regexSG, icon: 'https://github.com/Seven1echo/Yaml/raw/main/icons/SG.png' },
     { name: '美国节点', type: 'select', 'include-all': true, filter: regexUS, icon: 'https://github.com/Seven1echo/Yaml/raw/main/icons/US.png' },
     { name: '欧洲节点', type: 'select', 'include-all': true, filter: regexEU, icon: 'https://github.com/Seven1echo/Yaml/raw/main/icons/EU.png' },
+    { name: '家宽节点', type: 'select', 'include-all': true, filter: regexHOME, icon: homeIcon },
     { name: '其他节点', type: 'select', 'include-all': true, filter: regexOT, icon: 'https://github.com/Seven1echo/Yaml/raw/main/icons/OT.png' }
   ];
 

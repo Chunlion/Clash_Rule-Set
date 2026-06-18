@@ -123,10 +123,12 @@ function main(config) {
     "一键代理", "香港手动", "台湾手动", "日本手动", "韩国手动", "新加坡手动", "美国手动", "欧洲手动",
     "香港自动", "台湾自动", "日本自动", "韩国自动", "新加坡自动", "美国自动", "欧洲自动",
     "香港故转", "台湾故转", "日本故转", "韩国故转", "新加坡故转", "美国故转", "欧洲故转",
-    "其他手动", "DIRECT", "REJECT"
+    "家宽节点", "其他手动", "DIRECT", "REJECT"
   ];
 
-  const aiProxies = ["美国手动", ...commonProxies];
+  const homeIcon = "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/05icon/home.png";
+  const homeFilter = '^(?i)(?=.*(家宽|家庭宽带|宽带|住宅|民宅|\\bResidential\\b|\\bHome\\b|\\bISP\\b|Broadband)).*$';
+  const aiProxies = ["家宽节点", "美国手动", ...commonProxies.filter(p => p !== "家宽节点" && p !== "美国手动")];
 
   config["proxy-groups"] = [
     {
@@ -171,6 +173,8 @@ function main(config) {
         { name: `${region}自动`, type: "url-test", url: "https://cp.cloudflare.com/generate_204", interval: 300, tolerance: 50, "include-all": true, filter: filterMap[region], icon: `https://github.com/Seven1echo/Yaml/raw/main/icons/${regMap[region]}.png`, hidden: true }
       ];
     }).flat(),
+
+    { name: "家宽节点", type: "select", "include-all": true, filter: homeFilter, icon: homeIcon },
 
     {
       name: "其他手动",
