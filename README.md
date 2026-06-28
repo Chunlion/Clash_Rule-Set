@@ -69,14 +69,14 @@
 
 ## 🚀 快速上手
 
-### 方式一：使用 YAML（推荐直接导入）
+### 方式一：使用 YAML（直接导入）
 
 1. 下载 `Chunlion_Rule-Set_DNS-Leak.yaml` 或 `Chunlion_Rule-Set_DNS-Leak_Lite.yaml`。
 2. 修改 `proxy-providers` 下的 `订阅链接` 与 `机场名`。
 3. 导入客户端并启用配置。
 4. 启用 TUN 后刷新规则源与订阅。
 
-### 方式二：使用 JS 覆写（推荐 Clash Verge Rev）
+### 方式二：使用 JS 覆写
 
 1. 复制 `Chunlion_Rule-Set_DNS-Leak.js` 或 `Chunlion_Rule-Set_DNS-Leak_Lite.js` 内容。
 2. Clash Verge Rev 中新建 `Script` 订阅并粘贴。
@@ -93,7 +93,7 @@
 | 🧩 版本 | 🌐 服务策略组 |
 | :-- | :-- |
 | 🚀 完整版 | 🚀 一键代理、📺 Streaming、🐙 GitHub、🔎 Google、🤖 AI Services、🎞️ Emby、🍎 Apple、✈️ Telegram、🐦 Twitter、🎵 TikTok、🪟 Microsoft、💳 PayPal、💱 Wise、🎮 Games、🇬🇧 UKwifi、🧰 兜底流量 |
-| ⚡ Lite 版 | 🚀 一键代理、📺 Streaming、🎞️ Emby、🔎 Google、🤖 AI Services、🎵 TikTok、💱 Wise、🎮 Games、🇬🇧 UKwifi、🧰 兜底流量 |
+| ⚡ Lite 版 | 🚀 一键代理、📺 Streaming、✈️ Telegram、🎞️ Emby、🔎 Google、🤖 AI Services、🎵 TikTok、💱 Wise、🎮 Games、🧰 兜底流量 |
 
 ### 🗺️ 区域策略组
 
@@ -122,14 +122,14 @@
 | 🤖 AI Services | ✅ | ✅ |
 | 🎞️ Emby | ✅ | ✅ |
 | 🍎 Apple | ✅ | ❌ |
-| ✈️ Telegram | ✅ | ❌ |
+| ✈️ Telegram | ✅ | ✅ |
 | 🐦 Twitter | ✅ | ❌ |
 | 🎵 TikTok | ✅ | ✅ |
 | 🪟 Microsoft | ✅ | ❌ |
 | 💳 PayPal | ✅ | ❌ |
 | 💱 Wise | ✅ | ✅ |
 | 🎮 Games | ✅ | ✅ |
-| 🇬🇧 UKwifi | ✅ | ✅ |
+| 🇬🇧 UKwifi | ✅ | ❌ |
 | 🧰 兜底流量 | ✅ | ✅ |
 | ⚡ 全局最优 | ❌ | ✅ |
 | 🛟 稳定备用 | ❌ | ✅ |

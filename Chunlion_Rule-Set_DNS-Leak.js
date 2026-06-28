@@ -120,10 +120,10 @@ function main(config) {
 
   // --- 4. 策略组 (Proxy Groups) ---
   const commonProxies = [
-    "一键代理", "香港手动", "台湾手动", "日本手动", "韩国手动", "新加坡手动", "美国手动", "欧洲手动",
-    "香港自动", "台湾自动", "日本自动", "韩国自动", "新加坡自动", "美国自动", "欧洲自动",
-    "香港故转", "台湾故转", "日本故转", "韩国故转", "新加坡故转", "美国故转", "欧洲故转",
-    "家宽节点", "其他手动", "DIRECT", "REJECT"
+    "一键代理", "家宽节点", "香港手动", "澳门手动", "台湾手动", "日本手动", "韩国手动", "新加坡手动", "美国手动", "欧洲手动",
+    "香港自动", "澳门自动", "台湾自动", "日本自动", "韩国自动", "新加坡自动", "美国自动", "欧洲自动",
+    "香港故转", "澳门故转", "台湾故转", "日本故转", "韩国故转", "新加坡故转", "美国故转", "欧洲故转",
+    "其他手动", "DIRECT", "REJECT"
   ];
 
   const homeIcon = "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/05icon/home.png";
@@ -156,10 +156,22 @@ function main(config) {
     // 区域自动/手动组
     // 地区词决定归属；IEPL / IPLC / BGP / Game / 倍率等线路标签不参与地区判断。
     // 没有明确地区词的节点进入“其他手动”，避免把线路标签误当成地区特征。
-    ...["香港", "台湾", "日本", "韩国", "新加坡", "美国", "欧洲"].map(region => {
-      const regMap = { "香港": "HK", "台湾": "TW", "日本": "JP", "韩国": "KR", "新加坡": "SG", "美国": "US", "欧洲": "EU" };
+    { name: "家宽节点", type: "select", "include-all": true, filter: homeFilter, icon: homeIcon },
+
+    ...["香港", "澳门", "台湾", "日本", "韩国", "新加坡", "美国", "欧洲"].map(region => {
+      const iconMap = {
+        "香港": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Hongkong(3).png",
+        "澳门": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Macao.png",
+        "台湾": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/taiwan(4).png",
+        "日本": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Japan(2).png",
+        "韩国": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Korea(2).png",
+        "新加坡": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/singapore.png",
+        "美国": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/US(2).png",
+        "欧洲": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/EuropeanUnion(2).png"
+      };
       const filterMap = {
         "香港": '^(?i)(?=.*(香港|🇭🇰|\\bHK\\b|Hong(?:\\s?Kong)?|HKG|HKT|HK|HKBN)).*$',
+        "澳门": '^(?i)(?=.*(澳门|澳門|🇲🇴|\\bMO\\b|\\bMFM\\b|Macao|Macau)).*$',
         "台湾": '^(?i)(?=.*(台湾|台灣|🇹🇼|\\bTW\\b|\\bTPE\\b|\\bTSA\\b|\\bKHH\\b|Taiwan|Taipei|Kaohsiung|taiwan|TPE|TSA|KHH)).*$',
         "日本": '^(?i)(?=.*(日本|🇯🇵|\\bJP\\b|Japan|Tokyo|Osaka|TYO|OSA|NRT|HND|KIX|CTS|FUK)).*$',
         "韩国": '^(?i)(?=.*(韩国|韓國|🇰🇷|首尔|首爾|\\bKR\\b|\\bKOR\\b|Korea|Seoul|SEL|ICN|South)).*$',
@@ -168,19 +180,17 @@ function main(config) {
         "欧洲": '^(?i)(?=.*(奥地利|比利时|保加利亚|克罗地亚|塞浦路斯|捷克|丹麦|爱沙尼亚|芬兰|法国|德国|希腊|匈牙利|爱尔兰|意大利|拉脱维亚|立陶宛|卢森堡|荷兰|波兰|葡萄牙|罗马尼亚|斯洛伐克|斯洛文尼亚|西班牙|瑞典|英国|London|United\\s?Kingdom|England|Germany|France|Netherlands|Amsterdam|Frankfurt|Paris|LON|UK|GB|GBR|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|🇬🇧|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU|LHR|LGW)).*$'
       };
       return [
-        { name: `${region}故转`, type: "fallback", url: "https://cp.cloudflare.com/generate_204", interval: 300, proxies: [`${region}手动`, `${region}自动`], icon: `https://github.com/Seven1echo/Yaml/raw/main/icons/${regMap[region]}.png`, hidden: true },
-        { name: `${region}手动`, type: "select", "include-all": true, filter: filterMap[region], icon: `https://github.com/Seven1echo/Yaml/raw/main/icons/${regMap[region]}.png` },
-        { name: `${region}自动`, type: "url-test", url: "https://cp.cloudflare.com/generate_204", interval: 300, tolerance: 50, "include-all": true, filter: filterMap[region], icon: `https://github.com/Seven1echo/Yaml/raw/main/icons/${regMap[region]}.png`, hidden: true }
+        { name: `${region}故转`, type: "fallback", url: "https://cp.cloudflare.com/generate_204", interval: 300, proxies: [`${region}手动`, `${region}自动`], icon: iconMap[region], hidden: true },
+        { name: `${region}手动`, type: "select", "include-all": true, filter: filterMap[region], icon: iconMap[region] },
+        { name: `${region}自动`, type: "url-test", url: "https://cp.cloudflare.com/generate_204", interval: 300, tolerance: 50, "include-all": true, filter: filterMap[region], icon: iconMap[region], hidden: true }
       ];
     }).flat(),
-
-    { name: "家宽节点", type: "select", "include-all": true, filter: homeFilter, icon: homeIcon },
 
     {
       name: "其他手动",
       type: "select",
       "include-all": true,
-      filter: '^(?!.*(DIRECT|直接连接|香港|台湾|台灣|日本|韩国|韓國|新加坡|美国|美國|奥地利|比利时|保加利亚|克罗地亚|塞浦路斯|捷克|丹麦|爱沙尼亚|芬兰|法国|德国|希腊|匈牙利|爱尔兰|意大利|拉脱维亚|立陶宛|卢森堡|荷兰|波兰|葡萄牙|罗马尼亚|斯洛伐克|斯洛文尼亚|西班牙|瑞典|英国|London|Germany|France|Netherlands|Tokyo|Osaka|Seoul|Singapore|Taipei|Kaohsiung|🇭🇰|🇹🇼|🇸🇬|🇯🇵|🇰🇷|🇺🇸|🇬🇧|HK|HKBN|TW|SG|SGP|JP|TYO|OSA|KR|SEL|ICN|US|USA|NA|GB|GBR|LON|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU|HKG|HKT|TPE|TSA|KHH|SIN|XSP|NRT|HND|KIX|CTS|FUK|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD|LHR|LGW)).*$',
+      filter: '^(?!.*(DIRECT|直接连接|香港|澳门|澳門|台湾|台灣|日本|韩国|韓國|新加坡|美国|美國|奥地利|比利时|保加利亚|克罗地亚|塞浦路斯|捷克|丹麦|爱沙尼亚|芬兰|法国|德国|希腊|匈牙利|爱尔兰|意大利|拉脱维亚|立陶宛|卢森堡|荷兰|波兰|葡萄牙|罗马尼亚|斯洛伐克|斯洛文尼亚|西班牙|瑞典|英国|London|Germany|France|Netherlands|Tokyo|Osaka|Seoul|Singapore|Taipei|Kaohsiung|Macau|Macao|🇭🇰|🇲🇴|🇹🇼|🇸🇬|🇯🇵|🇰🇷|🇺🇸|🇬🇧|HK|HKBN|MO|MFM|TW|SG|SGP|JP|TYO|OSA|KR|SEL|ICN|US|USA|NA|GB|GBR|LON|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU|HKG|HKT|TPE|TSA|KHH|SIN|XSP|NRT|HND|KIX|CTS|FUK|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD|LHR|LGW)).*$',
       icon: "https://github.com/Seven1echo/Yaml/raw/main/icons/OT.png"
     }
   ];
