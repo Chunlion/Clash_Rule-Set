@@ -123,11 +123,13 @@ function main(config) {
     "一键代理", "家宽节点", "香港手动", "澳门手动", "台湾手动", "日本手动", "韩国手动", "新加坡手动", "美国手动", "欧洲手动",
     "香港自动", "澳门自动", "台湾自动", "日本自动", "韩国自动", "新加坡自动", "美国自动", "欧洲自动",
     "香港故转", "澳门故转", "台湾故转", "日本故转", "韩国故转", "新加坡故转", "美国故转", "欧洲故转",
-    "其他手动", "DIRECT", "REJECT"
+    "其他手动"
   ];
+  const specialProxies = [...commonProxies, "DIRECT"];
 
   const homeIcon = "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/05icon/home.png";
-  const homeFilter = '^(?i)(?=.*(家宽|家庭宽带|宽带|住宅|民宅|\\bResidential\\b|\\bHome\\b|\\bISP\\b|Broadband)).*$';
+  const homeFilter = '^(?i)(?=.*(家宽|🏠|家庭宽带|宽带|住宅|民宅|\\bResidential\\b|\\bHome\\b|\\bISP\\b|Broadband)).*$';
+  const excludeInfoFilter = '(?i)(剩余|流量|到期|订阅|时间|重置|过期|套餐|官网|邮箱|网址|Expire|Traffic|Reset|Subscription|Remaining)';
   const aiProxies = ["家宽节点", "美国手动", ...commonProxies.filter(p => p !== "家宽节点" && p !== "美国手动")];
 
   config["proxy-groups"] = [
@@ -141,22 +143,22 @@ function main(config) {
     { name: "GitHub", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/github(1).png" },
     { name: "Google", type: "select", proxies: commonProxies, icon: "https://github.com/Seven1echo/Yaml/raw/main/icons/Google.png" },
     { name: "AI Services", type: "select", proxies: aiProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AI.png" },
-    { name: "Emby", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Emby.png" },
+    { name: "Emby", type: "select", proxies: specialProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Emby.png" },
     { name: "Apple", type: "select", proxies: commonProxies, icon: "https://github.com/Seven1echo/Yaml/raw/main/icons/Apple.png" },
     { name: "Telegram", type: "select", proxies: commonProxies, icon: "https://github.com/Seven1echo/Yaml/raw/main/icons/Telegram.png" },
     { name: "Twitter", type: "select", proxies: commonProxies, icon: "https://github.com/Seven1echo/Yaml/raw/main/icons/Twitter.png" },
     { name: "TikTok", type: "select", proxies: commonProxies, icon: "https://github.com/Seven1echo/Yaml/raw/main/icons/TikTok.png" },
     { name: "Microsoft", type: "select", proxies: commonProxies, icon: "https://github.com/Seven1echo/Yaml/raw/main/icons/Microsoft.png" },
     { name: "PayPal", type: "select", proxies: commonProxies, icon: "https://github.com/Seven1echo/Yaml/raw/main/icons/PayPal.png" },
-    { name: "Wise", type: "select", proxies: commonProxies, icon: "https://fastly.jsdelivr.net/gh/Chunlion/Clash-Icons@main/wise.png" },
-    { name: "Games", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Game.png" },
+    { name: "Wise", type: "select", proxies: specialProxies, icon: "https://fastly.jsdelivr.net/gh/Chunlion/Clash-Icons@main/wise.png" },
+    { name: "Games", type: "select", proxies: specialProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Game.png" },
     { name: "UKwifi", type: "select", proxies: ["欧洲手动", "DIRECT"], icon: "https://www.giffgaff.design/iconography/icons/library/coverage-signal.svg" },
     { name: "兜底流量", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png" },
 
     // 区域自动/手动组
     // 地区词决定归属；IEPL / IPLC / BGP / Game / 倍率等线路标签不参与地区判断。
     // 没有明确地区词的节点进入“其他手动”，避免把线路标签误当成地区特征。
-    { name: "家宽节点", type: "select", "include-all": true, filter: homeFilter, icon: homeIcon },
+    { name: "家宽节点", type: "select", "include-all": true, "exclude-filter": excludeInfoFilter, filter: homeFilter, icon: homeIcon },
 
     ...["香港", "澳门", "台湾", "日本", "韩国", "新加坡", "美国", "欧洲"].map(region => {
       const iconMap = {
@@ -181,8 +183,8 @@ function main(config) {
       };
       return [
         { name: `${region}故转`, type: "fallback", url: "https://cp.cloudflare.com/generate_204", interval: 300, proxies: [`${region}手动`, `${region}自动`], icon: iconMap[region], hidden: true },
-        { name: `${region}手动`, type: "select", "include-all": true, filter: filterMap[region], icon: iconMap[region] },
-        { name: `${region}自动`, type: "url-test", url: "https://cp.cloudflare.com/generate_204", interval: 300, tolerance: 50, "include-all": true, filter: filterMap[region], icon: iconMap[region], hidden: true }
+        { name: `${region}手动`, type: "select", "include-all": true, "exclude-filter": excludeInfoFilter, filter: filterMap[region], icon: iconMap[region] },
+        { name: `${region}自动`, type: "url-test", url: "https://cp.cloudflare.com/generate_204", interval: 300, tolerance: 50, "include-all": true, "exclude-filter": excludeInfoFilter, filter: filterMap[region], icon: iconMap[region], hidden: true }
       ];
     }).flat(),
 
@@ -190,6 +192,7 @@ function main(config) {
       name: "其他手动",
       type: "select",
       "include-all": true,
+      "exclude-filter": excludeInfoFilter,
       filter: '^(?!.*(DIRECT|直接连接|香港|澳门|澳門|台湾|台灣|日本|韩国|韓國|新加坡|美国|美國|奥地利|比利时|保加利亚|克罗地亚|塞浦路斯|捷克|丹麦|爱沙尼亚|芬兰|法国|德国|希腊|匈牙利|爱尔兰|意大利|拉脱维亚|立陶宛|卢森堡|荷兰|波兰|葡萄牙|罗马尼亚|斯洛伐克|斯洛文尼亚|西班牙|瑞典|英国|London|Germany|France|Netherlands|Tokyo|Osaka|Seoul|Singapore|Taipei|Kaohsiung|Macau|Macao|🇭🇰|🇲🇴|🇹🇼|🇸🇬|🇯🇵|🇰🇷|🇺🇸|🇬🇧|HK|HKBN|MO|MFM|TW|SG|SGP|JP|TYO|OSA|KR|SEL|ICN|US|USA|NA|GB|GBR|LON|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU|HKG|HKT|TPE|TSA|KHH|SIN|XSP|NRT|HND|KIX|CTS|FUK|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD|LHR|LGW)).*$',
       icon: "https://github.com/Seven1echo/Yaml/raw/main/icons/OT.png"
     }
