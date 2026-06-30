@@ -6,7 +6,7 @@
 
 # ※※※※※※※※※※※※※※※ 锚点区域 ※※※※※※※※※※※※※※※
 # ① 订阅锚点
-Anchor_PR: &Anchor_PR {type: http, interval: 86400, Telegram: DIRECT, health-check: {enable: true, url: 'https://cp.cloudflare.com/generate_204', interval: 300}, filter: "^(?!.*(到期|过期|剩余|网址|官网|邮箱|订阅|套餐|流量|说明|重置)).*$"}
+Anchor_PR: &Anchor_PR {type: http, interval: 86400, proxy: DIRECT, health-check: {enable: true, url: 'https://cp.cloudflare.com/generate_204', interval: 300}, filter: "^(?!.*(到期|过期|剩余|网址|官网|邮箱|订阅|套餐|流量|说明|重置)).*$"}
 # ② 出站锚点
 Anchor_OB: &Anchor_OB {type: select, proxies: [一键代理, 全局最优, 稳定备用, 香港节点, 澳门节点, 台湾节点, 日本节点, 韩国节点, 新加坡节点, 美国节点, 欧洲节点, 家宽节点, 其他节点, DIRECT, REJECT]}
 Anchor_AI: &Anchor_AI {type: select, proxies: [家宽节点, 美国节点, 一键代理, 香港节点, 澳门节点, 台湾节点, 日本节点, 韩国节点, 新加坡节点, 欧洲节点, 其他节点, DIRECT, REJECT]}
@@ -223,7 +223,7 @@ rules:
   - GEOSITE,tiktok,TikTok                                               # TikTok
 
   - GEOSITE,telegram,Telegram                                           # Telegram
-  - GEOIP,Telegram,Telegram,no-resolve                                  # Telegram IP
+  - GEOIP,telegram,Telegram,no-resolve                                  # Telegram IP
 
   - GEOSITE,google,Google                                               # Google
   - GEOIP,google,Google,no-resolve                                      # Google IP
