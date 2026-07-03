@@ -129,7 +129,7 @@ function main(config) {
 
   const homeIcon = "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/05icon/home.png";
   const homeFilter = '^(?i)(?=.*(家宽|🏠|家庭宽带|宽带|住宅|民宅|\\bResidential\\b|\\bHome\\b|\\bISP\\b|Broadband)).*$';
-  const excludeInfoFilter = '(?i)(剩余|流量|到期|订阅|时间|重置|过期|套餐|官网|邮箱|网址|Expire|Traffic|Reset|Subscription|Remaining)';
+  const excludeInfoFilter = '(?i)(到期|过期|剩余|网址|官网|邮箱|订阅|套餐|流量|时间|说明|重置|Expire|Traffic|Reset|Subscription|Remaining)';
   const aiProxies = ["家宽节点", "美国手动", ...commonProxies.filter(p => p !== "家宽节点" && p !== "美国手动")];
 
   config["proxy-groups"] = [
