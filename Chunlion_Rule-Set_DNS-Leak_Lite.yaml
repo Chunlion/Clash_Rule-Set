@@ -178,6 +178,11 @@ proxy-groups:
   - {name: Google,    <<: *Anchor_OB, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Google.png}
   - {name: AI Services,   <<: *Anchor_AI, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AI.png}
   - {name: TikTok,    <<: *Anchor_OB, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/TikTok.png}
+  # 可选软件分流：取消下方分组与对应规则的注释即可启用。
+  # - {name: GitHub,    <<: *Anchor_OB, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/github(1).png}
+  # - {name: Apple,     <<: *Anchor_OB, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Apple.png}
+  # - {name: Twitter,   <<: *Anchor_OB, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Twitter.png}
+  # - {name: Microsoft, <<: *Anchor_OB, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Microsoft.png}
   - {name: PayPal,    <<: *Anchor_SP, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/paypal(2).png}
   - {name: Crypto,    <<: *Anchor_SP, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/Bitcoin.png}
   - {name: Games,      <<: *Anchor_SP, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Game.png}
@@ -229,6 +234,13 @@ rules:
 
   - GEOSITE,google,Google                                               # Google
   - GEOIP,google,Google,no-resolve                                      # Google IP
+
+  # 可选软件分流：与上方对应策略组同时取消注释后生效。
+  # - GEOSITE,github,GitHub
+  # - GEOSITE,apple,Apple
+  # - GEOSITE,twitter,Twitter
+  # - GEOIP,twitter,Twitter,no-resolve
+  # - GEOSITE,microsoft,Microsoft
 
   - GEOSITE,category-cryptocurrency,Crypto                              # 加密货币
   - GEOSITE,paypal,PayPal                                               # PayPal

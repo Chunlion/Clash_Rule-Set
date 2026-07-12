@@ -30,8 +30,8 @@
 | :-- | :-- | :-- | :-- |
 | `Chunlion_Rule-Set_DNS-Leak.yaml` | 完整 YAML | 直接导入客户端 | 含完整分流、规则源、DNS、TUN、面板配置 |
 | `Chunlion_Rule-Set_DNS-Leak.js` | 完整 JS 覆写 | Clash Verge Rev Script | 不改原订阅，注入完整策略与规则 |
-| `Chunlion_Rule-Set_DNS-Leak_Lite.yaml` | 轻量 YAML | 规则源更少、启动更轻 | 保留核心 DNS、防泄露和常用服务分流 |
-| `Chunlion_Rule-Set_DNS-Leak_Lite.js` | 轻量 JS 覆写 | Clash Verge Rev 轻量脚本 | 适合只想保留必要规则的用户 |
+| `Chunlion_Rule-Set_DNS-Leak_Lite.yaml` | 轻量 YAML | 规则源更少、启动更轻 | 保留核心 DNS、防泄露和常用服务分流；可选软件分组默认注释 |
+| `Chunlion_Rule-Set_DNS-Leak_Lite.js` | 轻量 JS 覆写 | Clash Verge Rev 轻量脚本 | 适合只想保留必要规则的用户；可选软件分组默认注释 |
 
 ### 怎么选
 
