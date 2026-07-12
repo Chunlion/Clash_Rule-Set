@@ -1,7 +1,7 @@
 # 名称： Chunlion_Rule-Set_DNS-Leak
 # 项目地址：https://github.com/Chunlion/Clash_Rule-Set
 # 说明： ①本文件适用于Mihomo核心的工具使用； ②使用前需补充完整 “订阅链接” 与 “机场名”;  ③订阅链接和机场名请勿随意泄露，以免造成不必要的麻烦； 
-# 原作者频道：https://t.me/Seven1gogogo，项目地址：https://github.com/Seven1echo/Yaml，此分流文件添加了我需要的规则(Wise,Games，Emby，去广告等)，并且做了防止DNS泄露的配置，欢迎参考修改。
+# 原作者频道：https://t.me/Seven1gogogo，项目地址：https://github.com/Seven1echo/Yaml，此分流文件添加了我需要的规则(PayPal、Crypto、Games、Emby、去广告等)，并且做了防止DNS泄露的配置，欢迎参考修改。
 
 
 # ※※※※※※※※※※※※※※※ 锚点区域 ※※※※※※※※※※※※※※※
@@ -194,8 +194,8 @@ proxy-groups:
   - {name: Twitter,   <<: *Anchor_OB, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Twitter.png}
   - {name: TikTok,    <<: *Anchor_OB, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/TikTok.png}
   - {name: Microsoft, <<: *Anchor_OB, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Microsoft.png}
-  - {name: PayPal,    <<: *Anchor_OB, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/PayPal.png}
-  - {name: Wise,      <<: *Anchor_SP, icon: https://fastly.jsdelivr.net/gh/Chunlion/Clash-Icons@main/wise.png}
+  - {name: PayPal,    <<: *Anchor_SP, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/paypal(2).png}
+  - {name: Crypto,    <<: *Anchor_SP, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/Bitcoin.png}
   - {name: Games,     <<: *Anchor_SP, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Game.png}
   - {name: UKwifi,    <<: *Anchor_UK, icon: https://www.giffgaff.design/iconography/icons/library/coverage-signal.svg}
   - {name: 兜底流量,   <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png}
@@ -283,8 +283,9 @@ rules:
   - RULE-SET,netflix_domain,Streaming                                   # Netflix
   - RULE-SET,disney_domain,Streaming                                    # Disney+
   - RULE-SET,spotify_domain,Streaming                                   # Spotify
+  - RULE-SET,crypto_domain,Crypto                                       # 加密货币
   - RULE-SET,paypal_domain,PayPal                                       # PayPal
-  - RULE-SET,wise_domain,Wise                                           # Wise
+  - RULE-SET,finance_domain,PayPal                                      # 金融平台
   - RULE-SET,add_emby,Emby                                              # Emby 补充
   - RULE-SET,add_direct_domain,DIRECT                                   # 直连域名
   - RULE-SET,emby_ip,Emby,no-resolve                                    # Emby IP
@@ -331,8 +332,9 @@ rule-providers:
   netflix_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs"}
   disney_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/disney.mrs"}
   spotify_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/spotify.mrs"}
+  crypto_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-cryptocurrency.mrs"}
   paypal_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/paypal.mrs"}
-  wise_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/wise.mrs"}
+  finance_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-finance.mrs"}
   geolocation-!cn: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs"}
   cn_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs"}
   add_direct_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Seven1echo/Yaml/refs/heads/main/rules/Seven1_Direct_Domain.mrs"}

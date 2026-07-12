@@ -14,7 +14,7 @@
 本项目基于 [Seven1echo/Yaml](https://github.com/Seven1echo/Yaml) 改造，面向 Mihomo (Clash Meta) 核心，重点强化以下能力：
 
 - 🔒 DNS 防泄露与解析稳定性
-- 🎮 游戏、金融、流媒体、AI 等场景分流
+- 🎮 游戏、金融、加密货币、流媒体、AI 等场景分流
 - 🔄 统一的 YAML 与 JS 覆写脚本策略
 
 适配客户端示例：`OpenWrt` `Clash/Nikki 插件`、`Clashmi`、`FlClash`、`Clash Verge Rev`、`Surfboard` 等。
@@ -92,22 +92,22 @@
 
 | 🧩 版本 | 🌐 服务策略组 |
 | :-- | :-- |
-| 🚀 完整版 | 🚀 一键代理、📺 Streaming、🐙 GitHub、🔎 Google、🤖 AI Services、🎞️ Emby、🍎 Apple、✈️ Telegram、🐦 Twitter、🎵 TikTok、🪟 Microsoft、💳 PayPal、💱 Wise、🎮 Games、🇬🇧 UKwifi、🧰 兜底流量 |
-| ⚡ Lite 版 | 🚀 一键代理、📺 Streaming、✈️ Telegram、🎞️ Emby、🔎 Google、🤖 AI Services、🎵 TikTok、💱 Wise、🎮 Games、🧰 兜底流量 |
+| 🚀 完整版 | 🚀 一键代理、📺 Streaming、🐙 GitHub、🔎 Google、🤖 AI Services、🎞️ Emby、🍎 Apple、✈️ Telegram、🐦 Twitter、🎵 TikTok、🪟 Microsoft、💳 PayPal、₿ Crypto、🎮 Games、🇬🇧 UKwifi、🧰 兜底流量 |
+| ⚡ Lite 版 | 🚀 一键代理、📺 Streaming、✈️ Telegram、🎞️ Emby、🔎 Google、🤖 AI Services、🎵 TikTok、💳 PayPal、₿ Crypto、🎮 Games、🧰 兜底流量 |
 
 ### 🗺️ 区域策略组
 
 | 🧩 版本 | 🗺️ 区域策略组 |
 | :-- | :-- |
-| 🚀 完整版 | 🇭🇰 香港、🇹🇼 台湾、🇯🇵 日本、🇰🇷 韩国、🇸🇬 新加坡、🇺🇸 美国、🇪🇺 欧洲均包含 ✋ 手动、⚡ 自动、🔁 故转；另有 🏠 家宽节点、📦 其他手动 |
-| ⚡ Lite 版 | 🇭🇰 香港、🇹🇼 台湾、🇯🇵 日本、🇰🇷 韩国、🇸🇬 新加坡、🇺🇸 美国、🇪🇺 欧洲均为 📍 节点组；另有 🏠 家宽节点、📦 其他节点 |
+| 🚀 完整版 | 🇭🇰 香港、🇲🇴 澳门、🇹🇼 台湾、🇯🇵 日本、🇰🇷 韩国、🇸🇬 新加坡、🇺🇸 美国、🇪🇺 欧洲均包含 ✋ 手动、⚡ 自动、🔁 故转；另有 🏠 家宽节点、📦 其他手动 |
+| ⚡ Lite 版 | 🇭🇰 香港、🇲🇴 澳门、🇹🇼 台湾、🇯🇵 日本、🇰🇷 韩国、🇸🇬 新加坡、🇺🇸 美国、🇪🇺 欧洲均为 📍 节点组；另有 🏠 家宽节点、📦 其他节点 |
 
 ### 节点分组对比
 
 | 📌 特征维度 | 🚀 完整版 | ⚡ Lite 版 |
 | :-- | :--: | :--: |
-| 🧩 策略组数量 | 39 | 21 |
-| 🌐 服务策略组数量 | 16 | 10 |
+| 🧩 策略组数量 | 42 | 23 |
+| 🌐 服务策略组数量 | 16 | 11 |
 | 🗺️ 区域分组形态 | ✋ 手动 + ⚡ 自动 + 🔁 故转 | 📍 节点 |
 | ⚡ 全局最优 | ❌ | ✅ |
 | 🛟 稳定备用 | ❌ | ✅ |
@@ -126,14 +126,15 @@
 | 🐦 Twitter | ✅ | ❌ |
 | 🎵 TikTok | ✅ | ✅ |
 | 🪟 Microsoft | ✅ | ❌ |
-| 💳 PayPal | ✅ | ❌ |
-| 💱 Wise | ✅ | ✅ |
+| 💳 PayPal | ✅ | ✅ |
+| ₿ Crypto | ✅ | ✅ |
 | 🎮 Games | ✅ | ✅ |
 | 🇬🇧 UKwifi | ✅ | ❌ |
 | 🧰 兜底流量 | ✅ | ✅ |
 | ⚡ 全局最优 | ❌ | ✅ |
 | 🛟 稳定备用 | ❌ | ✅ |
 | 🇭🇰 香港 | ✋ / ⚡ / 🔁 | 📍 |
+| 🇲🇴 澳门 | ✋ / ⚡ / 🔁 | 📍 |
 | 🇹🇼 台湾 | ✋ / ⚡ / 🔁 | 📍 |
 | 🇯🇵 日本 | ✋ / ⚡ / 🔁 | 📍 |
 | 🇰🇷 韩国 | ✋ / ⚡ / 🔁 | 📍 |
@@ -212,7 +213,7 @@
    - 修正了 `add_direct_domain`（直连域名）的规则层级，确保其优先级高于 `geolocation-!cn`。
 5. 规则源优化
    - Emby 规则源使用 `raw.githubusercontent.com`，减少 GitHub 页面跳转。
-   - 完整版 YAML 与 JS 的 Wise 规则源保持一致。
+   - 四份配置统一使用 PayPal 金融分流与 Crypto 加密货币分流。
 
 ---
 

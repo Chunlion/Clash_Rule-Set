@@ -178,7 +178,8 @@ proxy-groups:
   - {name: Google,    <<: *Anchor_OB, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Google.png}
   - {name: AI Services,   <<: *Anchor_AI, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AI.png}
   - {name: TikTok,    <<: *Anchor_OB, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/TikTok.png}
-  - {name: Wise,      <<: *Anchor_SP, icon: https://fastly.jsdelivr.net/gh/Chunlion/Clash-Icons@main/wise.png}
+  - {name: PayPal,    <<: *Anchor_SP, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/paypal(2).png}
+  - {name: Crypto,    <<: *Anchor_SP, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/Bitcoin.png}
   - {name: Games,      <<: *Anchor_SP, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Game.png}
   - {name: 兜底流量,   <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png}
 
@@ -229,7 +230,9 @@ rules:
   - GEOSITE,google,Google                                               # Google
   - GEOIP,google,Google,no-resolve                                      # Google IP
 
-  - GEOSITE,wise,Wise                                                   # Wise
+  - GEOSITE,category-cryptocurrency,Crypto                              # 加密货币
+  - GEOSITE,paypal,PayPal                                               # PayPal
+  - GEOSITE,category-finance,PayPal                                     # 金融平台
 
   - GEOSITE,steam,Games                                                 # Steam
   - GEOSITE,epicgames,Games                                             # Epic
