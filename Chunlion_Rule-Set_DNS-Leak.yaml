@@ -256,33 +256,23 @@ rules:
   - RULE-SET,private_domain,DIRECT                                      # Private
   - RULE-SET,private_ip,DIRECT,no-resolve                               # Private
   - RULE-SET,ukwifi_ip,UKwifi                                           # UKwifi
-  - RULE-SET,steam_cn_domain,DIRECT                                     # Steam中国
   - RULE-SET,microsoft_cn,DIRECT                                        # Microsoft中国
   - RULE-SET,apple_cn,DIRECT                                            # Apple中国
   - RULE-SET,speedtest_domain,DIRECT                                    # Speedtest
   - RULE-SET,ai,AI Services                                             # AI Services
   - RULE-SET,github_domain,GitHub                                       # GitHub
-  - RULE-SET,youtube_domain,Streaming                                   # YouTube
   - RULE-SET,google_domain,Google                                       # Google
-  - RULE-SET,steam_domain,Games                                         # Steam
-  - RULE-SET,epic_domain,Games                                          # Epic
-  - RULE-SET,ea_domain,Games                                            # EA
-  - RULE-SET,ubisoft_domain,Games                                       # Ubisoft
-  - RULE-SET,blizzard_domain,Games                                      # Blizzard
-  - RULE-SET,sony_domain,Games                                          # Sony
-  - RULE-SET,xbox_domain,Games                                          # Xbox
-  - RULE-SET,nintendo_domain,Games                                      # Nintendo
+  - GEOSITE,category-media@cn,DIRECT                                    # 国内媒体
+  - GEOSITE,category-media,Streaming                                    # 流媒体
+  - GEOSITE,category-games@cn,DIRECT                                    # 国内游戏
+  - GEOSITE,category-games,Games                                        # 游戏
   - RULE-SET,onedrive_domain,Microsoft                                  # OneDrive
   - RULE-SET,microsoft_domain,Microsoft                                 # 微软服务
-  - RULE-SET,appletv_domain,Streaming                                   # Apple TV+
   - RULE-SET,emby_domain,Emby                                           # Emby
   - RULE-SET,apple_domain,Apple                                         # 苹果服务
   - RULE-SET,telegram_domain,Telegram                                   # Telegram
   - RULE-SET,tiktok_domain,TikTok                                       # TikTok
   - RULE-SET,twitter_domain,Twitter                                     # Twitter
-  - RULE-SET,netflix_domain,Streaming                                   # Netflix
-  - RULE-SET,disney_domain,Streaming                                    # Disney+
-  - RULE-SET,spotify_domain,Streaming                                   # Spotify
   - RULE-SET,crypto_domain,Crypto                                       # 加密货币
   - RULE-SET,paypal_domain,PayPal                                       # PayPal
   - RULE-SET,finance_domain,PayPal                                      # 金融平台
@@ -301,37 +291,23 @@ rules:
 # 规则来源
 rule-providers:
   #国内直连
-  steam_cn_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/steam@cn.mrs"}
   microsoft_cn: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft@cn.mrs"}
   apple_cn: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple@cn.mrs"}
   #域名规则
   ads_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/privacy-protection-tools/anti-ad.github.io/master/docs/mihomo.mrs"}
-  steam_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/steam.mrs"}
-  epic_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/epicgames.mrs"}
-  ea_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ea.mrs"}
-  ubisoft_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ubisoft.mrs"}
-  blizzard_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/blizzard.mrs"}
-  sony_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/sony.mrs"}
-  xbox_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/xbox.mrs"}
-  nintendo_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/nintendo.mrs"}
   private_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs"}
   speedtest_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ookla-speedtest.mrs"}
   ai: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs"}
   github_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs"}
-  youtube_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs"}
   google_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs"}
   onedrive_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/onedrive.mrs"}
   microsoft_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs"}
-  appletv_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple-tvplus.mrs"}
   emby_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/666OS/rules/release/mihomo/domain/Emby.mrs"}
   add_emby: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash-Icons/main/Emby.mrs"}
   apple_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs"}
   telegram_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs"}
   tiktok_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.mrs"}
   twitter_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/twitter.mrs"}
-  netflix_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs"}
-  disney_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/disney.mrs"}
-  spotify_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/spotify.mrs"}
   crypto_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-cryptocurrency.mrs"}
   paypal_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/paypal.mrs"}
   finance_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-finance.mrs"}

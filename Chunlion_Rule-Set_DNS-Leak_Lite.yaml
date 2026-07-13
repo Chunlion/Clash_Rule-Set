@@ -221,12 +221,9 @@ rules:
 
   - GEOSITE,category-ai-!cn,AI Services                                 # AI Services
 
-  - GEOSITE,youtube,Streaming                                           # YouTube
-  - GEOSITE,apple-tvplus,Streaming                                      # Apple TV+
-  - GEOSITE,netflix,Streaming                                           # Netflix
+  - GEOSITE,category-media@cn,DIRECT                                    # 国内媒体
+  - GEOSITE,category-media,Streaming                                    # 流媒体
   - GEOIP,netflix,Streaming,no-resolve                                  # Netflix IP
-  - GEOSITE,disney,Streaming                                            # Disney+
-  - GEOSITE,spotify,Streaming                                           # Spotify
   - GEOSITE,tiktok,TikTok                                               # TikTok
 
   - GEOSITE,telegram,Telegram                                           # Telegram
@@ -246,9 +243,8 @@ rules:
   - GEOSITE,paypal,PayPal                                               # PayPal
   - GEOSITE,category-finance,PayPal                                     # 金融平台
 
-  - GEOSITE,steam,Games                                                 # Steam
-  - GEOSITE,epicgames,Games                                             # Epic
-  - GEOSITE,ea,Games                                                    # EA
+  - GEOSITE,category-games@cn,DIRECT                                    # 国内游戏
+  - GEOSITE,category-games,Games                                        # 游戏
 
   # 区域划分兜底
   - GEOSITE,cn,DIRECT                                                   # 中国域名
