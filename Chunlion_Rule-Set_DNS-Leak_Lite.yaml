@@ -221,9 +221,12 @@ rules:
 
   - GEOSITE,category-ai-!cn,AI Services                                 # AI Services
 
-  - GEOSITE,category-media@cn,DIRECT                                    # 国内媒体
-  - GEOSITE,category-media,Streaming                                    # 流媒体
+  - GEOSITE,youtube,Streaming                                           # YouTube
   - GEOIP,netflix,Streaming,no-resolve                                  # Netflix IP
+  - GEOSITE,apple-tvplus,Streaming                                      # Apple TV+
+  - GEOSITE,netflix,Streaming                                           # Netflix
+  - GEOSITE,disney,Streaming                                            # Disney+
+  - GEOSITE,spotify,Streaming                                           # Spotify
   - GEOSITE,tiktok,TikTok                                               # TikTok
 
   - GEOSITE,telegram,Telegram                                           # Telegram

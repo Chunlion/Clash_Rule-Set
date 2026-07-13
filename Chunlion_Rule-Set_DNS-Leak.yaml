@@ -261,18 +261,21 @@ rules:
   - RULE-SET,speedtest_domain,DIRECT                                    # Speedtest
   - RULE-SET,ai,AI Services                                             # AI Services
   - RULE-SET,github_domain,GitHub                                       # GitHub
+  - RULE-SET,youtube_domain,Streaming                                   # YouTube
   - RULE-SET,google_domain,Google                                       # Google
-  - GEOSITE,category-media@cn,DIRECT                                    # 国内媒体
-  - GEOSITE,category-media,Streaming                                    # 流媒体
   - GEOSITE,category-games@cn,DIRECT                                    # 国内游戏
   - GEOSITE,category-games,Games                                        # 游戏
   - RULE-SET,onedrive_domain,Microsoft                                  # OneDrive
   - RULE-SET,microsoft_domain,Microsoft                                 # 微软服务
+  - RULE-SET,appletv_domain,Streaming                                   # Apple TV+
   - RULE-SET,emby_domain,Emby                                           # Emby
   - RULE-SET,apple_domain,Apple                                         # 苹果服务
   - RULE-SET,telegram_domain,Telegram                                   # Telegram
   - RULE-SET,tiktok_domain,TikTok                                       # TikTok
   - RULE-SET,twitter_domain,Twitter                                     # Twitter
+  - RULE-SET,netflix_domain,Streaming                                   # Netflix
+  - RULE-SET,disney_domain,Streaming                                    # Disney+
+  - RULE-SET,spotify_domain,Streaming                                   # Spotify
   - RULE-SET,crypto_domain,Crypto                                       # 加密货币
   - RULE-SET,paypal_domain,PayPal                                       # PayPal
   - RULE-SET,finance_domain,PayPal                                      # 金融平台
@@ -299,15 +302,20 @@ rule-providers:
   speedtest_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ookla-speedtest.mrs"}
   ai: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs"}
   github_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs"}
+  youtube_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs"}
   google_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs"}
   onedrive_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/onedrive.mrs"}
   microsoft_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs"}
+  appletv_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple-tvplus.mrs"}
   emby_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/666OS/rules/release/mihomo/domain/Emby.mrs"}
   add_emby: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash-Icons/main/Emby.mrs"}
   apple_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs"}
   telegram_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs"}
   tiktok_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.mrs"}
   twitter_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/twitter.mrs"}
+  netflix_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs"}
+  disney_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/disney.mrs"}
+  spotify_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/spotify.mrs"}
   crypto_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-cryptocurrency.mrs"}
   paypal_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/paypal.mrs"}
   finance_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-finance.mrs"}
