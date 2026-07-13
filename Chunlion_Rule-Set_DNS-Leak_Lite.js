@@ -179,7 +179,6 @@ function main(config) {
     // 服务分流
     "GEOSITE,private,DIRECT",
     "GEOIP,private,DIRECT,no-resolve",
-    "GEOSITE,steam@cn,DIRECT",
     "GEOSITE,microsoft@cn,DIRECT",
     "GEOSITE,apple@cn,DIRECT",
     "GEOSITE,category-ai-!cn,AI Services",
