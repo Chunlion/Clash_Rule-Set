@@ -6,7 +6,7 @@
 
 # ※※※※※※※※※※※※※※※ 锚点区域 ※※※※※※※※※※※※※※※
 # ① 订阅锚点
-Anchor_PR: &Anchor_PR {type: http, interval: 86400, proxy: DIRECT, health-check: {enable: true, url: 'https://cp.cloudflare.com/generate_204', interval: 300}, filter: "^(?!.*(到期|过期|剩余|网址|官网|邮箱|订阅|套餐|流量|时间|说明|重置|Expire|Traffic|Reset|Subscription|Remaining)).*$"}
+Anchor_PR: &Anchor_PR {type: http, interval: 86400, proxy: DIRECT, health-check: {enable: true, url: 'https://cp.cloudflare.com/generate_204', interval: 300}, filter: "^(?!.*(到期|过期|剩余|流量|重置)).*$"}
 # ② 出站锚点
 Anchor_OB: &Anchor_OB {type: select, proxies: [一键代理, 家宽节点, 香港手动, 澳门手动, 台湾手动, 日本手动, 韩国手动, 新加坡手动, 美国手动, 欧洲手动, 香港自动, 澳门自动, 台湾自动, 日本自动, 韩国自动, 新加坡自动, 美国自动, 欧洲自动, 香港故转, 澳门故转, 台湾故转, 日本故转, 韩国故转, 新加坡故转, 美国故转, 欧洲故转, 其他手动]}
 Anchor_SP: &Anchor_SP {type: select, proxies: [一键代理, 家宽节点, 香港手动, 澳门手动, 台湾手动, 日本手动, 韩国手动, 新加坡手动, 美国手动, 欧洲手动, 香港自动, 澳门自动, 台湾自动, 日本自动, 韩国自动, 新加坡自动, 美国自动, 欧洲自动, 香港故转, 澳门故转, 台湾故转, 日本故转, 韩国故转, 新加坡故转, 美国故转, 欧洲故转, 其他手动, DIRECT]}
