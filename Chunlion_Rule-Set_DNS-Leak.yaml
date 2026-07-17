@@ -14,8 +14,8 @@ Anchor_AI: &Anchor_AI {type: select, proxies: [家宽节点, 美国手动, 一�
 Anchor_UK: &Anchor_UK {type: select, proxies: [欧洲手动,DIRECT]}
 # ③ 策略锚点
 Anchor_HS: &Anchor_HS {type: select, include-all: true}
-Anchor_FB: &Anchor_FB {type: fallback, url: 'https://www.gstatic.com/generate_204', interval: 300, lazy: true, timeout: 2000, max-failed-times: 3, hidden: true}
-Anchor_UT: &Anchor_UT {type: url-test, url: 'https://www.gstatic.com/generate_204', interval: 300, lazy: true, tolerance: 50, timeout: 2000, max-failed-times: 3, hidden: true, include-all: true}
+Anchor_FB: &Anchor_FB {type: fallback, url: 'https://www.gstatic.com/generate_204', interval: 300, lazy: false, timeout: 2000, max-failed-times: 3, hidden: true}
+Anchor_UT: &Anchor_UT {type: url-test, url: 'https://www.gstatic.com/generate_204', interval: 300, lazy: false, tolerance: 50, timeout: 2000, max-failed-times: 3, hidden: true, include-all: true}
 # ④ 规则锚点
 Anchor_DN: &Anchor_DN {type: http, interval: 86400, behavior: domain, format: mrs}
 Anchor_IP: &Anchor_IP {type: http, interval: 86400, behavior: ipcidr, format: mrs}
