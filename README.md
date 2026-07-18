@@ -17,7 +17,7 @@
 - 🎮 游戏、金融、加密货币、流媒体、AI 等场景分流
 - 🔄 统一的 YAML 与 JS 覆写脚本策略
 
-适配客户端示例：`OpenWrt` `Clash/Nikki 插件`、`Clashmi`、`FlClash`、`Clash Verge Rev`、`Surfboard` 等。
+适配客户端示例：`OpenWrt` `Clash/Nikki 插件`、`Clashmi`、`FlClash`、`Clash Verge Rev` 等 Mihomo 客户端。`Surfboard` 使用 Surge 配置格式，需转换后使用。
 
 > [!IMPORTANT]
 > 使用前请先替换配置中的 `订阅链接` 与 `机场名`。不要公开分享已填入订阅信息的配置文件。
@@ -40,7 +40,7 @@
 | 想要完整服务分流、规则命中更细 | `Chunlion_Rule-Set_DNS-Leak.yaml` 或 `Chunlion_Rule-Set_DNS-Leak.js` |
 | 设备性能一般、订阅节点多、希望少一点规则源 | `Chunlion_Rule-Set_DNS-Leak_Lite.yaml` 或 `Chunlion_Rule-Set_DNS-Leak_Lite.js` |
 | 使用 Clash Verge Rev 且已有订阅 | 优先用 `.js` 覆写脚本 |
-| OpenWrt / Nikki / FlClash / Surfboard 等直接导入 | 优先用 `.yaml` |
+| OpenWrt / Nikki / FlClash 等直接导入 | 优先用 `.yaml` |
 
 ---
 
@@ -209,7 +209,7 @@
    - `fake-ip-filter` 增加国内、私有、直连规则以及更多局域网/NTP/STUN/TURN/Xbox 探测域名。
    - `proxy-server-nameserver` 升级使用 `DoH (alidns 和 doh.pub)`。
 4. 测速与直连优化
-   - 测试链接统一替换为更贴近落地延迟的 `cp.cloudflare.com/generate_204`。
+   - 测试链接统一使用 `www.gstatic.com/generate_204`，减少部分地区节点的测速超时。
    - 修正了 `add_direct_domain`（直连域名）的规则层级，确保其优先级高于 `geolocation-!cn`。
 5. 规则源优化
    - Emby 规则源使用 `raw.githubusercontent.com`，减少 GitHub 页面跳转。
@@ -244,8 +244,8 @@
 
 ### 🧪 怀疑仍有 DNS 泄露
 
-- Windows 网卡 DNS 可改为 `127.0.0.1` 并配合 `TUN模式`。
-- 可尝试 `strict-route: true`（可能牺牲少量性能，不推荐）。
+- 已开启 `TUN 模式` 时，可将 Windows 网卡 DNS 改为 `127.0.0.1`，由 `dns-hijack` 接管 DNS 请求；未开启 TUN 时不要这样设置。
+- 对防泄露要求较高时可启用 `strict-route: true`；Windows 会增加 DNS 泄露防护规则，但可能影响 VirtualBox 等软件。
 - 关闭客户端内额外 DNS 劫持插件，避免重复重定向。
 - 禁用浏览器中`使用安全DNS`，并保持实验性功能`Experimental QUIC protocol`关闭。
 - `WebRTC泄露`可通过安装浏览器插件[WebRTC Network Limiter](https://chromewebstore.google.com/detail/webrtc-network-limiter/npeicpdbkakmehahjeeohfdhnlpdklia)解决。

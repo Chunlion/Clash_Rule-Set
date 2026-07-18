@@ -28,7 +28,12 @@ function main(config) {
     'geoip': 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat',
     'mmdb': 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.metadb',
     'asn': 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/GeoLite2-ASN.mmdb'
-  }
+  };
+  config['external-controller'] = '127.0.0.1:9090';
+  config['external-ui-name'] = 'zashboard';
+  config['external-ui'] = 'ui';
+  config['secret'] = '';
+  config['external-ui-url'] = 'https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip';
 
   // ==================== TUN 配置 ====================
   config['tun'] = {
@@ -183,7 +188,16 @@ function main(config) {
     "GEOSITE,apple@cn,DIRECT",
     "GEOSITE,category-ai-!cn,AI Services",
     "GEOSITE,youtube,Streaming",
+    "GEOIP,netflix,Streaming,no-resolve",
+    "GEOSITE,apple-tvplus,Streaming",
+    "GEOSITE,netflix,Streaming",
+    "GEOSITE,disney,Streaming",
+    "GEOSITE,spotify,Streaming",
+    "GEOSITE,tiktok,TikTok",
+    "GEOSITE,telegram,Telegram",
+    "GEOIP,telegram,Telegram,no-resolve",
     "GEOSITE,google,Google",
+    "GEOIP,google,Google,no-resolve",
     // Optional software rules: uncomment with their matching proxy groups above.
     // "GEOSITE,github,GitHub",
     // "GEOSITE,apple,Apple",
@@ -195,15 +209,6 @@ function main(config) {
     "GEOSITE,category-finance,PayPal",
     "GEOSITE,category-games@cn,DIRECT",
     "GEOSITE,category-games,Games",
-    "GEOSITE,tiktok,TikTok",
-    "GEOSITE,telegram,Telegram",
-    "GEOSITE,apple-tvplus,Streaming",
-    "GEOSITE,netflix,Streaming",
-    "GEOSITE,disney,Streaming",
-    "GEOSITE,spotify,Streaming",
-    "GEOIP,telegram,Telegram,no-resolve",
-    "GEOIP,google,Google,no-resolve",
-    "GEOIP,netflix,Streaming,no-resolve",
     // 区域划分兜底
     "GEOSITE,cn,DIRECT",
     "GEOIP,cn,DIRECT,no-resolve",

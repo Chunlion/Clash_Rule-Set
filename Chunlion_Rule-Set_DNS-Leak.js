@@ -27,6 +27,11 @@ function main(config) {
     'mmdb': 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.metadb',
     'asn': 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/GeoLite2-ASN.mmdb'
   };
+  config['external-controller'] = '127.0.0.1:9090';
+  config['external-ui-name'] = 'zashboard';
+  config['external-ui'] = 'ui';
+  config['secret'] = '';
+  config['external-ui-url'] = 'https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip';
 
   // ==================== TUN 配置 ====================
   config['tun'] = {
@@ -179,12 +184,12 @@ function main(config) {
         "韩国": '^(?i)(?=.*(韩国|韓國|🇰🇷|首尔|首爾|\\bKR\\b|\\bKOR\\b|Korea|Seoul|SEL|ICN|South)).*$',
         "新加坡": '^(?i)(?=.*(新加坡|🇸🇬|\\bSG\\b|Singapore|SGP|SIN|XSP)).*$',
         "美国": '^(?i)(?=.*(美国|美國|🇺🇸|\\bUS\\b|\\bUSA\\b|\\bNA\\b|United\\s?States|America|SJC|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD)).*$',
-        "欧洲": '^(?i)(?=.*(奥地利|比利时|保加利亚|克罗地亚|塞浦路斯|捷克|丹麦|爱沙尼亚|芬兰|法国|德国|希腊|匈牙利|爱尔兰|意大利|拉脱维亚|立陶宛|卢森堡|荷兰|波兰|葡萄牙|罗马尼亚|斯洛伐克|斯洛文尼亚|西班牙|瑞典|英国|London|United\\s?Kingdom|England|Germany|France|Netherlands|Amsterdam|Frankfurt|Paris|LON|UK|GB|GBR|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|🇬🇧|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU|LHR|LGW)).*$'
+        "欧洲": '^(?i)(?=.*(奥地利|奥地利共和国|比利时|保加利亚|克罗地亚|塞浦路斯|捷克|丹麦|爱沙尼亚|芬兰|法国|德国|希腊|匈牙利|爱尔兰|意大利|拉脱维亚|立陶宛|卢森堡|荷兰|波兰|葡萄牙|罗马尼亚|斯洛伐克|斯洛文尼亚|西班牙|瑞典|英国|London|United\\s?Kingdom|England|Germany|France|Netherlands|Amsterdam|Frankfurt|Paris|LON|UK|GB|GBR|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|🇬🇧|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU|LHR|LGW)).*$'
       };
       return [
-        { name: `${region}故转`, type: "fallback", url: "https://www.gstatic.com/generate_204", interval: 300, lazy: false, proxies: [`${region}手动`, `${region}自动`], icon: iconMap[region], hidden: true },
+        { name: `${region}故转`, type: "fallback", url: "https://www.gstatic.com/generate_204", interval: 300, lazy: false, timeout: 2000, "max-failed-times": 3, proxies: [`${region}手动`, `${region}自动`], icon: iconMap[region], hidden: true },
         { name: `${region}手动`, type: "select", "include-all": true, "exclude-filter": excludeInfoFilter, filter: filterMap[region], icon: iconMap[region] },
-        { name: `${region}自动`, type: "url-test", url: "https://www.gstatic.com/generate_204", interval: 300, lazy: false, tolerance: 50, "include-all": true, "exclude-filter": excludeInfoFilter, filter: filterMap[region], icon: iconMap[region], hidden: true }
+        { name: `${region}自动`, type: "url-test", url: "https://www.gstatic.com/generate_204", interval: 300, lazy: false, tolerance: 50, timeout: 2000, "max-failed-times": 3, "include-all": true, "exclude-filter": excludeInfoFilter, filter: filterMap[region], icon: iconMap[region], hidden: true }
       ];
     }).flat(),
 
@@ -260,7 +265,6 @@ function main(config) {
     "RULE-SET,microsoft_domain,Microsoft",
     "RULE-SET,appletv_domain,Streaming",
     "RULE-SET,emby_domain,Emby",
-    "RULE-SET,emby_ip,Emby,no-resolve",
     "RULE-SET,apple_domain,Apple",
     "RULE-SET,telegram_domain,Telegram",
     "RULE-SET,tiktok_domain,TikTok",
@@ -273,6 +277,7 @@ function main(config) {
     "RULE-SET,finance_domain,PayPal",
     "RULE-SET,add_emby,Emby",
     "RULE-SET,add_direct_domain,DIRECT",
+    "RULE-SET,emby_ip,Emby,no-resolve",
     "RULE-SET,google_ip,Google,no-resolve",
     "RULE-SET,telegram_ip,Telegram,no-resolve",
     "RULE-SET,twitter_ip,Twitter,no-resolve",
