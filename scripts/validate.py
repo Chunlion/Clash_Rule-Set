@@ -25,6 +25,7 @@ CRITICAL_KEYS = (
     "log-level",
     "ipv6",
     "profile",
+    "ntp",
     "geo-auto-update",
     "geo-update-interval",
     "geodata-mode",
@@ -121,6 +122,17 @@ def validate_pair(stem: str) -> None:
         raise AssertionError(f"{stem}: YAML/JS proxy-group mismatch")
     if yaml_config["rules"] != js_config["rules"]:
         raise AssertionError(f"{stem}: YAML/JS rule order mismatch")
+
+    expected_ntp = {
+        "enable": True,
+        "write-to-system": False,
+        "server": "time.apple.com",
+        "port": 123,
+        "interval": 30,
+        "dialer-proxy": "DIRECT",
+    }
+    if yaml_config.get("ntp") != expected_ntp:
+        raise AssertionError(f"{stem}: NTP settings mismatch")
 
     for group in yaml_config["proxy-groups"]:
         if group["type"] == "fallback":

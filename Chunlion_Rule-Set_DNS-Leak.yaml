@@ -59,6 +59,15 @@ profile:
   store-selected: true                                                  # 保存选择  记住上次选择的节点和策略组
   store-fake-ip: true                                                   # 保存映射  Fake-IP 映射以加快 DNS 命中
 
+# NTP 校时
+ntp:
+  enable: true                                                          # 内核校时  修正 Mihomo 内部时间偏差
+  write-to-system: false                                                # 系统写时  OpenWrt 以 root 运行时可改为 true
+  server: time.apple.com                                                # 时间服务器
+  port: 123                                                             # NTP 端口
+  interval: 30                                                          # 校时间隔  单位：分钟
+  dialer-proxy: DIRECT                                                  # 直连校时  不依赖代理节点
+
 # 管理面板
 external-controller: 127.0.0.1:9090                                     # 面板地址
 external-ui-name: zashboard                                             # 面板名称

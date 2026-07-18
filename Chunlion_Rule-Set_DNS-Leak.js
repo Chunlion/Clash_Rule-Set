@@ -18,6 +18,14 @@ function main(config) {
     'store-selected': true,
     'store-fake-ip': true
   };
+  config['ntp'] = {
+    'enable': true,
+    'write-to-system': false,
+    'server': 'time.apple.com',
+    'port': 123,
+    'interval': 30,
+    'dialer-proxy': 'DIRECT'
+  };
   config['geo-auto-update'] = true;
   config['geo-update-interval'] = 24;
   config['geodata-mode'] = true;

@@ -63,6 +63,7 @@
 | TUN          | 开启（mixed） | 提升全局接管能力           |
 | Sniffer      | 开启          | 支持 TLS / HTTP / QUIC     |
 | 控制面板     | Zashboard     | external-ui-url 已预置     |
+| NTP          | 30 分钟       | 内核校时，默认不写系统时间 |
 | Fallback 检测 | 180 秒 / 2 次 | 更快发现并切换不可用节点   |
 | URL-Test 容差 | 30 ms         | 新节点至少快 30 ms 才切换  |
 | 规则格式     | MRS / GEOSITE | 减少文本规则体积与加载压力 |
@@ -252,6 +253,11 @@
 - 禁用浏览器中`使用安全DNS`，并保持实验性功能`Experimental QUIC protocol`关闭。
 - `WebRTC泄露`可通过安装浏览器插件[WebRTC Network Limiter](https://chromewebstore.google.com/detail/webrtc-network-limiter/npeicpdbkakmehahjeeohfdhnlpdklia)解决。
 - 尝试`禁用Windows智能多宿主名称解析`，`本地组策略编辑器`-`计算机配置`-`管理模板`-`网络`-`DNS客户端`-`禁用智能多宿主名称解析`-选择`已启用`。
+
+### 🕒 OpenWrt 系统时间不准确
+
+- 配置默认启用 Mihomo 内部 NTP 校时，每 30 分钟通过 `DIRECT` 查询 `time.apple.com`，但不会修改系统时间。
+- 确认 Mihomo 以 root 权限运行后，可将 `ntp.write-to-system` 改为 `true`，让内核同时校准 OpenWrt 系统时间。
 
 ### 📍 节点很多但区域组为空
 

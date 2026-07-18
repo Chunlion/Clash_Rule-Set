@@ -19,6 +19,15 @@ function main(config) {
     'store-fake-ip': true
   };
 
+  config['ntp'] = {
+    'enable': true,
+    'write-to-system': false,
+    'server': 'time.apple.com',
+    'port': 123,
+    'interval': 30,
+    'dialer-proxy': 'DIRECT'
+  };
+
   // ==================== 地理数据 ====================
   config['geo-auto-update'] = true; // 自动更新 geodata
   config['geo-update-interval'] = 24; // 更新间隔  单位：小时
