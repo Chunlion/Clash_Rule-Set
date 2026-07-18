@@ -134,6 +134,7 @@ dns:
   respect-rules: true                                                   # 遵循规则  强制遵循规则顺序
   prefer-h3: false                                                      # 关闭 HTTP/3 支持
   fake-ip-filter:
+    - "rule-set:fakeip_filter"                                         # 真实解析  外部维护的 Fake-IP 兼容域名
     - "+.lan"                                                           # 真实解析  局域网域名，避免路由器、NAS、打印机访问异常
     - "+.local"                                                         # 真实解析  mDNS / Bonjour / 本地域名
     - "geosite:cn"                                                      # 真实解析  国内域名，配合国内直连规则使用
@@ -272,6 +273,7 @@ rules:
 
 # 规则来源 (
 rule-providers:
+  fakeip_filter: { <<: *Anchor_DN, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter.mrs"}
   emby_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/666OS/rules/release/mihomo/domain/Emby.mrs"}
   emby_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/666OS/rules/release/mihomo/ip/Emby.mrs"}
   add_direct_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Seven1echo/Yaml/refs/heads/main/rules/Seven1_Direct_Domain.mrs"}

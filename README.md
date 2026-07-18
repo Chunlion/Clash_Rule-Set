@@ -185,6 +185,7 @@
 
 已将以下项纳入真实解析路径：
 
+- `rule-set:fakeip_filter`（外部维护的 Fake-IP 兼容域名）
 - `rule-set:cn_domain`
 - `rule-set:private_domain`
 - `rule-set:add_direct_domain`

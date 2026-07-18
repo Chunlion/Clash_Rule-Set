@@ -97,6 +97,13 @@ def validate_references(name: str, config: dict[str, Any]) -> None:
             if target not in known_targets:
                 raise AssertionError(f"{name}: group {group['name']!r} references {target!r}")
 
+    for item in config.get("dns", {}).get("fake-ip-filter", []):
+        if item.startswith("rule-set:"):
+            provider_name = item.removeprefix("rule-set:")
+            provider = providers.get(provider_name)
+            if not provider or provider.get("behavior") not in {"domain", "classical"}:
+                raise AssertionError(f"{name}: invalid fake-ip rule provider {provider_name!r}")
+
 
 def normalized_groups(config: dict[str, Any]) -> list[dict[str, Any]]:
     groups = []

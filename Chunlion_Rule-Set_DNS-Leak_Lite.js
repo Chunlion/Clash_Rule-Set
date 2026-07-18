@@ -93,6 +93,7 @@ function main(config) {
     'respect-rules': true,
     'prefer-h3': false,
     'fake-ip-filter': [
+      'rule-set:fakeip_filter',
       '+.lan',
       '+.local',
       'geosite:cn',
@@ -227,6 +228,7 @@ function main(config) {
 
   // ==================== 规则来源 ====================
   config['rule-providers'] = {
+    fakeip_filter: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter.mrs" },
     emby_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/666OS/rules/release/mihomo/domain/Emby.mrs" },
     emby_ip: { type: 'http', interval: 86400, behavior: 'ipcidr', format: 'mrs', url: "https://raw.githubusercontent.com/666OS/rules/release/mihomo/ip/Emby.mrs" },
     add_direct_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/Seven1echo/Yaml/refs/heads/main/rules/Seven1_Direct_Domain.mrs" },

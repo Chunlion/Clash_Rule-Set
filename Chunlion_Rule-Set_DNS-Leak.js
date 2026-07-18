@@ -90,6 +90,7 @@ function main(config) {
     'respect-rules': true,
     'prefer-h3': false,
     'fake-ip-filter': [
+      'rule-set:fakeip_filter',
       '+.lan',
       '+.local',
       'geosite:cn',
@@ -213,6 +214,7 @@ function main(config) {
 
   // --- 5. 规则集 (Rule Providers) ---
   config["rule-providers"] = {
+    "fakeip_filter": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter.mrs" },
     "ads_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/privacy-protection-tools/anti-ad.github.io/master/docs/mihomo.mrs" },
     "private_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs" },
     "speedtest_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ookla-speedtest.mrs" },
