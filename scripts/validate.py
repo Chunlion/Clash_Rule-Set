@@ -122,6 +122,13 @@ def validate_pair(stem: str) -> None:
     if yaml_config["rules"] != js_config["rules"]:
         raise AssertionError(f"{stem}: YAML/JS rule order mismatch")
 
+    for group in yaml_config["proxy-groups"]:
+        if group["type"] == "fallback":
+            if group.get("interval") != 180 or group.get("max-failed-times") != 2:
+                raise AssertionError(f"{stem}: fallback health-check settings mismatch")
+        elif group["type"] == "url-test" and group.get("tolerance") != 30:
+            raise AssertionError(f"{stem}: url-test tolerance must be 30 ms")
+
     cn_index = yaml_config["rules"].index("GEOSITE,category-games@cn,DIRECT")
     games_index = yaml_config["rules"].index("GEOSITE,category-games,Games")
     if cn_index >= games_index:

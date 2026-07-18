@@ -63,6 +63,8 @@
 | TUN          | 开启（mixed） | 提升全局接管能力           |
 | Sniffer      | 开启          | 支持 TLS / HTTP / QUIC     |
 | 控制面板     | Zashboard     | external-ui-url 已预置     |
+| Fallback 检测 | 180 秒 / 2 次 | 更快发现并切换不可用节点   |
+| URL-Test 容差 | 30 ms         | 新节点至少快 30 ms 才切换  |
 | 规则格式     | MRS / GEOSITE | 减少文本规则体积与加载压力 |
 
 ---
