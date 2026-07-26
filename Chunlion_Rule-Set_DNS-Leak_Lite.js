@@ -14,6 +14,8 @@ function main(config) {
   config['unified-delay'] = true;
   config['log-level'] = 'info';
   config['ipv6'] = false;
+  // TLS 指纹：uTLS 模拟 Chrome 指纹，降低 TLS 特征被识别概率（仅对 TLS 类节点生效）
+  config['global-client-fingerprint'] = 'chrome';
   config['profile'] = {
     'store-selected': true,
     'store-fake-ip': true
@@ -128,12 +130,9 @@ function main(config) {
       'rule-set:add_direct_domain': ['223.5.5.5', '119.29.29.29'],
       'geosite:cn,private': ['223.5.5.5', '119.29.29.29']
     },
-    'nameserver': ['https://dns.alidns.com/dns-query', 'https://doh.pub/dns-query'],
-    'fallback': ['https://1.1.1.1/dns-query', 'https://8.8.8.8/dns-query'],
-    'fallback-filter': {
-      'geoip': true,
-      'geoip-code': 'CN'
-    }
+    // 不再配置 fallback / fallback-filter：境外域名由 Fake-IP 交给代理侧远程解析，
+    // 配合 respect-rules 已天然防污染；老式 GeoIP fallback 与其重复且实际不再生效。
+    'nameserver': ['https://dns.alidns.com/dns-query', 'https://doh.pub/dns-query']
   };
 
   // ==================== 策略组 ====================
@@ -243,11 +242,11 @@ function main(config) {
   // ==================== 规则来源 ====================
   config['rule-providers'] = {
     fakeip_filter: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter.mrs" },
-    emby_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/666OS/rules/release/mihomo/domain/Emby.mrs" },
-    emby_ip: { type: 'http', interval: 86400, behavior: 'ipcidr', format: 'mrs', url: "https://raw.githubusercontent.com/666OS/rules/release/mihomo/ip/Emby.mrs" },
-    add_direct_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/Seven1echo/Yaml/refs/heads/main/rules/Seven1_Direct_Domain.mrs" },
-    add_emby: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/Chunlion/Clash-Icons/main/Emby.mrs" },
-    cn_ip: { type: 'http', interval: 86400, behavior: 'ipcidr', format: 'mrs', url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs" }
+    emby_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://cdn.jsdelivr.net/gh/666OS/rules@release/mihomo/domain/Emby.mrs" },
+    emby_ip: { type: 'http', interval: 86400, behavior: 'ipcidr', format: 'mrs', url: "https://cdn.jsdelivr.net/gh/666OS/rules@release/mihomo/ip/Emby.mrs" },
+    add_direct_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://cdn.jsdelivr.net/gh/Seven1echo/Yaml@main/rules/Seven1_Direct_Domain.mrs" },
+    add_emby: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://cdn.jsdelivr.net/gh/Chunlion/Clash-Icons@main/Emby.mrs" },
+    cn_ip: { type: 'http', interval: 86400, behavior: 'ipcidr', format: 'mrs', url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.mrs" }
   };
   for (const provider of Object.values(config['rule-providers'])) {
     if (provider.type === 'http') provider.proxy = '一键代理';

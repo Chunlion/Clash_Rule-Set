@@ -166,6 +166,7 @@
 
 - `respect-rules: true`
 - 先规则匹配，再走 DNS 解析路径。
+- 境外域名由 Fake-IP 交给代理侧远程解析，天然防污染；因此不再配置老式 `fallback` / `fallback-filter`（与 `respect-rules` 机制重复，实际不再生效）。
 
 ### 3️⃣ 分角色 DNS 服务器
 
@@ -177,23 +178,19 @@
 
 已对以下规则集定向到国内 DNS：
 
-- `rule-set:cn_domain`
-- `rule-set:private_domain`
 - `rule-set:add_direct_domain`
 - `geosite:cn,private`
 
-这能减少直连域名被错误送往远端解析的概率，提升稳定性。
+这能减少直连域名被错误送往远端解析的概率，提升稳定性。`cn_domain` / `private_domain` 规则集与 `geosite:cn,private` 数据同源，不再重复登记。
 
 ### 5️⃣ fake-ip-filter 增强
 
 已将以下项纳入真实解析路径：
 
 - `rule-set:fakeip_filter`（外部维护的 Fake-IP 兼容域名）
-- `rule-set:cn_domain`
-- `rule-set:private_domain`
 - `rule-set:add_direct_domain`
-- `geosite:cn`
-- `geosite:private`
+- `geosite:cn`（与 `rule-set:cn_domain` 同源，保留一份）
+- `geosite:private`（与 `rule-set:private_domain` 同源，保留一份）
 - 常见局域网/NTP/STUN/Windows 探测域名
 - `services.googleapis.cn` 映射至 `services.googleapis.com`，改善 Google Play 下载兼容性
 
@@ -214,17 +211,21 @@
 2. Emby 双通道规则
    - 同时使用 `emby_domain` 与 `emby_ip`，提升命中率。
 3. DNS 策略增强
-   - `nameserver-policy` 增加 `cn_domain`、`private_domain`、`add_direct_domain`。
+   - `nameserver-policy` 增加 `add_direct_domain`，并与 `geosite:cn,private` 配合覆盖国内/私有域名（去除同源重复登记）。
    - `fake-ip-filter` 增加国内、私有、直连规则以及更多局域网/NTP/STUN/TURN/Xbox 探测域名。
    - `proxy-server-nameserver` 升级使用 `DoH (alidns 和 doh.pub)`。
+   - 移除老式 `fallback` / `fallback-filter`：防污染统一由 Fake-IP + `respect-rules` 承担，避免两套机制并存造成误解。
 4. 测速与直连优化
    - 测试链接统一使用 `www.gstatic.com/generate_204`，仅 HTTP 204 响应视为可用，减少劫持页误判。
    - 动态节点组、Fallback 与 URL-Test 组无可用节点时使用 `REJECT`，不自动改走其他节点。
    - 修正了 `add_direct_domain`（直连域名）的规则层级，确保其优先级高于 `geolocation-!cn`。
 5. 规则源优化
-   - Emby 规则源使用 `raw.githubusercontent.com`，减少 GitHub 页面跳转。
+   - 规则源统一走 `cdn.jsdelivr.net` 多节点 CDN（GitHub Release 附件除外），广告规则改用 anti-AD 官方地址，下载更稳。
    - 所有远程规则集通过“一键代理”更新；订阅源仍保持 `DIRECT`，避免首启代理依赖。
    - 四份配置统一使用 PayPal 金融分流与 Crypto 加密货币分流。
+6. 连接层增强
+   - 新增 `global-client-fingerprint: chrome`：uTLS 模拟 Chrome TLS 指纹，降低 TLS 类节点被特征识别的概率。
+   - 订阅健康检查补充 `expected-status: 204`，与策略组测速判定标准一致。
 
 ---
 

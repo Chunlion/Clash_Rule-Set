@@ -24,6 +24,7 @@ CRITICAL_KEYS = (
     "unified-delay",
     "log-level",
     "ipv6",
+    "global-client-fingerprint",
     "profile",
     "ntp",
     "geo-auto-update",
@@ -98,12 +99,26 @@ def validate_references(name: str, config: dict[str, Any]) -> None:
             if target not in known_targets:
                 raise AssertionError(f"{name}: group {group['name']!r} references {target!r}")
 
-    for item in config.get("dns", {}).get("fake-ip-filter", []):
+    dns = config.get("dns", {})
+    for item in dns.get("fake-ip-filter", []):
         if item.startswith("rule-set:"):
             provider_name = item.removeprefix("rule-set:")
             provider = providers.get(provider_name)
             if not provider or provider.get("behavior") not in {"domain", "classical"}:
                 raise AssertionError(f"{name}: invalid fake-ip rule provider {provider_name!r}")
+
+    for policy_key in dns.get("nameserver-policy", {}):
+        if policy_key.startswith("rule-set:"):
+            provider_name = policy_key.removeprefix("rule-set:")
+            provider = providers.get(provider_name)
+            if not provider or provider.get("behavior") not in {"domain", "classical"}:
+                raise AssertionError(f"{name}: invalid nameserver-policy rule provider {provider_name!r}")
+
+    # 防污染由 Fake-IP + respect-rules 承担，禁止再引入与其重复的老式 fallback。
+    if "fallback" in dns or "fallback-filter" in dns:
+        raise AssertionError(f"{name}: dns fallback/fallback-filter is superseded by respect-rules")
+    if dns.get("respect-rules") is not True:
+        raise AssertionError(f"{name}: dns respect-rules must be enabled")
 
     for provider_name in config.get("tun", {}).get("route-exclude-address-set", []):
         provider = providers.get(provider_name)

@@ -6,7 +6,7 @@
 
 # ※※※※※※※※※※※※※※※ 锚点区域 ※※※※※※※※※※※※※※※
 # ① 订阅锚点
-Anchor_PR: &Anchor_PR {type: http, interval: 86400, proxy: DIRECT, health-check: {enable: true, url: 'https://www.gstatic.com/generate_204', interval: 300}, filter: "^(?!.*(到期|过期|剩余|网址|官网|邮箱|订阅|套餐|流量|时间|说明|重置|Expire|Traffic|Reset|Subscription|Remaining)).*$"}
+Anchor_PR: &Anchor_PR {type: http, interval: 86400, proxy: DIRECT, health-check: {enable: true, url: 'https://www.gstatic.com/generate_204', interval: 300, expected-status: 204}, filter: "^(?!.*(到期|过期|剩余|网址|官网|邮箱|订阅|套餐|流量|时间|说明|重置|Expire|Traffic|Reset|Subscription|Remaining)).*$"}
 # ② 出站锚点
 Anchor_OB: &Anchor_OB {type: select, proxies: [一键代理, 全局最优, 稳定备用, 香港节点, 澳门节点, 台湾节点, 日本节点, 韩国节点, 新加坡节点, 美国节点, 欧洲节点, 家宽节点, 其他节点]}
 Anchor_SP: &Anchor_SP {type: select, proxies: [一键代理, 全局最优, 稳定备用, 香港节点, 澳门节点, 台湾节点, 日本节点, 韩国节点, 新加坡节点, 美国节点, 欧洲节点, 家宽节点, 其他节点, DIRECT]}
@@ -53,6 +53,7 @@ tcp-concurrent: true                                                    # 并发
 unified-delay: true                                                     # 统一延迟  减少节点延迟抖动
 log-level: info                                                         # 日志级别  silent（静默）/ error（错误）/ warning（警告）/ info（信息）/ debug（调试）
 ipv6: false                                                             # 网络协议  是否启用 IPv6 支持
+global-client-fingerprint: chrome                                       # TLS 指纹  uTLS 模拟 Chrome 指纹，降低 TLS 特征被识别概率（仅对 TLS 类节点生效）
 profile:
   store-selected: true                                                  # 保存选择  记住上次选择的节点和策略组
   store-fake-ip: true                                                   # 保存映射  Fake-IP 映射以加快 DNS 命中
@@ -182,13 +183,8 @@ dns:
     - https://dns.alidns.com/dns-query                                  # 默认解析  阿里 DoH，普通域名默认解析
     - https://doh.pub/dns-query                                         # 默认解析  腾讯 DoH，普通域名备用解析
 
-  fallback:
-    - https://1.1.1.1/dns-query                                         # 后备解析  Cloudflare DoH，用于境外域名防污染
-    - https://8.8.8.8/dns-query                                         # 后备解析  Google DoH，用于境外域名防污染
-
-  fallback-filter:
-    geoip: true                                                         # 污染过滤  启用 GeoIP 判断
-    geoip-code: CN                                                      # 污染过滤  国内结果走 nameserver，非国内异常结果使用 fallback
+  # 不再配置 fallback / fallback-filter：境外域名由 Fake-IP 交给代理侧远程解析，
+  # 配合 respect-rules 已天然防污染；老式 GeoIP fallback 与其重复且实际不再生效。
 
 
 # ※※※※※※※※※※※※※※※ 代理策略组 ※※※※※※※※※※※※※※※
@@ -279,9 +275,9 @@ rules:
 # 规则来源 (
 rule-providers:
   fakeip_filter: { <<: *Anchor_DN, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter.mrs"}
-  emby_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/666OS/rules/release/mihomo/domain/Emby.mrs"}
-  emby_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/666OS/rules/release/mihomo/ip/Emby.mrs"}
-  add_direct_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Seven1echo/Yaml/refs/heads/main/rules/Seven1_Direct_Domain.mrs"}
-  add_emby: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash-Icons/main/Emby.mrs"}
-  cn_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs"}
+  emby_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/666OS/rules@release/mihomo/domain/Emby.mrs"}
+  emby_ip: { <<: *Anchor_IP, url: "https://cdn.jsdelivr.net/gh/666OS/rules@release/mihomo/ip/Emby.mrs"}
+  add_direct_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/Seven1echo/Yaml@main/rules/Seven1_Direct_Domain.mrs"}
+  add_emby: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/Chunlion/Clash-Icons@main/Emby.mrs"}
+  cn_ip: { <<: *Anchor_IP, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.mrs"}
 # ※※※※※※※※※※※※※※※ 配置结束 ※※※※※※※※※※※※※※※
