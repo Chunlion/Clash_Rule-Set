@@ -93,6 +93,7 @@ tun:
   auto-redirect: true                                                   # 自动定向  自动将流量重定向至 TUN  （仅 Linux 生效）
   strict-route: false                                                   # 路由模式  严格路由模式
   endpoint-independent-nat: true                                        # 端点无关  NAT（提高 NAT 类型兼容性，适用于 P2P 和游戏）
+  route-exclude-address-set: [cn_ip]                                    # 绕过大陆  匹配大陆 IP-CIDR 的流量不进入 TUN
 
 # 嗅探功能
 sniffer:
@@ -121,6 +122,9 @@ sniffer:
     - "dlg.io.mi.com"                                                   # 跳过嗅探  小米设备通信
     - "+.oray.com"                                                      # 跳过嗅探  花生壳服务，避免远程访问异常
     - "+.sunlogin.net"                                                  # 跳过嗅探  向日葵远程控制，避免远控连接异常
+# hosts 配置
+hosts:
+  'services.googleapis.cn': ['services.googleapis.com']                # Google Play 使用全球服务域名
 
 # DNS 设置(开启严格路由可以仅保留nameserver)
 dns:

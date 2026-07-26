@@ -50,7 +50,8 @@ function main(config) {
     'auto-route': true,
     'auto-redirect': true,
     'strict-route': false,
-    'endpoint-independent-nat': true
+    'endpoint-independent-nat': true,
+    'route-exclude-address-set': ['cn_ip']
   };
 
   // ==================== 嗅探功能 ====================
@@ -76,6 +77,10 @@ function main(config) {
       '+.oray.com',
       '+.sunlogin.net'
     ]
+  };
+
+  config['hosts'] = {
+    'services.googleapis.cn': ['services.googleapis.com']
   };
 
   // ==================== DNS 设置 ====================

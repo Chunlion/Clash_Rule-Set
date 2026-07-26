@@ -53,7 +53,8 @@ function main(config) {
     'auto-route': true,
     'auto-redirect': true,
     'strict-route': false,
-    'endpoint-independent-nat': true
+    'endpoint-independent-nat': true,
+    'route-exclude-address-set': ['cn_ip']
   };
 
   // ==================== 嗅探功能 ====================
@@ -79,6 +80,10 @@ function main(config) {
       '+.oray.com',
       '+.sunlogin.net'
     ]
+  };
+
+  config['hosts'] = {
+    'services.googleapis.cn': ['services.googleapis.com']
   };
 
   // ==================== DNS 设置 ====================
@@ -232,7 +237,8 @@ function main(config) {
     emby_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/666OS/rules/release/mihomo/domain/Emby.mrs" },
     emby_ip: { type: 'http', interval: 86400, behavior: 'ipcidr', format: 'mrs', url: "https://raw.githubusercontent.com/666OS/rules/release/mihomo/ip/Emby.mrs" },
     add_direct_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/Seven1echo/Yaml/refs/heads/main/rules/Seven1_Direct_Domain.mrs" },
-    add_emby: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/Chunlion/Clash-Icons/main/Emby.mrs" }
+    add_emby: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/Chunlion/Clash-Icons/main/Emby.mrs" },
+    cn_ip: { type: 'http', interval: 86400, behavior: 'ipcidr', format: 'mrs', url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs" }
   };
   return config;
 }

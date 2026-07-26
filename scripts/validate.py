@@ -37,6 +37,7 @@ CRITICAL_KEYS = (
     "external-ui-url",
     "tun",
     "sniffer",
+    "hosts",
     "dns",
     "rule-providers",
 )
@@ -103,6 +104,11 @@ def validate_references(name: str, config: dict[str, Any]) -> None:
             provider = providers.get(provider_name)
             if not provider or provider.get("behavior") not in {"domain", "classical"}:
                 raise AssertionError(f"{name}: invalid fake-ip rule provider {provider_name!r}")
+
+    for provider_name in config.get("tun", {}).get("route-exclude-address-set", []):
+        provider = providers.get(provider_name)
+        if not provider or provider.get("behavior") != "ipcidr":
+            raise AssertionError(f"{name}: invalid TUN route-exclude provider {provider_name!r}")
 
 
 def normalized_groups(config: dict[str, Any]) -> list[dict[str, Any]]:
