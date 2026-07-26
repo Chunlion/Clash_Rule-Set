@@ -66,6 +66,9 @@
 | NTP          | 30 分钟       | 内核校时，默认不写系统时间 |
 | Fallback 检测 | 180 秒 / 2 次 | 更快发现并切换不可用节点   |
 | URL-Test 容差 | 30 ms         | 新节点至少快 30 ms 才切换  |
+| 测速状态     | HTTP 204      | 仅 204 响应视为可用节点    |
+| 空节点回退   | REJECT        | 动态节点组为空时自动拒绝   |
+| 规则源更新   | 一键代理      | 远程规则集通过代理下载     |
 | 规则格式     | MRS / GEOSITE | 减少文本规则体积与加载压力 |
 
 ---
@@ -192,11 +195,13 @@
 - `geosite:cn`
 - `geosite:private`
 - 常见局域网/NTP/STUN/Windows 探测域名
+- `services.googleapis.cn` 映射至 `services.googleapis.com`，改善 Google Play 下载兼容性
 
 ### 6️⃣ TUN + DNS 劫持
 
 - `dns-hijack: any:53 与 tcp://any:53`
 - 配合 `auto-route/auto-redirect`，尽量减少系统层绕行。
+- Linux + nftables 环境会通过 `route-exclude-address-set: [cn_ip]` 将大陆 IP 绕过 TUN；Windows 和 macOS 不使用该规则。
 
 ---
 
@@ -213,10 +218,12 @@
    - `fake-ip-filter` 增加国内、私有、直连规则以及更多局域网/NTP/STUN/TURN/Xbox 探测域名。
    - `proxy-server-nameserver` 升级使用 `DoH (alidns 和 doh.pub)`。
 4. 测速与直连优化
-   - 测试链接统一使用 `www.gstatic.com/generate_204`，减少部分地区节点的测速超时。
+   - 测试链接统一使用 `www.gstatic.com/generate_204`，仅 HTTP 204 响应视为可用，减少劫持页误判。
+   - 动态节点组、Fallback 与 URL-Test 组无可用节点时使用 `REJECT`，不自动改走其他节点。
    - 修正了 `add_direct_domain`（直连域名）的规则层级，确保其优先级高于 `geolocation-!cn`。
 5. 规则源优化
    - Emby 规则源使用 `raw.githubusercontent.com`，减少 GitHub 页面跳转。
+   - 所有远程规则集通过“一键代理”更新；订阅源仍保持 `DIRECT`，避免首启代理依赖。
    - 四份配置统一使用 PayPal 金融分流与 Crypto 加密货币分流。
 
 ---
@@ -264,6 +271,12 @@
 
 - 检查节点命名是否包含地区关键字（如 HK、JP、US 等）。
 - 如机场命名不规范，可在区域正则中补充关键字。
+- 动态节点组为空时会返回 `REJECT`，不会自动改走其他地区节点。
+
+### 🔄 规则源更新失败
+
+- 确认“一键代理”已选择可用节点；远程规则集通过该策略组下载。
+- 重新加载配置后刷新规则提供者；订阅源仍按 `DIRECT` 更新。
 
 ---
 
