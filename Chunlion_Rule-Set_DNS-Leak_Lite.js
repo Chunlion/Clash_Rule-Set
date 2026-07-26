@@ -189,6 +189,15 @@ function main(config) {
     { name: '其他节点', type: 'select', 'include-all': true, 'exclude-filter': excludeInfoFilter, filter: regexOT, icon: 'https://github.com/Seven1echo/Yaml/raw/main/icons/OT.png' }
   ];
 
+  for (const group of config['proxy-groups']) {
+    if (group.type === 'fallback' || group.type === 'url-test') {
+      group['empty-fallback'] = 'REJECT';
+      group['expected-status'] = 204;
+    } else if (group.type === 'select' && group['include-all']) {
+      group['empty-fallback'] = 'REJECT';
+    }
+  }
+
   // ==================== 规则匹配 ====================
   config['rules'] = [
     // 特殊自定义规则
@@ -240,5 +249,8 @@ function main(config) {
     add_emby: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/Chunlion/Clash-Icons/main/Emby.mrs" },
     cn_ip: { type: 'http', interval: 86400, behavior: 'ipcidr', format: 'mrs', url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs" }
   };
+  for (const provider of Object.values(config['rule-providers'])) {
+    if (provider.type === 'http') provider.proxy = '一键代理';
+  }
   return config;
 }

@@ -217,6 +217,15 @@ function main(config) {
     }
   ];
 
+  for (const group of config["proxy-groups"]) {
+    if (group.type === "fallback" || group.type === "url-test") {
+      group["empty-fallback"] = "REJECT";
+      group["expected-status"] = 204;
+    } else if (group.type === "select" && group["include-all"]) {
+      group["empty-fallback"] = "REJECT";
+    }
+  }
+
   // --- 5. 规则集 (Rule Providers) ---
   config["rule-providers"] = {
     "fakeip_filter": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter.mrs" },
@@ -261,6 +270,9 @@ function main(config) {
     "ukwifi_ip": { type: "http", behavior: "classical", format: "text", interval: 86400, url: "https://raw.githubusercontent.com/iniwex5/tools/refs/heads/main/rules/UK-wifi-call.list" },
     "cn_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs" }
   };
+  for (const provider of Object.values(config["rule-providers"])) {
+    if (provider.type === "http") provider.proxy = "一键代理";
+  }
   // --- 6. 规则匹配 (Rules) ---
   config["rules"] = [
     "RULE-SET,ads_domain,REJECT",

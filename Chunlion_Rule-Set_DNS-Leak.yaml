@@ -13,13 +13,13 @@ Anchor_SP: &Anchor_SP {type: select, proxies: [一键代理, 家宽节点, 香�
 Anchor_AI: &Anchor_AI {type: select, proxies: [家宽节点, 美国手动, 一键代理, 香港手动, 澳门手动, 台湾手动, 日本手动, 韩国手动, 新加坡手动, 欧洲手动, 香港自动, 澳门自动, 台湾自动, 日本自动, 韩国自动, 新加坡自动, 美国自动, 欧洲自动, 香港故转, 澳门故转, 台湾故转, 日本故转, 韩国故转, 新加坡故转, 美国故转, 欧洲故转, 其他手动]}
 Anchor_UK: &Anchor_UK {type: select, proxies: [欧洲手动,DIRECT]}
 # ③ 策略锚点
-Anchor_HS: &Anchor_HS {type: select, include-all: true}
-Anchor_FB: &Anchor_FB {type: fallback, url: 'https://www.gstatic.com/generate_204', interval: 180, lazy: false, timeout: 2000, max-failed-times: 2, hidden: true}
-Anchor_UT: &Anchor_UT {type: url-test, url: 'https://www.gstatic.com/generate_204', interval: 300, lazy: false, tolerance: 30, timeout: 2000, max-failed-times: 3, hidden: true, include-all: true}
+Anchor_HS: &Anchor_HS {type: select, empty-fallback: REJECT, include-all: true}
+Anchor_FB: &Anchor_FB {type: fallback, empty-fallback: REJECT, expected-status: 204, url: 'https://www.gstatic.com/generate_204', interval: 180, lazy: false, timeout: 2000, max-failed-times: 2, hidden: true}
+Anchor_UT: &Anchor_UT {type: url-test, empty-fallback: REJECT, expected-status: 204, url: 'https://www.gstatic.com/generate_204', interval: 300, lazy: false, tolerance: 30, timeout: 2000, max-failed-times: 3, hidden: true, include-all: true}
 # ④ 规则锚点
-Anchor_DN: &Anchor_DN {type: http, interval: 86400, behavior: domain, format: mrs}
-Anchor_IP: &Anchor_IP {type: http, interval: 86400, behavior: ipcidr, format: mrs}
-Anchor_CL: &Anchor_CL {type: http, interval: 86400, behavior: classical, format: text}
+Anchor_DN: &Anchor_DN {type: http, interval: 86400, proxy: 一键代理, behavior: domain, format: mrs}
+Anchor_IP: &Anchor_IP {type: http, interval: 86400, proxy: 一键代理, behavior: ipcidr, format: mrs}
+Anchor_CL: &Anchor_CL {type: http, interval: 86400, proxy: 一键代理, behavior: classical, format: text}
 # ⑤ 区域锚点
 # 地区词决定归属；IEPL / IPLC / BGP / Game / 倍率等线路标签不参与地区判断。
 # 没有明确地区词的节点进入“其他”分组，避免把线路标签误当成地区特征。

@@ -110,6 +110,10 @@ def validate_references(name: str, config: dict[str, Any]) -> None:
         if not provider or provider.get("behavior") != "ipcidr":
             raise AssertionError(f"{name}: invalid TUN route-exclude provider {provider_name!r}")
 
+    for provider_name, provider in providers.items():
+        if provider.get("type") == "http" and provider.get("proxy") != "一键代理":
+            raise AssertionError(f"{name}: remote rule provider {provider_name!r} must use 一键代理")
+
 
 def normalized_groups(config: dict[str, Any]) -> list[dict[str, Any]]:
     groups = []
@@ -149,10 +153,17 @@ def validate_pair(stem: str) -> None:
 
     for group in yaml_config["proxy-groups"]:
         if group["type"] == "fallback":
+            if group.get("empty-fallback") != "REJECT" or group.get("expected-status") != 204:
+                raise AssertionError(f"{stem}: fallback groups must reject empty members and require HTTP 204")
             if group.get("interval") != 180 or group.get("max-failed-times") != 2:
                 raise AssertionError(f"{stem}: fallback health-check settings mismatch")
-        elif group["type"] == "url-test" and group.get("tolerance") != 30:
-            raise AssertionError(f"{stem}: url-test tolerance must be 30 ms")
+        elif group["type"] == "url-test":
+            if group.get("empty-fallback") != "REJECT" or group.get("expected-status") != 204:
+                raise AssertionError(f"{stem}: url-test groups must reject empty members and require HTTP 204")
+            if group.get("tolerance") != 30:
+                raise AssertionError(f"{stem}: url-test tolerance must be 30 ms")
+        elif group["type"] == "select" and group.get("include-all") and group.get("empty-fallback") != "REJECT":
+            raise AssertionError(f"{stem}: dynamic select groups must reject empty members")
 
     cn_index = yaml_config["rules"].index("GEOSITE,category-games@cn,DIRECT")
     games_index = yaml_config["rules"].index("GEOSITE,category-games,Games")
