@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import argparse
 import json
 import subprocess
+import urllib.error
+import urllib.request
 from pathlib import Path
 from typing import Any
 
@@ -193,9 +196,55 @@ def validate_pair(stem: str) -> None:
     )
 
 
+def collect_remote_urls() -> list[str]:
+    urls: set[str] = set()
+    for stem in PAIRS:
+        config = load_yaml(ROOT / f"{stem}.yaml")
+        for provider in config.get("rule-providers", {}).values():
+            if provider.get("type") == "http":
+                urls.add(provider["url"])
+        urls.update(config.get("geox-url", {}).values())
+    return sorted(urls)
+
+
+def probe_url(url: str) -> str | None:
+    """探测 URL 可达性；可达返回 None，否则返回失败原因。"""
+    last_error = "unknown error"
+    for method in ("HEAD", "GET"):
+        for _attempt in range(2):
+            request = urllib.request.Request(url, method=method, headers={"User-Agent": "Clash-Rule-Set-CI"})
+            try:
+                with urllib.request.urlopen(request, timeout=30):
+                    return None
+            except urllib.error.HTTPError as error:
+                last_error = f"{method} -> HTTP {error.code}"
+                break  # HTTP 状态明确，重试无益；部分源不支持 HEAD，换 GET 再试
+            except OSError as error:
+                last_error = f"{method} -> {error}"
+    return last_error
+
+
+def check_remote_urls() -> None:
+    failures = []
+    for url in collect_remote_urls():
+        error = probe_url(url)
+        if error is None:
+            print(f"PASS url {url}")
+        else:
+            print(f"FAIL url {url}: {error}")
+            failures.append(url)
+    if failures:
+        raise AssertionError(f"{len(failures)} unreachable rule source(s): {failures}")
+
+
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Validate Clash rule-set configs")
+    parser.add_argument("--check-urls", action="store_true", help="probe every remote rule/geodata URL")
+    args = parser.parse_args()
     for stem in PAIRS:
         validate_pair(stem)
+    if args.check_urls:
+        check_remote_urls()
 
 
 if __name__ == "__main__":

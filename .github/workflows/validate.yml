@@ -13,6 +13,9 @@ on:
       - "Chunlion_Rule-Set_DNS-Leak*.yaml"
       - "scripts/validate.py"
       - ".github/workflows/validate.yml"
+  schedule:
+    - cron: "0 3 * * 1"   # 每周一 03:00 UTC（北京时间 11:00）巡检规则源可达性
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -30,3 +33,6 @@ jobs:
           node-version: "24"
       - run: python -m pip install PyYAML==6.0.2
       - run: python scripts/validate.py
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
+      - run: python scripts/validate.py --check-urls
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'

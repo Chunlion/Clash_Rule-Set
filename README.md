@@ -226,6 +226,11 @@
 6. 连接层增强
    - 新增 `global-client-fingerprint: chrome`：uTLS 模拟 Chrome TLS 指纹，降低 TLS 类节点被特征识别的概率。
    - 订阅健康检查补充 `expected-status: 204`，与策略组测速判定标准一致。
+7. 地区正则与安全加固
+   - 地区正则的 2–3 字母代码（HK/UK/GB/SEL/OSA 等）统一加 `\b` 单词边界，修复 `Fukuoka` 误入欧洲组、`South Africa` 误入韩国组、带 `10GB` 标签误入欧洲组等错分。
+   - “其他”组排除正则补充 `(?i)` 与地区词全集，全大写命名（如 `RUSSIA`、`PANAMA`）不再凭空消失。
+   - 面板 API 默认启用密码 `123456`（首次打开 zashboard 时输入；建议改成自己的随机值）。
+   - 图标地址统一为 `raw.githubusercontent.com` 写法。
 
 ---
 
@@ -236,6 +241,11 @@
 1. YAML 语法检查：确认客户端可以正常导入。
 2. JS 语法检查：用 `node --check Chunlion_Rule-Set_DNS-Leak.js` 检查覆写脚本。
 3. 规则源检查：确认 `rule-providers` 中的 URL 可以访问，且 `rules` 引用的规则源都存在。
+
+仓库自带自动化校验（GitHub Actions）：
+
+- 每次推送 / PR 运行 `scripts/validate.py`，校验 YAML 与 JS 覆写在关键配置、策略组、规则顺序上完全一致。
+- 每周一自动运行 `scripts/validate.py --check-urls`，探测全部规则源与 geodata 地址的可达性，链接失效会让工作流变红提醒。也可在 Actions 页面手动触发。
 
 常见维护原则：
 
