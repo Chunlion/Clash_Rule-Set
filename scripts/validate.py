@@ -27,7 +27,6 @@ CRITICAL_KEYS = (
     "unified-delay",
     "log-level",
     "ipv6",
-    "global-client-fingerprint",
     "profile",
     "ntp",
     "geo-auto-update",
@@ -49,10 +48,12 @@ NODE_RENDER = r"""
 const fs = require('fs');
 const vm = require('vm');
 const source = fs.readFileSync(process.argv[1], 'utf8');
+const input = fs.readFileSync(0, 'utf8').trim();
 const context = {};
 vm.createContext(context);
 vm.runInContext(source, context);
-const config = context.main({ proxies: [], 'proxy-providers': {} });
+const initialConfig = input ? JSON.parse(input) : { proxies: [], 'proxy-providers': {} };
+const config = context.main(initialConfig);
 process.stdout.write(JSON.stringify(config));
 """
 
@@ -65,7 +66,7 @@ def load_yaml(path: Path) -> dict[str, Any]:
     return config
 
 
-def load_js(path: Path) -> dict[str, Any]:
+def load_js(path: Path, initial_config: dict[str, Any] | None = None) -> dict[str, Any]:
     subprocess.run(["node", "--check", str(path)], check=True, capture_output=True, text=True)
     result = subprocess.run(
         ["node", "-e", NODE_RENDER, str(path)],
@@ -73,6 +74,7 @@ def load_js(path: Path) -> dict[str, Any]:
         capture_output=True,
         text=True,
         encoding="utf-8",
+        input=json.dumps(initial_config or {"proxies": [], "proxy-providers": {}}),
     )
     config = json.loads(result.stdout)
     if not isinstance(config, dict):
@@ -152,6 +154,8 @@ def validate_pair(stem: str) -> None:
     for key in CRITICAL_KEYS:
         if yaml_config.get(key) != js_config.get(key):
             raise AssertionError(f"{stem}: YAML/JS mismatch at {key}")
+    if "global-client-fingerprint" in yaml_config or "global-client-fingerprint" in js_config:
+        raise AssertionError(f"{stem}: global-client-fingerprint was removed by Mihomo")
 
     if normalized_groups(yaml_config) != normalized_groups(js_config):
         raise AssertionError(f"{stem}: YAML/JS proxy-group mismatch")
@@ -170,6 +174,11 @@ def validate_pair(stem: str) -> None:
         raise AssertionError(f"{stem}: NTP settings mismatch")
 
     for group in yaml_config["proxy-groups"]:
+        if group.get("include-all"):
+            excluded_types = {item.lower() for item in group.get("exclude-type", "").split("|")}
+            if "direct" not in excluded_types:
+                raise AssertionError(f"{stem}: include-all groups must exclude direct outbound proxies")
+
         if group["type"] == "fallback":
             if group.get("empty-fallback") != "REJECT" or group.get("expected-status") != 204:
                 raise AssertionError(f"{stem}: fallback groups must reject empty members and require HTTP 204")
@@ -180,8 +189,48 @@ def validate_pair(stem: str) -> None:
                 raise AssertionError(f"{stem}: url-test groups must reject empty members and require HTTP 204")
             if group.get("tolerance") != 30:
                 raise AssertionError(f"{stem}: url-test tolerance must be 30 ms")
+        elif group["type"] == "load-balance":
+            if group.get("empty-fallback") != "REJECT" or group.get("expected-status") != 204:
+                raise AssertionError(f"{stem}: load-balance groups must reject empty members and require HTTP 204")
+            if group.get("strategy") != "sticky-sessions" or group.get("lazy") is not True:
+                raise AssertionError(f"{stem}: load-balance groups must use lazy sticky sessions")
         elif group["type"] == "select" and group.get("include-all") and group.get("empty-fallback") != "REJECT":
             raise AssertionError(f"{stem}: dynamic select groups must reject empty members")
+
+    group_names = {group["name"] for group in yaml_config["proxy-groups"]}
+    if not {"低倍率节点", "高倍率节点"} <= group_names:
+        raise AssertionError(f"{stem}: rate-aware proxy groups are missing")
+    if stem.endswith("_Lite"):
+        if "全局均衡" in group_names:
+            raise AssertionError(f"{stem}: Lite config must not add load-balance background checks")
+    elif "全局均衡" not in group_names:
+        raise AssertionError(f"{stem}: full config must provide global load balancing")
+
+    private_dns_config = load_js(
+        ROOT / f"{stem}.js",
+        {
+            "proxies": [],
+            "proxy-providers": {},
+            "dns": {
+                "nameserver": [
+                    "https://10.0.0.53/dns-query",
+                    "https://11.1.1.1/dns-query",
+                    "https://dns.google/dns-query",
+                ],
+                "proxy-server-nameserver": ["tls://192.168.1.1", "223.5.5.5"],
+            },
+        },
+    )
+    proxy_nameservers = private_dns_config["dns"]["proxy-server-nameserver"]
+    for private_nameserver in (
+        "https://10.0.0.53/dns-query",
+        "https://11.1.1.1/dns-query",
+        "tls://192.168.1.1",
+    ):
+        if private_nameserver not in proxy_nameservers:
+            raise AssertionError(f"{stem}: JS override did not preserve private DNS {private_nameserver!r}")
+    if "https://dns.google/dns-query" in proxy_nameservers:
+        raise AssertionError(f"{stem}: JS override retained a redundant public DNS server")
 
     cn_index = yaml_config["rules"].index("GEOSITE,category-games@cn,DIRECT")
     games_index = yaml_config["rules"].index("GEOSITE,category-games,Games")

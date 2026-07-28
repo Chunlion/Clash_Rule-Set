@@ -3,7 +3,36 @@
  * 说明： 基于 YAML 配置文件生成的 JS 脚本，用于 Clash Verge 等客户端的 Merge 覆写。
  */
 
+function collectPrivateNameservers(dnsConfig = {}) {
+  const publicNameserverHosts = [
+    '223.5.5.5', '223.6.6.6', '119.29.29.29', '1.12.12.12', '120.53.53.53',
+    '114.114.114.114', '1.1.1.1', '1.0.0.1', '8.8.8.8', '8.8.4.4',
+    '9.9.9.9', '127.0.0.1'
+  ];
+  const publicNameserverKeywords = [
+    'alidns', 'doh.pub', 'dot.pub', 'dnspod', 'dns.google', 'cloudflare',
+    'quad9', 'opendns', 'nextdns', 'adguard', 'system'
+  ];
+  const candidates = [
+    ...(Array.isArray(dnsConfig['nameserver']) ? dnsConfig['nameserver'] : []),
+    ...(Array.isArray(dnsConfig['proxy-server-nameserver']) ? dnsConfig['proxy-server-nameserver'] : [])
+  ];
+
+  return [...new Set(candidates
+    .filter(nameserver => typeof nameserver === 'string')
+    .map(nameserver => nameserver.trim())
+    .filter(Boolean))]
+    .filter(nameserver => {
+      const normalized = nameserver.toLowerCase();
+      const host = normalized.replace(/^[a-z][a-z0-9+.-]*:\/\//, '').split(/[/:#?]/, 1)[0];
+      return !publicNameserverHosts.includes(host)
+        && !publicNameserverKeywords.some(keyword => normalized.includes(keyword));
+    });
+}
+
 function main(config) {
+  const privateNameservers = collectPrivateNameservers(config['dns'] || {});
+
   // ==================== 基础配置 ====================
   config['mixed-port'] = 7893;
   config['mode'] = 'rule';
@@ -14,8 +43,6 @@ function main(config) {
   config['unified-delay'] = true;
   config['log-level'] = 'info';
   config['ipv6'] = false;
-  // TLS 指纹：uTLS 模拟 Chrome 指纹，降低 TLS 特征被识别概率（仅对 TLS 类节点生效）
-  config['global-client-fingerprint'] = 'chrome';
   config['profile'] = {
     'store-selected': true,
     'store-fake-ip': true
@@ -120,7 +147,11 @@ function main(config) {
     ],
     // 默认 DNS 用于解析 DoH / DoT 服务器域名，节点 DNS 避免解析代理节点时产生循环。
     'default-nameserver': ['223.5.5.5', '119.29.29.29'],
-    'proxy-server-nameserver': ['https://dns.alidns.com/dns-query', 'https://doh.pub/dns-query'],
+    'proxy-server-nameserver': [
+      'https://dns.alidns.com/dns-query',
+      'https://doh.pub/dns-query',
+      ...privateNameservers
+    ],
     'direct-nameserver': ['223.5.5.5', '119.29.29.29'],
     'direct-nameserver-follow-policy': true,
     'nameserver-policy': {
@@ -134,7 +165,8 @@ function main(config) {
 
   // --- 4. 策略组 (Proxy Groups) ---
   const commonProxies = [
-    "一键代理", "家宽节点", "香港手动", "澳门手动", "台湾手动", "日本手动", "韩国手动", "新加坡手动", "美国手动", "欧洲手动",
+    "一键代理", "全局均衡", "低倍率节点", "高倍率节点", "家宽节点",
+    "香港手动", "澳门手动", "台湾手动", "日本手动", "韩国手动", "新加坡手动", "美国手动", "欧洲手动",
     "香港自动", "澳门自动", "台湾自动", "日本自动", "韩国自动", "新加坡自动", "美国自动", "欧洲自动",
     "香港故转", "澳门故转", "台湾故转", "日本故转", "韩国故转", "新加坡故转", "美国故转", "欧洲故转",
     "其他手动"
@@ -143,7 +175,9 @@ function main(config) {
 
   const homeIcon = "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/05icon/home.png";
   const homeFilter = '^(?i)(?=.*(家宽|🏠|家庭宽带|宽带|住宅|民宅|\\bResidential\\b|\\bHome\\b|\\bISP\\b|Broadband)).*$';
-  const excludeInfoFilter = '(?i)(到期|过期|剩余|网址|官网|邮箱|订阅|套餐|流量|时间|说明|重置|Expire|Traffic|Reset|Subscription|Remaining)';
+  const lowRateFilter = '(?i)(0\\.[0-5]\\s*(x|×|倍)|(x|×)\\s*0\\.[0-5]|低倍|低倍率)';
+  const highRateFilter = '(?i)(([2-9]|[1-9][0-9]+)(\\.[0-9]+)?\\s*(x|×|倍)|(x|×)\\s*([2-9]|[1-9][0-9]+)(\\.[0-9]+)?|高倍|高倍率)';
+  const excludeInfoFilter = '(?i)(群|返利|邀请|客服|工单|官网|网站|网址|邮箱|订阅|套餐|流量|到期|过期|剩余|重置|通知|更新|作者|频道|http|Expire|Traffic|Reset|Subscription|Remaining)';
   const aiProxies = ["家宽节点", "美国手动", ...commonProxies.filter(p => p !== "家宽节点" && p !== "美国手动")];
 
   config["proxy-groups"] = [
@@ -172,6 +206,21 @@ function main(config) {
     // 区域自动/手动组
     // 地区词决定归属；IEPL / IPLC / BGP / Game / 倍率等线路标签不参与地区判断。
     // 没有明确地区词的节点进入“其他手动”，避免把线路标签误当成地区特征。
+    {
+      name: "全局均衡",
+      type: "load-balance",
+      strategy: "sticky-sessions",
+      url: "https://www.gstatic.com/generate_204",
+      interval: 300,
+      lazy: true,
+      timeout: 2000,
+      "max-failed-times": 3,
+      hidden: true,
+      "include-all": true,
+      "exclude-filter": excludeInfoFilter
+    },
+    { name: "低倍率节点", type: "select", "include-all": true, "exclude-filter": excludeInfoFilter, filter: lowRateFilter },
+    { name: "高倍率节点", type: "select", "include-all": true, "exclude-filter": excludeInfoFilter, filter: highRateFilter },
     { name: "家宽节点", type: "select", "include-all": true, "exclude-filter": excludeInfoFilter, filter: homeFilter, icon: homeIcon },
 
     ...["香港", "澳门", "台湾", "日本", "韩国", "新加坡", "美国", "欧洲"].map(region => {
@@ -213,7 +262,10 @@ function main(config) {
   ];
 
   for (const group of config["proxy-groups"]) {
-    if (group.type === "fallback" || group.type === "url-test") {
+    if (group["include-all"]) {
+      group["exclude-type"] = "direct";
+    }
+    if (group.type === "fallback" || group.type === "url-test" || group.type === "load-balance") {
       group["empty-fallback"] = "REJECT";
       group["expected-status"] = 204;
     } else if (group.type === "select" && group["include-all"]) {

@@ -11,7 +11,7 @@
 [![DNS](https://img.shields.io/badge/DNS-Fake--IP-success)](#-dns-防泄露机制重点)
 [![Format](https://img.shields.io/badge/Format-YAML%20%2B%20JS-orange)](#-项目文件说明)
 
-本项目基于 [Seven1echo/Yaml](https://github.com/Seven1echo/Yaml) 改造，面向 Mihomo (Clash Meta) 核心，重点强化以下能力：
+本项目基于 [Seven1echo/Yaml](https://github.com/Seven1echo/Yaml) 改造，并参考 [AIsouler/MyClash](https://github.com/AIsouler/MyClash) 与 [Toperlock/Clash](https://github.com/Toperlock/Clash) 的节点管理思路，面向 Mihomo (Clash Meta) 核心，重点强化以下能力：
 
 - 🔒 DNS 防泄露与解析稳定性
 - 🎮 游戏、金融、加密货币、流媒体、AI 等场景分流
@@ -105,18 +105,21 @@
 
 | 🧩 版本 | 🗺️ 区域策略组 |
 | :-- | :-- |
-| 🚀 完整版 | 🇭🇰 香港、🇲🇴 澳门、🇹🇼 台湾、🇯🇵 日本、🇰🇷 韩国、🇸🇬 新加坡、🇺🇸 美国、🇪🇺 欧洲均包含 ✋ 手动、⚡ 自动、🔁 故转；另有 🏠 家宽节点、📦 其他手动 |
-| ⚡ Lite 版 | 🇭🇰 香港、🇲🇴 澳门、🇹🇼 台湾、🇯🇵 日本、🇰🇷 韩国、🇸🇬 新加坡、🇺🇸 美国、🇪🇺 欧洲均为 📍 节点组；另有 🏠 家宽节点、📦 其他节点 |
+| 🚀 完整版 | 🇭🇰 香港、🇲🇴 澳门、🇹🇼 台湾、🇯🇵 日本、🇰🇷 韩国、🇸🇬 新加坡、🇺🇸 美国、🇪🇺 欧洲均包含 ✋ 手动、⚡ 自动、🔁 故转；另有 ⚖️ 全局均衡、🌱 低倍率、🔥 高倍率、🏠 家宽节点、📦 其他手动 |
+| ⚡ Lite 版 | 🇭🇰 香港、🇲🇴 澳门、🇹🇼 台湾、🇯🇵 日本、🇰🇷 韩国、🇸🇬 新加坡、🇺🇸 美国、🇪🇺 欧洲均为 📍 节点组；另有 🌱 低倍率、🔥 高倍率、🏠 家宽节点、📦 其他节点 |
 
 ### 节点分组对比
 
 | 📌 特征维度 | 🚀 完整版 | ⚡ Lite 版 |
 | :-- | :--: | :--: |
-| 🧩 策略组数量 | 42 | 23 |
+| 🧩 策略组数量 | 45 | 25 |
 | 🌐 服务策略组数量 | 16 | 11 |
 | 🗺️ 区域分组形态 | ✋ 手动 + ⚡ 自动 + 🔁 故转 | 📍 节点 |
 | ⚡ 全局最优 | ❌ | ✅ |
 | 🛟 稳定备用 | ❌ | ✅ |
+| ⚖️ 全局均衡 | ✅ | ❌ |
+| 🌱 低倍率节点 | ✅ | ✅ |
+| 🔥 高倍率节点 | ✅ | ✅ |
 | 🏠 家宽节点 | ✅ | ✅ |
 
 | 🧩 策略组 | 🚀 完整版 | ⚡ Lite 版 |
@@ -139,6 +142,9 @@
 | 🧰 兜底流量 | ✅ | ✅ |
 | ⚡ 全局最优 | ❌ | ✅ |
 | 🛟 稳定备用 | ❌ | ✅ |
+| ⚖️ 全局均衡 | ✅ | ❌ |
+| 🌱 低倍率节点 | ✅ | ✅ |
+| 🔥 高倍率节点 | ✅ | ✅ |
 | 🇭🇰 香港 | ✋ / ⚡ / 🔁 | 📍 |
 | 🇲🇴 澳门 | ✋ / ⚡ / 🔁 | 📍 |
 | 🇹🇼 台湾 | ✋ / ⚡ / 🔁 | 📍 |
@@ -214,6 +220,7 @@
    - `nameserver-policy` 增加 `add_direct_domain`，并与 `geosite:cn,private` 配合覆盖国内/私有域名（去除同源重复登记）。
    - `fake-ip-filter` 增加国内、私有、直连规则以及更多局域网/NTP/STUN/TURN/Xbox 探测域名。
    - `proxy-server-nameserver` 升级使用 `DoH (alidns 和 doh.pub)`。
+   - JS 覆写会保留订阅中非公共的私有 DNS，用于解析机场节点域名，避免覆写后节点域名失效。
    - 移除老式 `fallback` / `fallback-filter`：防污染统一由 Fake-IP + `respect-rules` 承担，避免两套机制并存造成误解。
 4. 测速与直连优化
    - 测试链接统一使用 `www.gstatic.com/generate_204`，仅 HTTP 204 响应视为可用，减少劫持页误判。
@@ -223,14 +230,18 @@
    - 规则源统一走 `cdn.jsdelivr.net` 多节点 CDN（GitHub Release 附件除外），广告规则改用 anti-AD 官方地址，下载更稳。
    - 所有远程规则集通过“一键代理”更新；订阅源仍保持 `DIRECT`，避免首启代理依赖。
    - 四份配置统一使用 PayPal 金融分流与 Crypto 加密货币分流。
-6. 连接层增强
-   - 新增 `global-client-fingerprint: chrome`：uTLS 模拟 Chrome TLS 指纹，降低 TLS 类节点被特征识别的概率。
+6. 连接层兼容
+   - 移除 [Mihomo v1.19.27](https://github.com/MetaCubeX/mihomo/releases/tag/v1.19.27) 已废弃的 `global-client-fingerprint`；TLS 指纹改由订阅节点自身的 `client-fingerprint` 管理。
    - 订阅健康检查补充 `expected-status: 204`，与策略组测速判定标准一致。
 7. 地区正则与安全加固
    - 地区正则的 2–3 字母代码（HK/UK/GB/SEL/OSA 等）统一加 `\b` 单词边界，修复 `Fukuoka` 误入欧洲组、`South Africa` 误入韩国组、带 `10GB` 标签误入欧洲组等错分。
    - “其他”组排除正则补充 `(?i)` 与地区词全集，全大写命名（如 `RUSSIA`、`PANAMA`）不再凭空消失。
    - 面板 API 默认启用密码 `123456`（首次打开 zashboard 时输入；建议改成自己的随机值）。
    - 图标地址统一为 `raw.githubusercontent.com` 写法。
+8. 节点选择增强
+   - 完整版新增懒加载 `sticky-sessions` 全局均衡组；同一来源与目标的连接保持在同一节点，未选择该组时不进行测速。
+   - 完整版与 Lite 版新增低倍率、高倍率节点组，按常见 `0.5x`、`2x`、`×2`、`低倍率`、`高倍率` 标签归类。
+   - 所有 `include-all` 动态组排除 `direct` 出站，避免全局测速误选直连；订阅信息节点过滤补充客服、工单、邀请、频道等常见标签。
 
 ---
 
@@ -302,4 +313,5 @@
 ## 🙏 致谢
 
 - 原始项目与思路来源：[Seven1echo/Yaml](https://github.com/Seven1echo/Yaml)
+- 节点倍率、私有 DNS 与负载均衡思路参考：[AIsouler/MyClash](https://github.com/AIsouler/MyClash)、[Toperlock/Clash](https://github.com/Toperlock/Clash)
 - 规则数据来源：MetaCubeX、Koolson、及其他公开规则维护者
