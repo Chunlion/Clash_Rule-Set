@@ -25,6 +25,8 @@ CRITICAL_KEYS = (
     "bind-address",
     "tcp-concurrent",
     "unified-delay",
+    "keep-alive-idle",
+    "keep-alive-interval",
     "log-level",
     "ipv6",
     "profile",
@@ -156,6 +158,29 @@ def validate_pair(stem: str) -> None:
             raise AssertionError(f"{stem}: YAML/JS mismatch at {key}")
     if "global-client-fingerprint" in yaml_config or "global-client-fingerprint" in js_config:
         raise AssertionError(f"{stem}: global-client-fingerprint was removed by Mihomo")
+    if yaml_config.get("keep-alive-idle") != 600 or yaml_config.get("keep-alive-interval") != 60:
+        raise AssertionError(f"{stem}: TCP keep-alive settings mismatch")
+
+    dns = yaml_config["dns"]
+    if dns.get("use-hosts") is not True or dns.get("use-system-hosts") is not True:
+        raise AssertionError(f"{stem}: configured and system hosts must be enabled")
+
+    expected_skip_dst = [
+        "127.0.0.0/8",
+        "10.0.0.0/8",
+        "172.16.0.0/12",
+        "192.168.0.0/16",
+        "169.254.0.0/16",
+        "100.64.0.0/10",
+        "::1/128",
+        "fc00::/7",
+        "fe80::/10",
+    ]
+    sniffer = yaml_config["sniffer"]
+    if sniffer.get("override-destination") is not False or sniffer.get("parse-pure-ip") is not False:
+        raise AssertionError(f"{stem}: global sniffer overrides must remain conservative")
+    if sniffer.get("skip-dst-address") != expected_skip_dst:
+        raise AssertionError(f"{stem}: sniffer private destination exclusions mismatch")
 
     if normalized_groups(yaml_config) != normalized_groups(js_config):
         raise AssertionError(f"{stem}: YAML/JS proxy-group mismatch")
@@ -209,8 +234,16 @@ def validate_pair(stem: str) -> None:
     private_dns_config = load_js(
         ROOT / f"{stem}.js",
         {
-            "proxies": [],
+            "proxies": [
+                {"name": "node-a", "type": "ss", "server": "edge.node.example"},
+                {"name": "node-b", "type": "trojan", "server": "api.other.net"},
+            ],
             "proxy-providers": {},
+            "hosts": {
+                "edge.node.example": "10.0.0.8",
+                "+.node.example": "10.0.0.9",
+                "unrelated.example": "203.0.113.10",
+            },
             "dns": {
                 "nameserver": [
                     "https://10.0.0.53/dns-query",
@@ -218,6 +251,13 @@ def validate_pair(stem: str) -> None:
                     "https://dns.google/dns-query",
                 ],
                 "proxy-server-nameserver": ["tls://192.168.1.1", "223.5.5.5"],
+                "nameserver-policy": {
+                    "+.node.example": ["10.0.0.53"],
+                    "unrelated.example": ["203.0.113.53"],
+                },
+                "proxy-server-nameserver-policy": {
+                    "api.other.net": ["192.168.1.53"],
+                },
             },
         },
     )
@@ -231,6 +271,22 @@ def validate_pair(stem: str) -> None:
             raise AssertionError(f"{stem}: JS override did not preserve private DNS {private_nameserver!r}")
     if "https://dns.google/dns-query" in proxy_nameservers:
         raise AssertionError(f"{stem}: JS override retained a redundant public DNS server")
+
+    proxy_hosts = private_dns_config["hosts"]
+    for proxy_host in ("edge.node.example", "+.node.example"):
+        if proxy_host not in proxy_hosts:
+            raise AssertionError(f"{stem}: JS override did not preserve proxy hosts entry {proxy_host!r}")
+    if "unrelated.example" in proxy_hosts:
+        raise AssertionError(f"{stem}: JS override retained an unrelated hosts entry")
+    if proxy_hosts.get("services.googleapis.cn") != ["services.googleapis.com"]:
+        raise AssertionError(f"{stem}: mandatory Google Play hosts entry mismatch")
+
+    proxy_policy = private_dns_config["dns"].get("proxy-server-nameserver-policy", {})
+    for policy_key in ("+.node.example", "api.other.net"):
+        if policy_key not in proxy_policy:
+            raise AssertionError(f"{stem}: JS override did not preserve proxy DNS policy {policy_key!r}")
+    if "unrelated.example" in proxy_policy:
+        raise AssertionError(f"{stem}: JS override retained an unrelated DNS policy")
 
     cn_index = yaml_config["rules"].index("GEOSITE,category-games@cn,DIRECT")
     games_index = yaml_config["rules"].index("GEOSITE,category-games,Games")

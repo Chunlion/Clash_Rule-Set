@@ -30,8 +30,58 @@ function collectPrivateNameservers(dnsConfig = {}) {
     });
 }
 
+function collectProxyServerDomains(proxies = []) {
+  return new Set((Array.isArray(proxies) ? proxies : [])
+    .map(proxy => proxy && proxy.server)
+    .filter(server => typeof server === 'string')
+    .map(server => server.trim().toLowerCase())
+    .filter(Boolean));
+}
+
+function hostPatternMatchesDomains(pattern, domains) {
+  if (typeof pattern !== 'string') {
+    return false;
+  }
+
+  return pattern.split(',').some(rawPattern => {
+    const candidate = rawPattern.trim().toLowerCase();
+    if (!candidate || candidate.startsWith('rule-set:') || candidate.startsWith('geosite:')) {
+      return false;
+    }
+
+    const suffix = candidate.startsWith('+.') || candidate.startsWith('*.')
+      ? candidate.slice(2)
+      : candidate.startsWith('.') ? candidate.slice(1) : null;
+    return suffix
+      ? [...domains].some(domain => domain === suffix || domain.endsWith(`.${suffix}`))
+      : domains.has(candidate);
+  });
+}
+
+function collectProxyDomainMappings(sources, domains) {
+  const mappings = {};
+  for (const source of sources) {
+    if (!source || typeof source !== 'object' || Array.isArray(source)) {
+      continue;
+    }
+    for (const [pattern, value] of Object.entries(source)) {
+      if (hostPatternMatchesDomains(pattern, domains)) {
+        mappings[pattern] = value;
+      }
+    }
+  }
+  return mappings;
+}
+
 function main(config) {
-  const privateNameservers = collectPrivateNameservers(config['dns'] || {});
+  const originalDnsConfig = config['dns'] || {};
+  const proxyServerDomains = collectProxyServerDomains(config['proxies']);
+  const privateNameservers = collectPrivateNameservers(originalDnsConfig);
+  const proxyServerPolicy = collectProxyDomainMappings([
+    originalDnsConfig['nameserver-policy'],
+    originalDnsConfig['proxy-server-nameserver-policy']
+  ], proxyServerDomains);
+  const proxyServerHosts = collectProxyDomainMappings([config['hosts']], proxyServerDomains);
 
   // ==================== 基础配置 ====================
   config['mixed-port'] = 7893;
@@ -41,6 +91,8 @@ function main(config) {
   config['bind-address'] = '127.0.0.1';
   config['tcp-concurrent'] = true;
   config['unified-delay'] = true;
+  config['keep-alive-idle'] = 600;
+  config['keep-alive-interval'] = 60;
   config['log-level'] = 'info';
   config['ipv6'] = false;
   config['profile'] = {
@@ -105,16 +157,30 @@ function main(config) {
       'dlg.io.mi.com',
       '+.oray.com',
       '+.sunlogin.net'
+    ],
+    'skip-dst-address': [
+      '127.0.0.0/8',
+      '10.0.0.0/8',
+      '172.16.0.0/12',
+      '192.168.0.0/16',
+      '169.254.0.0/16',
+      '100.64.0.0/10',
+      '::1/128',
+      'fc00::/7',
+      'fe80::/10'
     ]
   };
 
   config['hosts'] = {
-    'services.googleapis.cn': ['services.googleapis.com']
+    'services.googleapis.cn': ['services.googleapis.com'],
+    ...proxyServerHosts
   };
 
   // ==================== DNS 设置 ====================
   config['dns'] = {
     'enable': true,
+    'use-hosts': true,
+    'use-system-hosts': true,
     'cache-algorithm': 'arc',
     'listen': '127.0.0.1:7874',
     'ipv6': false,
@@ -152,6 +218,9 @@ function main(config) {
       'https://doh.pub/dns-query',
       ...privateNameservers
     ],
+    ...(Object.keys(proxyServerPolicy).length > 0 && {
+      'proxy-server-nameserver-policy': proxyServerPolicy
+    }),
     'direct-nameserver': ['223.5.5.5', '119.29.29.29'],
     'direct-nameserver-follow-policy': true,
     'nameserver-policy': {

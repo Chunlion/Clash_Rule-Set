@@ -53,6 +53,8 @@ allow-lan: false                                                        # 局域
 bind-address: 127.0.0.1                                                 # 监听接口  仅监听本机回环地址
 tcp-concurrent: true                                                    # 并发连接  提升多任务性能
 unified-delay: true                                                     # 统一延迟  减少节点延迟抖动
+keep-alive-idle: 600                                                    # 保活空闲  TCP Keep Alive 最大空闲时间，降低移动设备频繁探测
+keep-alive-interval: 60                                                 # 保活探测  TCP Keep Alive 探测间隔
 log-level: info                                                         # 日志级别  silent（静默）/ error（错误）/ warning（警告）/ info（信息）/ debug（调试）
 ipv6: false                                                             # 网络协议  是否启用 IPv6 支持
 profile:
@@ -102,7 +104,7 @@ sniffer:
   enable: true                                                          # 启用嗅探  提升透明代理 / TUN 场景下的域名分流准确性
   override-destination: false                                           # 覆盖目标  全局不覆盖目标地址，降低误嗅探导致异常的概率
   parse-pure-ip: false                                                  # 纯 IP 嗅探  不强制嗅探所有纯 IP 连接，减少游戏、P2P、IoT、远控异常
-  force-dns-mapping: true                                               # 强制映射  对 DNS 映射流量进行嗅探，适合 Fake-IP / TUN 场景
+  force-dns-mapping: true                                               # 强制映射  兼容 redir-host 的 DNS 映射流量；Fake-IP 模式下保留无副作用
 
   sniff:
     HTTP:
@@ -125,6 +127,17 @@ sniffer:
     - "+.oray.com"                                                      # 跳过嗅探  花生壳服务，避免远程访问异常
     - "+.sunlogin.net"                                                  # 跳过嗅探  向日葵远程控制，避免远控连接异常
 
+  skip-dst-address:
+    - 127.0.0.0/8                                                       # 跳过目标  本机回环
+    - 10.0.0.0/8                                                        # 跳过目标  私有网络
+    - 172.16.0.0/12                                                     # 跳过目标  私有网络
+    - 192.168.0.0/16                                                    # 跳过目标  私有网络
+    - 169.254.0.0/16                                                    # 跳过目标  IPv4 链路本地
+    - 100.64.0.0/10                                                     # 跳过目标  CGNAT / Tailscale
+    - ::1/128                                                           # 跳过目标  IPv6 回环
+    - fc00::/7                                                          # 跳过目标  IPv6 私有网络
+    - fe80::/10                                                         # 跳过目标  IPv6 链路本地
+
 # hosts 配置
 hosts:
   'services.googleapis.cn': ['services.googleapis.com']                # Google Play 使用全球服务域名
@@ -132,6 +145,8 @@ hosts:
 # DNS 设置(开启严格路由可以仅保留nameserver)
 dns:
   enable: true                                                          # 解析服务  启用 Clash 内置 DNS 服务
+  use-hosts: true                                                       # 配置 Hosts  DNS 查询遵循配置文件中的 hosts
+  use-system-hosts: true                                                # 系统 Hosts  DNS 查询同时遵循系统 hosts
   cache-algorithm: arc                                                  # 缓存算法  自适应替换缓存（较LRU命中率更优）
   listen: 127.0.0.1:7874                                                # 监听服务  仅监听本机，避免 DNS 暴露到局域网
   ipv6: false                                                           # 网络协议  关闭 IPv6 DNS 解析支持(防止DNS泄露)

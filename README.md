@@ -62,6 +62,7 @@
 | 工作模式     | rule          | 按规则分流                 |
 | TUN          | 开启（mixed） | 提升全局接管能力           |
 | Sniffer      | 开启          | 支持 TLS / HTTP / QUIC     |
+| TCP Keep Alive | 600 / 60 秒 | 空闲 600 秒，间隔 60 秒探测 |
 | 控制面板     | Zashboard     | external-ui-url 已预置     |
 | NTP          | 30 分钟       | 内核校时，默认不写系统时间 |
 | Fallback 检测 | 180 秒 / 2 次 | 更快发现并切换不可用节点   |
@@ -179,6 +180,7 @@
 - `default-nameserver：223.5.5.5、119.29.29.29`
 - `proxy-server-nameserver：https://dns.alidns.com/dns-query、https://doh.pub/dns-query`
 - `direct-nameserver：223.5.5.5、119.29.29.29`
+- `use-hosts` 与 `use-system-hosts` 均开启，配置内映射和系统 hosts 同时生效。
 
 ### 4️⃣ nameserver-policy 精细化
 
@@ -206,6 +208,12 @@
 - 配合 `auto-route/auto-redirect`，尽量减少系统层绕行。
 - Linux + nftables 环境会通过 `route-exclude-address-set: [cn_ip]` 将大陆 IP 绕过 TUN；Windows 和 macOS 不使用该规则。
 
+### 7️⃣ 节点 hosts 与保守嗅探
+
+- JS 覆写只保留与实际节点服务器域名匹配的原订阅 hosts、`nameserver-policy` 和 `proxy-server-nameserver-policy`，避免覆盖节点域名所需的内网解析，同时不把无关映射带入新配置。
+- Sniffer 不嗅探回环、私网、链路本地及 `100.64.0.0/10` 目标，减少 NAS、路由器、远控、Tailscale 和内网 HTTP 被改写的概率。
+- 全局 `override-destination` 与 `parse-pure-ip` 保持关闭，仅 HTTP 协议嗅探按原配置覆盖目标。
+
 ---
 
 ## 🆕 规则更新说明（当前版本）
@@ -220,7 +228,8 @@
    - `nameserver-policy` 增加 `add_direct_domain`，并与 `geosite:cn,private` 配合覆盖国内/私有域名（去除同源重复登记）。
    - `fake-ip-filter` 增加国内、私有、直连规则以及更多局域网/NTP/STUN/TURN/Xbox 探测域名。
    - `proxy-server-nameserver` 升级使用 `DoH (alidns 和 doh.pub)`。
-   - JS 覆写会保留订阅中非公共的私有 DNS，用于解析机场节点域名，避免覆写后节点域名失效。
+   - JS 覆写会保留订阅中非公共的私有 DNS，以及与实际节点服务器域名匹配的 hosts 和 DNS policy，避免覆写后节点域名失效。
+   - 显式启用配置 hosts 与系统 hosts，并为回环、私网、链路本地和 CGNAT/Tailscale 目标关闭嗅探。
    - 移除老式 `fallback` / `fallback-filter`：防污染统一由 Fake-IP + `respect-rules` 承担，避免两套机制并存造成误解。
 4. 测速与直连优化
    - 测试链接统一使用 `www.gstatic.com/generate_204`，仅 HTTP 204 响应视为可用，减少劫持页误判。
@@ -232,6 +241,7 @@
    - 四份配置统一使用 PayPal 金融分流与 Crypto 加密货币分流。
 6. 连接层兼容
    - 移除 [Mihomo v1.19.27](https://github.com/MetaCubeX/mihomo/releases/tag/v1.19.27) 已废弃的 `global-client-fingerprint`；TLS 指纹改由订阅节点自身的 `client-fingerprint` 管理。
+   - 设置 TCP Keep Alive 空闲 600 秒、探测间隔 60 秒，降低频繁探测带来的移动设备耗电。
    - 订阅健康检查补充 `expected-status: 204`，与策略组测速判定标准一致。
 7. 地区正则与安全加固
    - 地区正则的 2–3 字母代码（HK/UK/GB/SEL/OSA 等）统一加 `\b` 单词边界，修复 `Fukuoka` 误入欧洲组、`South Africa` 误入韩国组、带 `10GB` 标签误入欧洲组等错分。
