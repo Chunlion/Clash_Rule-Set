@@ -17,10 +17,45 @@
 - 🎮 游戏、金融、加密货币、流媒体、AI 等场景分流
 - 🔄 统一的 YAML 与 JS 覆写脚本策略
 
-适配客户端示例：`OpenWrt` `Clash/Nikki 插件`、`Clashmi`、`FlClash`、`Clash Verge Rev` 等 Mihomo 客户端。`Surfboard` 使用 Surge 配置格式，需转换后使用。
+适配客户端示例：[Bettbox](https://github.com/appshubcc/Bettbox)、`OpenWrt` `Clash/Nikki 插件`、`Clashmi`、`FlClash`、`Clash Verge Rev` 等 Mihomo 客户端。`Surfboard` 使用 Surge 配置格式，需转换后使用。
 
 > [!IMPORTANT]
 > 使用前请先替换配置中的 `订阅链接` 与 `机场名`。不要公开分享已填入订阅信息的配置文件。
+
+## 📥 Bettbox 导入链接
+
+YAML 链接用于 Bettbox 的“配置 → 添加配置 → URL”；JS 链接用于“配置 → 脚本 → 导入 → URL”。
+
+### YAML 配置
+
+- [完整 YAML](https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set_DNS-Leak.yaml)
+
+```text
+https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set_DNS-Leak.yaml
+```
+
+- [Lite YAML](https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set_DNS-Leak_Lite.yaml)
+
+```text
+https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set_DNS-Leak_Lite.yaml
+```
+
+### JS 覆写脚本
+
+- [完整 JS](https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set_DNS-Leak.js)
+
+```text
+https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set_DNS-Leak.js
+```
+
+- [Lite JS](https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set_DNS-Leak_Lite.js)
+
+```text
+https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set_DNS-Leak_Lite.js
+```
+
+> [!NOTE]
+> YAML 导入后仍需替换 `订阅链接` 与 `机场名`；JS 必须作为已有机场配置的覆写脚本使用。
 
 ---
 
@@ -29,9 +64,9 @@
 | 文件 | 类型 | 适合场景 | 说明 |
 | :-- | :-- | :-- | :-- |
 | `Chunlion_Rule-Set_DNS-Leak.yaml` | 完整 YAML | 直接导入客户端 | 含完整分流、规则源、DNS、TUN、面板配置 |
-| `Chunlion_Rule-Set_DNS-Leak.js` | 完整 JS 覆写 | Clash Verge Rev Script | 不改原订阅，注入完整策略与规则 |
+| `Chunlion_Rule-Set_DNS-Leak.js` | 完整 JS 覆写 | Bettbox / Clash Verge Rev Script | 不改原订阅，注入完整策略与规则 |
 | `Chunlion_Rule-Set_DNS-Leak_Lite.yaml` | 轻量 YAML | 规则源更少、启动更轻 | 保留核心 DNS、防泄露和常用服务分流；可选软件分组默认注释 |
-| `Chunlion_Rule-Set_DNS-Leak_Lite.js` | 轻量 JS 覆写 | Clash Verge Rev 轻量脚本 | 适合只想保留必要规则的用户；可选软件分组默认注释 |
+| `Chunlion_Rule-Set_DNS-Leak_Lite.js` | 轻量 JS 覆写 | Bettbox / Clash Verge Rev 轻量脚本 | 适合只想保留必要规则的用户；可选软件分组默认注释 |
 
 ### 怎么选
 
@@ -40,6 +75,7 @@
 | 想要完整服务分流、规则命中更细 | `Chunlion_Rule-Set_DNS-Leak.yaml` 或 `Chunlion_Rule-Set_DNS-Leak.js` |
 | 设备性能一般、订阅节点多、希望少一点规则源 | `Chunlion_Rule-Set_DNS-Leak_Lite.yaml` 或 `Chunlion_Rule-Set_DNS-Leak_Lite.js` |
 | 使用 Clash Verge Rev 且已有订阅 | 优先用 `.js` 覆写脚本 |
+| 使用 Bettbox 且已有订阅 | 在“脚本”中导入 `.js` 链接 |
 | OpenWrt / Nikki / FlClash 等直接导入 | 优先用 `.yaml` |
 
 ---
