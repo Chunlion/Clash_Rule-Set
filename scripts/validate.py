@@ -223,8 +223,8 @@ def validate_pair(stem: str) -> None:
             raise AssertionError(f"{stem}: dynamic select groups must reject empty members")
 
     group_names = {group["name"] for group in yaml_config["proxy-groups"]}
-    if not {"低倍率节点", "高倍率节点"} <= group_names:
-        raise AssertionError(f"{stem}: rate-aware proxy groups are missing")
+    if {"低倍率节点", "高倍率节点"} & group_names:
+        raise AssertionError(f"{stem}: removed rate-aware proxy groups must not be restored")
     if stem.endswith("_Lite"):
         if "全局均衡" in group_names:
             raise AssertionError(f"{stem}: Lite config must not add load-balance background checks")
