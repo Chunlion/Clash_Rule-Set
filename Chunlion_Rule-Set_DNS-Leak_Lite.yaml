@@ -96,6 +96,16 @@ tun:
   strict-route: false                                                   # 路由模式  严格路由模式
   endpoint-independent-nat: true                                        # 端点无关  NAT（提高 NAT 类型兼容性，适用于 P2P 和游戏）
   route-exclude-address-set: [cn_ip]                                    # 绕过大陆  匹配大陆 IP-CIDR 的流量不进入 TUN
+  route-exclude-address:                                                # 绕过私网  保持局域网、链路本地与 Tailscale / CGNAT 连接不进入 TUN
+    - 127.0.0.0/8
+    - 10.0.0.0/8
+    - 172.16.0.0/12
+    - 192.168.0.0/16
+    - 169.254.0.0/16
+    - 100.64.0.0/10
+    - ::1/128
+    - fc00::/7
+    - fe80::/10
 
 # 嗅探功能
 sniffer:

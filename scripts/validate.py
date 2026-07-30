@@ -186,7 +186,7 @@ def validate_pair(stem: str) -> None:
     if dns.get("use-hosts") is not True or dns.get("use-system-hosts") is not True:
         raise AssertionError(f"{stem}: configured and system hosts must be enabled")
 
-    expected_skip_dst = [
+    expected_private_addresses = [
         "127.0.0.0/8",
         "10.0.0.0/8",
         "172.16.0.0/12",
@@ -200,8 +200,10 @@ def validate_pair(stem: str) -> None:
     sniffer = yaml_config["sniffer"]
     if sniffer.get("override-destination") is not False or sniffer.get("parse-pure-ip") is not False:
         raise AssertionError(f"{stem}: global sniffer overrides must remain conservative")
-    if sniffer.get("skip-dst-address") != expected_skip_dst:
+    if sniffer.get("skip-dst-address") != expected_private_addresses:
         raise AssertionError(f"{stem}: sniffer private destination exclusions mismatch")
+    if yaml_config["tun"].get("route-exclude-address") != expected_private_addresses:
+        raise AssertionError(f"{stem}: TUN private route exclusions mismatch")
 
     provider_filter = yaml_config.get("Anchor_PR", {}).get("filter", "")
     js_info_filters = [

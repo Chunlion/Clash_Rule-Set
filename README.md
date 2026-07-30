@@ -275,6 +275,7 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 
 - `dns-hijack: any:53 与 tcp://any:53`
 - 配合 `auto-route/auto-redirect`，尽量减少系统层绕行。
+- 通过 `route-exclude-address` 显式绕过回环、私网、链路本地及 `100.64.0.0/10`，避免 NAS、路由器和 Tailscale 流量进入 TUN。
 - Linux + nftables 环境会通过 `route-exclude-address-set: [cn_ip]` 将大陆 IP 绕过 TUN；Windows 和 macOS 不使用该规则。
 
 ### 7️⃣ 节点 hosts 与保守嗅探
@@ -303,7 +304,7 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
    - `fake-ip-filter` 增加国内、私有、直连规则以及更多局域网/NTP/STUN/TURN/Xbox 探测域名。
    - `proxy-server-nameserver` 升级使用 `DoH (alidns 和 doh.pub)`。
    - JS 覆写会保留订阅中非公共的私有 DNS，以及与实际节点服务器域名匹配的 hosts 和 DNS policy，避免覆写后节点域名失效。
-   - 显式启用配置 hosts 与系统 hosts，并为回环、私网、链路本地和 CGNAT/Tailscale 目标关闭嗅探。
+   - 显式启用配置 hosts 与系统 hosts，并为回环、私网、链路本地和 CGNAT/Tailscale 目标关闭嗅探、绕过 TUN。
    - 移除老式 `fallback` / `fallback-filter`：防污染统一由 Fake-IP + `respect-rules` 承担，避免两套机制并存造成误解。
 4. 测速与直连优化
    - 测试链接统一使用 `www.gstatic.com/generate_204`，仅 HTTP 204 响应视为可用，减少劫持页误判。
