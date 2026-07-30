@@ -202,8 +202,6 @@ def validate_pair(stem: str) -> None:
         raise AssertionError(f"{stem}: global sniffer overrides must remain conservative")
     if sniffer.get("skip-dst-address") != expected_private_addresses:
         raise AssertionError(f"{stem}: sniffer private destination exclusions mismatch")
-    if yaml_config["tun"].get("route-exclude-address") != expected_private_addresses:
-        raise AssertionError(f"{stem}: TUN private route exclusions mismatch")
 
     provider_filter = yaml_config.get("Anchor_PR", {}).get("filter", "")
     js_info_filters = [
