@@ -22,7 +22,7 @@
 > - 已有机场订阅：优先使用 JS 覆写，不要把 JS 当成独立配置。
 > - 不要公开分享已填入订阅信息的配置文件。
 
-本项目基于 [Seven1echo/Yaml](https://github.com/Seven1echo/Yaml) 改造，并参考 [AIsouler/MyClash](https://github.com/AIsouler/MyClash) 与 [Toperlock/Clash](https://github.com/Toperlock/Clash) 的节点管理思路。
+本项目基于 [Seven1echo/Yaml](https://github.com/Seven1echo/Yaml) 改造，并参考 [AIsouler/MyClash](https://github.com/AIsouler/MyClash) 与 [HenryChiao/MIHOMO_YAMLS](https://github.com/HenryChiao/MIHOMO_YAMLS) 的节点管理与配置筛选思路。
 
 ---
 
@@ -324,7 +324,7 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
    - 图标地址统一为 `raw.githubusercontent.com` 写法。
 8. 节点选择增强
    - 完整版新增懒加载 `sticky-sessions` 全局均衡组；同一来源与目标的连接保持在同一节点，未选择该组时不进行测速。
-   - 所有 `include-all` 动态组排除 `direct` 出站，避免全局测速误选直连；订阅信息节点过滤补充客服、工单、邀请、频道等常见标签。
+   - 所有 `include-all` 动态组排除 `direct` 出站，避免全局测速误选直连；订阅信息节点过滤补充获取、版本、官址、已用、联系、说明、教程、关注等常见标签。
 
 </details>
 
@@ -414,7 +414,8 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 ## 🙏 致谢
 
 - 原始项目与思路来源：[Seven1echo/Yaml](https://github.com/Seven1echo/Yaml)
-- 节点倍率、私有 DNS 与负载均衡思路参考：[AIsouler/MyClash](https://github.com/AIsouler/MyClash)、[Toperlock/Clash](https://github.com/Toperlock/Clash)
+- 私有 DNS 与负载均衡思路参考：[AIsouler/MyClash](https://github.com/AIsouler/MyClash)
+- 节点筛选与规则组织参考：[HenryChiao/MIHOMO_YAMLS](https://github.com/HenryChiao/MIHOMO_YAMLS)
 - 规则数据来源：MetaCubeX、Koolson、及其他公开规则维护者
 
 <div align="center">

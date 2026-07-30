@@ -17,6 +17,27 @@ PAIRS = (
     "Chunlion_Rule-Set_DNS-Leak_Lite",
 )
 BUILTIN_TARGETS = {"DIRECT", "REJECT", "REJECT-DROP", "PASS"}
+INFO_FILTER_TOKENS = (
+    "获取",
+    "下次",
+    "版本",
+    "官址",
+    "已用",
+    "联系",
+    "贩卖",
+    "倒卖",
+    "地址",
+    "说明",
+    "教程",
+    "关注",
+    "加入",
+    "used",
+    "total",
+    "email",
+    "panel",
+    "channel",
+    "author",
+)
 CRITICAL_KEYS = (
     "mixed-port",
     "mode",
@@ -181,6 +202,20 @@ def validate_pair(stem: str) -> None:
         raise AssertionError(f"{stem}: global sniffer overrides must remain conservative")
     if sniffer.get("skip-dst-address") != expected_skip_dst:
         raise AssertionError(f"{stem}: sniffer private destination exclusions mismatch")
+
+    provider_filter = yaml_config.get("Anchor_PR", {}).get("filter", "")
+    js_info_filters = [
+        group.get("exclude-filter", "")
+        for group in js_config["proxy-groups"]
+        if group.get("include-all")
+    ]
+    if not js_info_filters:
+        raise AssertionError(f"{stem}: JS config must filter subscription information nodes")
+    for token in INFO_FILTER_TOKENS:
+        if token not in provider_filter:
+            raise AssertionError(f"{stem}: YAML subscription filter missing {token!r}")
+        if any(token not in item for item in js_info_filters):
+            raise AssertionError(f"{stem}: JS subscription filter missing {token!r}")
 
     if normalized_groups(yaml_config) != normalized_groups(js_config):
         raise AssertionError(f"{stem}: YAML/JS proxy-group mismatch")

@@ -239,7 +239,7 @@ function main(config) {
   const Anchor_OB = ['一键代理', '全局最优', '稳定备用', '香港节点', '澳门节点', '台湾节点', '日本节点', '韩国节点', '新加坡节点', '美国节点', '欧洲节点', '家宽节点', '其他节点'];
   const Anchor_SP = ['一键代理', '全局最优', '稳定备用', '香港节点', '澳门节点', '台湾节点', '日本节点', '韩国节点', '新加坡节点', '美国节点', '欧洲节点', '家宽节点', '其他节点', 'DIRECT'];
   const Anchor_AI = ['家宽节点', '美国节点', '一键代理', '香港节点', '澳门节点', '台湾节点', '日本节点', '韩国节点', '新加坡节点', '欧洲节点', '其他节点'];
-  const excludeInfoFilter = '(?i)(群|返利|邀请|客服|工单|官网|网站|网址|邮箱|订阅|套餐|流量|到期|过期|剩余|重置|通知|更新|作者|频道|http|Expire|Traffic|Reset|Subscription|Remaining)';
+  const excludeInfoFilter = '(?i)(群|返利|邀请|客服|工单|官网|网站|网址|邮箱|订阅|套餐|流量|到期|过期|剩余|重置|通知|更新|作者|频道|获取|下次|版本|官址|已用|联系|贩卖|倒卖|地址|说明|教程|关注|加入|http|expire|traffic|reset|subscription|remaining|used|total|email|panel|channel|author)';
 
 
   // 区域正则锚点转译
