@@ -1,91 +1,118 @@
-
----
+<div align="center">
 
 # 🚀 Chunlion Clash Rule-Set
 
-> 🛡️ 面向 Mihomo (Clash Meta) 的高可用分流与 DNS 防泄露配置
->
-> ⚡ 主打：稳定、清晰、可维护
+**面向 Mihomo（Clash Meta）的高可用分流与 DNS 防泄露配置**
 
-[![Mihomo](https://img.shields.io/badge/Core-Mihomo-blue)](https://github.com/MetaCubeX/mihomo)
-[![DNS](https://img.shields.io/badge/DNS-Fake--IP-success)](#-dns-防泄露机制重点)
-[![Format](https://img.shields.io/badge/Format-YAML%20%2B%20JS-orange)](#-项目文件说明)
+`完整 / Lite` · `YAML / JS` · `Fake-IP` · `TUN` · `Bettbox`
 
-本项目基于 [Seven1echo/Yaml](https://github.com/Seven1echo/Yaml) 改造，并参考 [AIsouler/MyClash](https://github.com/AIsouler/MyClash) 与 [Toperlock/Clash](https://github.com/Toperlock/Clash) 的节点管理思路，面向 Mihomo (Clash Meta) 核心，重点强化以下能力：
+[![Release](https://img.shields.io/github/v/release/Chunlion/Clash_Rule-Set?label=Release&color=blue)](https://github.com/Chunlion/Clash_Rule-Set/releases/latest)
+[![Mihomo](https://img.shields.io/badge/Core-Mihomo-5c7cfa)](https://github.com/MetaCubeX/mihomo)
+[![DNS](https://img.shields.io/badge/DNS-Fake--IP-2f9e44)](#-dns-防泄露)
+[![Format](https://img.shields.io/badge/Format-YAML%20%2B%20JS-f08c00)](#-版本选择)
 
-- 🔒 DNS 防泄露与解析稳定性
-- 🎮 游戏、金融、加密货币、流媒体、AI 等场景分流
-- 🔄 统一的 YAML 与 JS 覆写脚本策略
+[📥 快速导入](#-快速导入) · [🧭 版本选择](#-版本选择) · [🔀 策略分流](#-策略分流) · [🔒 DNS 机制](#-dns-防泄露) · [❓ 常见问题](#-常见问题)
 
-适配客户端示例：[Bettbox](https://github.com/appshubcc/Bettbox)、`OpenWrt` `Clash/Nikki 插件`、`Clashmi`、`FlClash`、`Clash Verge Rev` 等 Mihomo 客户端。`Surfboard` 使用 Surge 配置格式，需转换后使用。
+</div>
 
 > [!IMPORTANT]
-> 使用前请先替换配置中的 `订阅链接` 与 `机场名`。不要公开分享已填入订阅信息的配置文件。
+> **使用前必读**
+>
+> - 独立使用 YAML：导入后先替换 `订阅链接` 与 `机场名`。
+> - 已有机场订阅：优先使用 JS 覆写，不要把 JS 当成独立配置。
+> - 不要公开分享已填入订阅信息的配置文件。
 
-## 📥 Bettbox 导入链接
+本项目基于 [Seven1echo/Yaml](https://github.com/Seven1echo/Yaml) 改造，并参考 [AIsouler/MyClash](https://github.com/AIsouler/MyClash) 与 [Toperlock/Clash](https://github.com/Toperlock/Clash) 的节点管理思路。
 
-YAML 链接用于 Bettbox 的“配置 → 添加配置 → URL”；JS 链接用于“配置 → 脚本 → 导入 → URL”。
+---
 
-### YAML 配置
+## 🧭 版本选择
 
-- [完整 YAML](https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set_DNS-Leak.yaml)
+> [!TIP]
+> **不知道怎么选？** 已有机场订阅选 JS；需要独立配置选 YAML。设备性能一般或节点较多时选 Lite。
+
+| 使用场景 | 推荐版本 | 推荐格式 | 原因 |
+| :-- | :--: | :--: | :-- |
+| Bettbox，已有机场订阅 | 完整 / Lite | **JS** | 通过脚本覆写原订阅 |
+| Clash Verge Rev，已有机场订阅 | 完整 / Lite | **JS** | 使用 Script 覆写 |
+| OpenWrt / Nikki / FlClash | 完整 / Lite | **YAML** | 直接导入完整配置 |
+| 需要精细服务分流 | **完整** | YAML / JS | 43 个策略组，服务分类更细 |
+| 节点多或设备资源有限 | **Lite** | YAML / JS | 23 个策略组，规则源更少 |
+
+<details>
+<summary><strong>📦 展开查看项目文件说明</strong></summary>
+
+| 文件 | 类型 | 说明 |
+| :-- | :-- | :-- |
+| `Chunlion_Rule-Set_DNS-Leak.yaml` | 完整 YAML | 完整分流、规则源、DNS、TUN 与面板配置 |
+| `Chunlion_Rule-Set_DNS-Leak.js` | 完整 JS | 为已有订阅注入完整策略与规则 |
+| `Chunlion_Rule-Set_DNS-Leak_Lite.yaml` | Lite YAML | 保留核心 DNS、防泄露和常用服务分流 |
+| `Chunlion_Rule-Set_DNS-Leak_Lite.js` | Lite JS | 轻量覆写，适合节点较多或低资源设备 |
+
+</details>
+
+---
+
+## 📥 快速导入
+
+### Bettbox
+
+[Bettbox](https://github.com/appshubcc/Bettbox) 支持远程配置与远程脚本：
+
+- **YAML**：`配置 → 添加配置 → URL`
+- **JS**：`配置 → 脚本 → 导入 → URL`
+
+| 类型 | 完整版 | Lite 版 |
+| :-- | :--: | :--: |
+| YAML 配置 | [打开 Raw 链接](https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set_DNS-Leak.yaml) | [打开 Raw 链接](https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set_DNS-Leak_Lite.yaml) |
+| JS 覆写 | [打开 Raw 链接](https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set_DNS-Leak.js) | [打开 Raw 链接](https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set_DNS-Leak_Lite.js) |
+
+<details>
+<summary><strong>📋 展开复制四个 Raw URL</strong></summary>
+
+**完整 YAML**
 
 ```text
 https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set_DNS-Leak.yaml
 ```
 
-- [Lite YAML](https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set_DNS-Leak_Lite.yaml)
+**Lite YAML**
 
 ```text
 https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set_DNS-Leak_Lite.yaml
 ```
 
-### JS 覆写脚本
-
-- [完整 JS](https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set_DNS-Leak.js)
+**完整 JS**
 
 ```text
 https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set_DNS-Leak.js
 ```
 
-- [Lite JS](https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set_DNS-Leak_Lite.js)
+**Lite JS**
 
 ```text
 https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set_DNS-Leak_Lite.js
 ```
 
+</details>
+
 > [!NOTE]
 > YAML 导入后仍需替换 `订阅链接` 与 `机场名`；JS 必须作为已有机场配置的覆写脚本使用。
 
+### 其他 Mihomo 客户端
+
+1. **Clash Verge Rev**：新建 `Script`，粘贴 JS 或使用远程脚本链接。
+2. **OpenWrt / Nikki / FlClash**：下载 YAML，替换订阅信息后导入。
+3. 启用配置后刷新规则提供者、代理提供者和节点延迟。
+
 ---
 
-## 📦 项目文件说明
+## ✨ 核心能力
 
-| 文件 | 类型 | 适合场景 | 说明 |
+| 🔒 DNS 稳定 | 🔀 精细分流 | ⚡ 节点健康 | 🛡️ 网络兼容 |
 | :-- | :-- | :-- | :-- |
-| `Chunlion_Rule-Set_DNS-Leak.yaml` | 完整 YAML | 直接导入客户端 | 含完整分流、规则源、DNS、TUN、面板配置 |
-| `Chunlion_Rule-Set_DNS-Leak.js` | 完整 JS 覆写 | Bettbox / Clash Verge Rev Script | 不改原订阅，注入完整策略与规则 |
-| `Chunlion_Rule-Set_DNS-Leak_Lite.yaml` | 轻量 YAML | 规则源更少、启动更轻 | 保留核心 DNS、防泄露和常用服务分流；可选软件分组默认注释 |
-| `Chunlion_Rule-Set_DNS-Leak_Lite.js` | 轻量 JS 覆写 | Bettbox / Clash Verge Rev 轻量脚本 | 适合只想保留必要规则的用户；可选软件分组默认注释 |
-
-### 怎么选
-
-| 需求 | 推荐 |
-| :-- | :-- |
-| 想要完整服务分流、规则命中更细 | `Chunlion_Rule-Set_DNS-Leak.yaml` 或 `Chunlion_Rule-Set_DNS-Leak.js` |
-| 设备性能一般、订阅节点多、希望少一点规则源 | `Chunlion_Rule-Set_DNS-Leak_Lite.yaml` 或 `Chunlion_Rule-Set_DNS-Leak_Lite.js` |
-| 使用 Clash Verge Rev 且已有订阅 | 优先用 `.js` 覆写脚本 |
-| 使用 Bettbox 且已有订阅 | 在“脚本”中导入 `.js` 链接 |
-| OpenWrt / Nikki / FlClash 等直接导入 | 优先用 `.yaml` |
-
----
-
-## 🎯 核心设计目标
-
-1. 降低 DNS 泄露概率
-2. 提高规则命中精度（域名 + IP 双层）
-3. 保持多区域策略组可控（手动/自动/故障转移）
-4. 在不同客户端之间保证行为一致
+| Fake-IP + `respect-rules` | 域名与 IP 双层规则 | HTTP 204 有效性检测 | TUN + 保守嗅探 |
+| 私有 DNS 与节点 hosts 保留 | 流媒体、AI、金融、游戏 | 自动、故转、全局均衡 | 内网、远控、Tailscale 保护 |
 
 ---
 
@@ -110,26 +137,22 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 
 ---
 
-## 🚀 快速上手
+## 🔀 策略分流
 
-### 方式一：使用 YAML（直接导入）
+| 对比项 | 🚀 完整版 | ⚡ Lite 版 |
+| :-- | :--: | :--: |
+| 策略组数量 | **43** | **23** |
+| 服务策略组 | 16 | 11 |
+| 地区模式 | 手动 + 自动 + 故转 | 单一地区选择组 |
+| 全局均衡 | ✅ | — |
+| 全局最优 / 稳定备用 | — | ✅ |
+| 适合场景 | 精细分流 | 轻量运行 |
 
-1. 下载 `Chunlion_Rule-Set_DNS-Leak.yaml` 或 `Chunlion_Rule-Set_DNS-Leak_Lite.yaml`。
-2. 修改 `proxy-providers` 下的 `订阅链接` 与 `机场名`。
-3. 导入客户端并启用配置。
-4. 启用 TUN 后刷新规则源与订阅。
+> [!TIP]
+> 完整版适合需要细分服务和多种地区选择方式的用户；Lite 版减少后台测速与外部规则源，更适合节点较多或资源有限的设备。
 
-### 方式二：使用 JS 覆写
-
-1. 复制 `Chunlion_Rule-Set_DNS-Leak.js` 或 `Chunlion_Rule-Set_DNS-Leak_Lite.js` 内容。
-2. Clash Verge Rev 中新建 `Script` 订阅并粘贴。
-3. 启用脚本后刷新订阅。
-
-> 💡 说明：JS 脚本适合“原订阅继续由客户端管理，只用脚本注入规则”的场景。
-
----
-
-## 🔀 策略分流详解
+<details>
+<summary><strong>🧩 展开查看完整策略组对比</strong></summary>
 
 ### 🌐 服务策略组
 
@@ -189,11 +212,25 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 | 🏠 家宽节点 | ✅ | ✅ |
 | 📦 其他 | 其他手动 | 其他节点 |
 
-> Lite 版会减少后台测速与外部规则源数量，更适合节点很多或客户端资源有限的环境。
+</details>
 
 ---
 
-## 🔒 DNS 防泄露机制（重点）
+## 🔒 DNS 防泄露
+
+| 防护层 | 当前配置 | 作用 |
+| :-- | :-- | :-- |
+| DNS 模式 | `fake-ip` + `respect-rules` | 境外域名交由代理侧解析，降低污染风险 |
+| 解析分工 | 默认 / 节点 / 直连 DNS 分离 | 节点域名与直连域名使用对应解析路径 |
+| Hosts | 配置 hosts + 系统 hosts | 兼顾预设映射、内网和节点域名 |
+| TUN | UDP/TCP 53 劫持 | 减少系统 DNS 绕行 |
+| Sniffer | 全局不覆盖、私网目标跳过 | 降低 NAS、远控、IoT 和 Tailscale 异常 |
+
+> [!NOTE]
+> DNS、Fake-IP 过滤、TUN 和规则顺序是一套配套设计，不建议再叠加其他 DNS 覆写。
+
+<details>
+<summary><strong>🔍 展开查看 DNS、TUN 与 Sniffer 细节</strong></summary>
 
 ### 1️⃣ Fake-IP 增强模式
 
@@ -246,9 +283,14 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 - Sniffer 不嗅探回环、私网、链路本地及 `100.64.0.0/10` 目标，减少 NAS、路由器、远控、Tailscale 和内网 HTTP 被改写的概率。
 - 全局 `override-destination` 与 `parse-pure-ip` 保持关闭，仅 HTTP 协议嗅探按原配置覆盖目标。
 
+</details>
+
 ---
 
-## 🆕 规则更新说明（当前版本）
+## 🆕 当前版本改进
+
+<details>
+<summary><strong>展开查看完整改进记录</strong></summary>
 
 相较早期版本，当前配置已补强：
 
@@ -284,22 +326,24 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
    - 完整版新增懒加载 `sticky-sessions` 全局均衡组；同一来源与目标的连接保持在同一节点，未选择该组时不进行测速。
    - 所有 `include-all` 动态组排除 `direct` 出站，避免全局测速误选直连；订阅信息节点过滤补充客服、工单、邀请、频道等常见标签。
 
+</details>
+
 ---
 
 ## 🧪 维护与自检
 
-修改配置后建议做三类检查：
+修改配置后建议完成三类检查：
 
-1. YAML 语法检查：确认客户端可以正常导入。
-2. JS 语法检查：用 `node --check Chunlion_Rule-Set_DNS-Leak.js` 检查覆写脚本。
-3. 规则源检查：确认 `rule-providers` 中的 URL 可以访问，且 `rules` 引用的规则源都存在。
+| 检查项 | 目标 |
+| :-- | :-- |
+| YAML 语法 | 客户端可以正常解析和导入 |
+| JS 语法 | 覆写脚本能够通过 `node --check` |
+| 规则源 | URL 可访问，`rules` 引用均有对应提供者 |
 
-仓库自带自动化校验（GitHub Actions）：
+> [!TIP]
+> 仓库会在每次推送或 PR 时校验 YAML/JS 一致性，并在每周一巡检规则源与 geodata 地址。
 
-- 每次推送 / PR 运行 `scripts/validate.py`，校验 YAML 与 JS 覆写在关键配置、策略组、规则顺序上完全一致。
-- 每周一自动运行 `scripts/validate.py --check-urls`，探测全部规则源与 geodata 地址的可达性，链接失效会让工作流变红提醒。也可在 Actions 页面手动触发。
-
-常见维护原则：
+**维护原则**
 
 - 规则顺序比数量更重要，直连、私有、特殊规则应放在泛规则前。
 - DNS 相关配置要和规则层级保持一致，避免直连域名走远端解析。
@@ -309,45 +353,61 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 
 ## ❓ 常见问题
 
-### 🌐 无法联网或部分站点超时
+<details>
+<summary><strong>🌐 无法联网或部分站点超时</strong></summary>
 
 - 检查 `mixed-port` 是否被占用。
 - 确认客户端没有叠加其他 DNS 覆写脚本。
 - 旧内核建议保持 `prefer-h3: false`。
-- 如果节点使用的是`ipv6`，请自己修改配置文件中关于`ipv6`的部分。
+- 如果节点使用 IPv6，请同步调整配置中的 `ipv6` 设置。
 
-### 🧪 怀疑仍有 DNS 泄露
+</details>
+
+<details>
+<summary><strong>🧪 怀疑仍有 DNS 泄露</strong></summary>
 
 - 已开启 `TUN 模式` 时，可将 Windows 网卡 DNS 改为 `127.0.0.1`，由 `dns-hijack` 接管 DNS 请求；未开启 TUN 时不要这样设置。
 - 对防泄露要求较高时可启用 `strict-route: true`；Windows 会增加 DNS 泄露防护规则，但可能影响 VirtualBox 等软件。
 - 关闭客户端内额外 DNS 劫持插件，避免重复重定向。
-- 禁用浏览器中`使用安全DNS`，并保持实验性功能`Experimental QUIC protocol`关闭。
-- `WebRTC泄露`可通过安装浏览器插件[WebRTC Network Limiter](https://chromewebstore.google.com/detail/webrtc-network-limiter/npeicpdbkakmehahjeeohfdhnlpdklia)解决。
-- 尝试`禁用Windows智能多宿主名称解析`，`本地组策略编辑器`-`计算机配置`-`管理模板`-`网络`-`DNS客户端`-`禁用智能多宿主名称解析`-选择`已启用`。
+- 禁用浏览器的“使用安全 DNS”，并关闭实验性的 QUIC 功能。
+- WebRTC 泄露可使用 [WebRTC Network Limiter](https://chromewebstore.google.com/detail/webrtc-network-limiter/npeicpdbkakmehahjeeohfdhnlpdklia) 限制。
+- Windows 可在组策略中启用“禁用智能多宿主名称解析”。
 
-### 🕒 OpenWrt 系统时间不准确
+</details>
+
+<details>
+<summary><strong>🕒 OpenWrt 系统时间不准确</strong></summary>
 
 - 配置默认启用 Mihomo 内部 NTP 校时，每 30 分钟通过 `DIRECT` 查询 `time.apple.com`，但不会修改系统时间。
 - 确认 Mihomo 以 root 权限运行后，可将 `ntp.write-to-system` 改为 `true`，让内核同时校准 OpenWrt 系统时间。
 
-### 📍 节点很多但区域组为空
+</details>
+
+<details>
+<summary><strong>📍 节点很多但区域组为空</strong></summary>
 
 - 检查节点命名是否包含地区关键字（如 HK、JP、US 等）。
 - 如机场命名不规范，可在区域正则中补充关键字。
 - 动态节点组为空时会返回 `REJECT`，不会自动改走其他地区节点。
 
-### 🔄 规则源更新失败
+</details>
+
+<details>
+<summary><strong>🔄 规则源更新失败</strong></summary>
 
 - 确认“一键代理”已选择可用节点；远程规则集通过该策略组下载。
 - 重新加载配置后刷新规则提供者；订阅源仍按 `DIRECT` 更新。
+
+</details>
 
 ---
 
 ## ⚠️ 安全与合规
 
-- 请勿公开泄露订阅链接与机场信息。
-- 本仓库规则来自公开规则源，按需自动更新。
-- 请在当地法律法规允许范围内使用。
+> [!WARNING]
+> - 请勿公开泄露订阅链接、机场信息或已填写凭据的配置。
+> - 面板默认密码为 `123456`，建议修改为自己的随机密码。
+> - 本仓库规则来自公开规则源，请在当地法律法规允许范围内使用。
 
 ---
 
@@ -356,3 +416,9 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 - 原始项目与思路来源：[Seven1echo/Yaml](https://github.com/Seven1echo/Yaml)
 - 节点倍率、私有 DNS 与负载均衡思路参考：[AIsouler/MyClash](https://github.com/AIsouler/MyClash)、[Toperlock/Clash](https://github.com/Toperlock/Clash)
 - 规则数据来源：MetaCubeX、Koolson、及其他公开规则维护者
+
+<div align="center">
+
+[⬆ 返回顶部](#-chunlion-clash-rule-set)
+
+</div>
