@@ -151,6 +151,10 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 > [!TIP]
 > 完整版适合需要细分服务和多种地区选择方式的用户；Lite 版减少后台测速与外部规则源，更适合节点较多或资源有限的设备。
 
+### ⚡ Lite 版分流界面
+
+![Lite 版策略组分流展示](https://cdn.nodeimage.com/i/EKpGF1WQX9OuGK81dMJ3080c1BwYT0Jy.webp)
+
 <details>
 <summary><strong>🧩 展开查看完整策略组对比</strong></summary>
 
