@@ -191,6 +191,7 @@ function main(config) {
     'prefer-h3': false,
     'fake-ip-filter': [
       'rule-set:fakeip_filter',
+      '+.ts.net',
       '+.lan',
       '+.local',
       'geosite:cn',

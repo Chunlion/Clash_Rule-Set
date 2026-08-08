@@ -155,6 +155,7 @@ dns:
   prefer-h3: false                                                      # 关闭 HTTP/3 支持
   fake-ip-filter:
     - "rule-set:fakeip_filter"                                         # 真实解析  外部维护的 Fake-IP 兼容域名
+    - "+.ts.net"                                                       # Tailscale MagicDNS
     - "+.lan"                                                           # 真实解析  局域网域名，避免路由器、NAS、打印机访问异常
     - "+.local"                                                         # 真实解析  mDNS / Bonjour / 本地域名
     - "geosite:cn"                                                      # 真实解析  国内域名，配合国内直连规则使用
