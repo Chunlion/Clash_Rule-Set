@@ -17,6 +17,7 @@ PAIRS = (
     "Chunlion_Rule-Set_DNS-Leak_Lite",
 )
 BUILTIN_TARGETS = {"DIRECT", "REJECT", "REJECT-DROP", "PASS"}
+QUIC_BLOCK_RULE = "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT"
 RULE_PROVIDER_SIZE_LIMIT = 8 * 1024 * 1024
 RULE_PROVIDER_BEHAVIORS = {"domain", "ipcidr", "classical"}
 RULE_PROVIDER_FORMATS = {"yaml", "text", "mrs"}
@@ -120,8 +121,10 @@ def validate_references(name: str, config: dict[str, Any]) -> None:
     known_targets = set(group_names) | BUILTIN_TARGETS
     for rule in rules:
         parts = rule.split(",")
-        if len(parts) >= 3 and parts[2] not in known_targets:
-            raise AssertionError(f"{name}: unknown rule target {parts[2]!r}")
+        if len(parts) >= 3:
+            target = parts[-1] if parts[0] in {"AND", "OR"} else parts[2]
+            if target not in known_targets:
+                raise AssertionError(f"{name}: unknown rule target {target!r}")
         if parts[0] == "RULE-SET" and parts[1] not in providers:
             raise AssertionError(f"{name}: unknown rule provider {parts[1]!r}")
 
@@ -241,6 +244,8 @@ def validate_pair(stem: str) -> None:
         raise AssertionError(f"{stem}: YAML/JS proxy-group mismatch")
     if yaml_config["rules"] != js_config["rules"]:
         raise AssertionError(f"{stem}: YAML/JS rule order mismatch")
+    if yaml_config["rules"][0] != QUIC_BLOCK_RULE:
+        raise AssertionError(f"{stem}: QUIC block rule must be first")
 
     expected_ntp = {
         "enable": True,

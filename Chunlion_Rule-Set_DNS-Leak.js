@@ -391,6 +391,7 @@ function main(config) {
   }
   // --- 6. 规则匹配 (Rules) ---
   config["rules"] = [
+    "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
     "RULE-SET,ads_domain,REJECT",
     "RULE-SET,private_domain,DIRECT",
     "RULE-SET,private_ip,DIRECT,no-resolve",

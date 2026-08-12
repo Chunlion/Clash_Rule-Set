@@ -303,6 +303,7 @@ function main(config) {
 
   // ==================== 规则匹配 ====================
   config['rules'] = [
+    "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
     // 特殊自定义规则
     "RULE-SET,emby_domain,Emby",
     "RULE-SET,emby_ip,Emby,no-resolve",

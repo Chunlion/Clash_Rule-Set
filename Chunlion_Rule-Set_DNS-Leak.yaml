@@ -277,6 +277,7 @@ proxy-groups:
 
 # ※※※※※※※※※※※※※※※ 规则匹配 ※※※※※※※※※※※※※※※
 rules:
+  - AND,((NETWORK,UDP),(DST-PORT,443)),REJECT                          # 屏蔽 QUIC / HTTP/3
    # 服务分流
   - RULE-SET,ads_domain,REJECT                                          # 屏蔽广告
   - RULE-SET,private_domain,DIRECT                                      # Private
