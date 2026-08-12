@@ -384,7 +384,10 @@ function main(config) {
     "cn_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.mrs" }
   };
   for (const provider of Object.values(config["rule-providers"])) {
-    if (provider.type === "http") provider.proxy = "一键代理";
+    if (provider.type === "http") {
+      provider["size-limit"] = 8 * 1024 * 1024;
+      provider.proxy = "一键代理";
+    }
   }
   // --- 6. 规则匹配 (Rules) ---
   config["rules"] = [

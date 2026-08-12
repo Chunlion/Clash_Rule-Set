@@ -16,9 +16,9 @@ Anchor_HS: &Anchor_HS {type: select, empty-fallback: REJECT, include-all: true, 
 Anchor_UT_Global: &Anchor_UT_Global {type: url-test, empty-fallback: REJECT, expected-status: 204, url: 'https://www.gstatic.com/generate_204', interval: 300, tolerance: 30, timeout: 2000, hidden: true, include-all: true, exclude-type: direct}
 Anchor_FB_Global: &Anchor_FB_Global {type: fallback, empty-fallback: REJECT, expected-status: 204, url: 'https://www.gstatic.com/generate_204', interval: 180, timeout: 2000, max-failed-times: 2, hidden: true}
 # ④ 规则锚点
-Anchor_DN: &Anchor_DN {type: http, interval: 86400, proxy: 一键代理, behavior: domain, format: mrs}
-Anchor_IP: &Anchor_IP {type: http, interval: 86400, proxy: 一键代理, behavior: ipcidr, format: mrs}
-Anchor_CL: &Anchor_CL {type: http, interval: 86400, proxy: 一键代理, behavior: classical, format: text}
+Anchor_DN: &Anchor_DN {type: http, interval: 86400, size-limit: 8388608, proxy: 一键代理, behavior: domain, format: mrs}
+Anchor_IP: &Anchor_IP {type: http, interval: 86400, size-limit: 8388608, proxy: 一键代理, behavior: ipcidr, format: mrs}
+Anchor_CL: &Anchor_CL {type: http, interval: 86400, size-limit: 8388608, proxy: 一键代理, behavior: classical, format: text}
 # ⑤ 区域锚点
 # 地区词决定归属；IEPL / IPLC / BGP / Game / 倍率等线路标签不参与地区判断。
 # 没有明确地区词的节点进入“其他”分组，避免把线路标签误当成地区特征。

@@ -17,6 +17,9 @@ PAIRS = (
     "Chunlion_Rule-Set_DNS-Leak_Lite",
 )
 BUILTIN_TARGETS = {"DIRECT", "REJECT", "REJECT-DROP", "PASS"}
+RULE_PROVIDER_SIZE_LIMIT = 8 * 1024 * 1024
+RULE_PROVIDER_BEHAVIORS = {"domain", "ipcidr", "classical"}
+RULE_PROVIDER_FORMATS = {"yaml", "text", "mrs"}
 INFO_FILTER_TOKENS = (
     "获取",
     "下次",
@@ -156,6 +159,23 @@ def validate_references(name: str, config: dict[str, Any]) -> None:
     for provider_name, provider in providers.items():
         if provider.get("type") == "http" and provider.get("proxy") != "一键代理":
             raise AssertionError(f"{name}: remote rule provider {provider_name!r} must use 一键代理")
+        if provider.get("type") != "http":
+            continue
+
+        if provider.get("size-limit") != RULE_PROVIDER_SIZE_LIMIT:
+            raise AssertionError(
+                f"{name}: remote rule provider {provider_name!r} must use "
+                f"size-limit {RULE_PROVIDER_SIZE_LIMIT}"
+            )
+
+        behavior = provider.get("behavior")
+        rule_format = provider.get("format")
+        if behavior not in RULE_PROVIDER_BEHAVIORS:
+            raise AssertionError(f"{name}: invalid rule provider behavior {behavior!r}")
+        if rule_format not in RULE_PROVIDER_FORMATS:
+            raise AssertionError(f"{name}: invalid rule provider format {rule_format!r}")
+        if rule_format == "mrs" and behavior not in {"domain", "ipcidr"}:
+            raise AssertionError(f"{name}: MRS rule provider {provider_name!r} must use domain or ipcidr")
 
 
 def normalized_groups(config: dict[str, Any]) -> list[dict[str, Any]]:
@@ -336,42 +356,74 @@ def validate_pair(stem: str) -> None:
     )
 
 
-def collect_remote_urls() -> list[str]:
-    urls: set[str] = set()
+def collect_remote_rule_providers() -> dict[str, int]:
+    providers: dict[str, int] = {}
     for stem in PAIRS:
         config = load_yaml(ROOT / f"{stem}.yaml")
         for provider in config.get("rule-providers", {}).values():
             if provider.get("type") == "http":
-                urls.add(provider["url"])
+                url = provider["url"]
+                size_limit = provider["size-limit"]
+                if url in providers and providers[url] != size_limit:
+                    raise AssertionError(f"{url}: inconsistent size-limit across configurations")
+                providers[url] = size_limit
+    return dict(sorted(providers.items()))
+
+
+def collect_geodata_urls() -> list[str]:
+    urls: set[str] = set()
+    for stem in PAIRS:
+        config = load_yaml(ROOT / f"{stem}.yaml")
         urls.update(config.get("geox-url", {}).values())
     return sorted(urls)
 
 
-def probe_url(url: str) -> str | None:
-    """探测 URL 可达性；可达返回 None，否则返回失败原因。"""
+def probe_url(url: str, size_limit: int | None = None) -> tuple[int, int | None] | str:
+    """探测 URL；规则源下载时同时验证响应大小。"""
     last_error = "unknown error"
-    for method in ("HEAD", "GET"):
+    methods = ("GET",) if size_limit is not None else ("HEAD", "GET")
+    for method in methods:
         for _attempt in range(2):
             request = urllib.request.Request(url, method=method, headers={"User-Agent": "Clash-Rule-Set-CI"})
             try:
-                with urllib.request.urlopen(request, timeout=30):
-                    return None
+                with urllib.request.urlopen(request, timeout=30) as response:
+                    status = response.status
+                    if size_limit is None:
+                        return status, None
+
+                    content_length = response.headers.get("Content-Length")
+                    if content_length is not None and int(content_length) > size_limit:
+                        return f"HTTP {status} -> {content_length} bytes exceeds {size_limit} bytes"
+
+                    content = response.read(size_limit + 1)
+                    if len(content) > size_limit:
+                        return f"HTTP {status} -> response exceeds {size_limit} bytes"
+                    return status, len(content)
             except urllib.error.HTTPError as error:
                 last_error = f"{method} -> HTTP {error.code}"
                 break  # HTTP 状态明确，重试无益；部分源不支持 HEAD，换 GET 再试
-            except OSError as error:
+            except (OSError, ValueError) as error:
                 last_error = f"{method} -> {error}"
     return last_error
 
 
 def check_remote_urls() -> None:
     failures = []
-    for url in collect_remote_urls():
-        error = probe_url(url)
-        if error is None:
-            print(f"PASS url {url}")
+    for url, size_limit in collect_remote_rule_providers().items():
+        result = probe_url(url, size_limit)
+        if isinstance(result, tuple):
+            status, size = result
+            print(f"PASS rule source {url}: HTTP {status}, {size} bytes")
         else:
-            print(f"FAIL url {url}: {error}")
+            print(f"FAIL rule source {url}: {result}")
+            failures.append(url)
+    for url in collect_geodata_urls():
+        result = probe_url(url)
+        if isinstance(result, tuple):
+            status, _ = result
+            print(f"PASS geodata {url}: HTTP {status}")
+        else:
+            print(f"FAIL geodata {url}: {result}")
             failures.append(url)
     if failures:
         raise AssertionError(f"{len(failures)} unreachable rule source(s): {failures}")
