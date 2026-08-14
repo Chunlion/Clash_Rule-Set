@@ -80,7 +80,6 @@ geox-url:
 
 # 控制面板
 external-controller: 127.0.0.1:9090                                     # 面板地址
-external-ui-name: zashboard                                             # 面板名称
 external-ui: ui                                                         # 面板目录
 secret: "123456"                                                        # 面板密码  面板与 API 的访问凭据（默认 123456，建议自行修改）
 external-ui-url: https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip

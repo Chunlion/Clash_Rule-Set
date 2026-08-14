@@ -120,7 +120,6 @@ function main(config) {
     'asn': 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/GeoLite2-ASN.mmdb'
   };
   config['external-controller'] = '127.0.0.1:9090';
-  config['external-ui-name'] = 'zashboard';
   config['external-ui'] = 'ui';
   config['secret'] = '123456';
   config['external-ui-url'] = 'https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip';
