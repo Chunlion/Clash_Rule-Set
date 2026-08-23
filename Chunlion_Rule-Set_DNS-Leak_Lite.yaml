@@ -8,9 +8,9 @@
 # ① 订阅锚点
 Anchor_PR: &Anchor_PR {type: http, interval: 86400, proxy: DIRECT, health-check: {enable: true, url: 'https://www.gstatic.com/generate_204', interval: 300, expected-status: 204}, filter: "^(?i)(?!.*(群|返利|邀请|客服|工单|官网|网站|网址|邮箱|订阅|套餐|流量|到期|过期|剩余|重置|通知|更新|作者|频道|获取|下次|版本|官址|已用|联系|贩卖|倒卖|地址|说明|教程|关注|加入|http|expire|traffic|reset|subscription|remaining|used|total|email|panel|channel|author)).*$"}
 # ② 出站锚点
-Anchor_OB: &Anchor_OB {type: select, proxies: [一键代理, 全局最优, 稳定备用, 香港节点, 澳门节点, 台湾节点, 日本节点, 韩国节点, 新加坡节点, 美国节点, 欧洲节点, 家宽节点, 其他节点]}
-Anchor_SP: &Anchor_SP {type: select, proxies: [一键代理, 全局最优, 稳定备用, 香港节点, 澳门节点, 台湾节点, 日本节点, 韩国节点, 新加坡节点, 美国节点, 欧洲节点, 家宽节点, 其他节点, DIRECT]}
-Anchor_AI: &Anchor_AI {type: select, proxies: [家宽节点, 美国节点, 一键代理, 香港节点, 澳门节点, 台湾节点, 日本节点, 韩国节点, 新加坡节点, 欧洲节点, 其他节点]}
+Anchor_OB: &Anchor_OB {type: select, proxies: [一键代理, 全局最优, 稳定备用, 香港节点, 日本节点, 澳门节点, 台湾节点, 韩国节点, 新加坡节点, 美国节点, 欧洲节点, 家宽节点, 其他节点]}
+Anchor_SP: &Anchor_SP {type: select, proxies: [一键代理, 全局最优, 稳定备用, 香港节点, 日本节点, 澳门节点, 台湾节点, 韩国节点, 新加坡节点, 美国节点, 欧洲节点, 家宽节点, 其他节点, DIRECT]}
+Anchor_AI: &Anchor_AI {type: select, proxies: [家宽节点, 美国节点, 一键代理, 香港节点, 日本节点, 澳门节点, 台湾节点, 韩国节点, 新加坡节点, 欧洲节点, 其他节点]}
 # ③ 策略锚点
 Anchor_HS: &Anchor_HS {type: select, empty-fallback: REJECT, include-all: true, exclude-type: direct}
 Anchor_UT_Global: &Anchor_UT_Global {type: url-test, empty-fallback: REJECT, expected-status: 204, url: 'https://www.gstatic.com/generate_204', interval: 300, tolerance: 30, timeout: 2000, hidden: true, include-all: true, exclude-type: direct}
@@ -203,7 +203,7 @@ dns:
 
 # ※※※※※※※※※※※※※※※ 代理策略组 ※※※※※※※※※※※※※※※
 proxy-groups:
-  - {name: 一键代理, type: select, proxies: [全局最优, 稳定备用, 香港节点, 澳门节点, 台湾节点, 日本节点, 韩国节点, 新加坡节点, 美国节点, 欧洲节点, 家宽节点, 其他节点], icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Rocket.png}
+  - {name: 一键代理, type: select, proxies: [全局最优, 稳定备用, 香港节点, 日本节点, 澳门节点, 台湾节点, 韩国节点, 新加坡节点, 美国节点, 欧洲节点, 家宽节点, 其他节点], icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Rocket.png}
   - {name: Streaming,   <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/YouTube.png}
   - {name: Telegram,  <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Telegram.png}
   - {name: Emby,    <<: *Anchor_SP, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Emby.png}
@@ -222,12 +222,12 @@ proxy-groups:
 
 # 策略组（按区域分组）- 仅保留选择，拒绝后台并发测速灾难
   - {name: 全局最优, <<: *Anchor_UT_Global}
-  - {name: 稳定备用, <<: *Anchor_FB_Global, proxies: [香港节点, 澳门节点, 新加坡节点, 日本节点, 韩国节点, 美国节点, 欧洲节点, 家宽节点, 其他节点]}
+  - {name: 稳定备用, <<: *Anchor_FB_Global, proxies: [香港节点, 日本节点, 澳门节点, 新加坡节点, 韩国节点, 美国节点, 欧洲节点, 家宽节点, 其他节点]}
   - {name: 家宽节点,   <<: *Anchor_HS, filter: *Anchor_HOME, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/05icon/home.png}
   - {name: 香港节点,   <<: *Anchor_HS, filter: *Anchor_HK, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Hongkong(3).png}
+  - {name: 日本节点,   <<: *Anchor_HS, filter: *Anchor_JP, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Japan(2).png}
   - {name: 澳门节点,   <<: *Anchor_HS, filter: *Anchor_MO, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Macao.png}
   - {name: 台湾节点,   <<: *Anchor_HS, filter: *Anchor_TW, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/taiwan(4).png}
-  - {name: 日本节点,   <<: *Anchor_HS, filter: *Anchor_JP, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Japan(2).png}
   - {name: 韩国节点,   <<: *Anchor_HS, filter: *Anchor_KR, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Korea(2).png}
   - {name: 新加坡节点, <<: *Anchor_HS, filter: *Anchor_SG, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/singapore.png}
   - {name: 美国节点,   <<: *Anchor_HS, filter: *Anchor_US, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/US(2).png}

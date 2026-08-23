@@ -8,9 +8,9 @@
 # ① 订阅锚点
 Anchor_PR: &Anchor_PR {type: http, interval: 86400, proxy: DIRECT, health-check: {enable: true, url: 'https://www.gstatic.com/generate_204', interval: 300, expected-status: 204}, filter: "^(?i)(?!.*(群|返利|邀请|客服|工单|官网|网站|网址|邮箱|订阅|套餐|流量|到期|过期|剩余|重置|通知|更新|作者|频道|获取|下次|版本|官址|已用|联系|贩卖|倒卖|地址|说明|教程|关注|加入|http|expire|traffic|reset|subscription|remaining|used|total|email|panel|channel|author)).*$"}
 # ② 出站锚点
-Anchor_OB: &Anchor_OB {type: select, proxies: [一键代理, 全局均衡, 家宽节点, 香港手动, 澳门手动, 台湾手动, 日本手动, 韩国手动, 新加坡手动, 美国手动, 欧洲手动, 香港自动, 澳门自动, 台湾自动, 日本自动, 韩国自动, 新加坡自动, 美国自动, 欧洲自动, 香港故转, 澳门故转, 台湾故转, 日本故转, 韩国故转, 新加坡故转, 美国故转, 欧洲故转, 其他手动]}
-Anchor_SP: &Anchor_SP {type: select, proxies: [一键代理, 全局均衡, 家宽节点, 香港手动, 澳门手动, 台湾手动, 日本手动, 韩国手动, 新加坡手动, 美国手动, 欧洲手动, 香港自动, 澳门自动, 台湾自动, 日本自动, 韩国自动, 新加坡自动, 美国自动, 欧洲自动, 香港故转, 澳门故转, 台湾故转, 日本故转, 韩国故转, 新加坡故转, 美国故转, 欧洲故转, 其他手动, DIRECT]}
-Anchor_AI: &Anchor_AI {type: select, proxies: [家宽节点, 美国手动, 一键代理, 全局均衡, 香港手动, 澳门手动, 台湾手动, 日本手动, 韩国手动, 新加坡手动, 欧洲手动, 香港自动, 澳门自动, 台湾自动, 日本自动, 韩国自动, 新加坡自动, 美国自动, 欧洲自动, 香港故转, 澳门故转, 台湾故转, 日本故转, 韩国故转, 新加坡故转, 美国故转, 欧洲故转, 其他手动]}
+Anchor_OB: &Anchor_OB {type: select, proxies: [一键代理, 全局均衡, 家宽节点, 香港手动, 日本手动, 澳门手动, 台湾手动, 韩国手动, 新加坡手动, 美国手动, 欧洲手动, 香港自动, 日本自动, 澳门自动, 台湾自动, 韩国自动, 新加坡自动, 美国自动, 欧洲自动, 香港故转, 日本故转, 澳门故转, 台湾故转, 韩国故转, 新加坡故转, 美国故转, 欧洲故转, 其他手动]}
+Anchor_SP: &Anchor_SP {type: select, proxies: [一键代理, 全局均衡, 家宽节点, 香港手动, 日本手动, 澳门手动, 台湾手动, 韩国手动, 新加坡手动, 美国手动, 欧洲手动, 香港自动, 日本自动, 澳门自动, 台湾自动, 韩国自动, 新加坡自动, 美国自动, 欧洲自动, 香港故转, 日本故转, 澳门故转, 台湾故转, 韩国故转, 新加坡故转, 美国故转, 欧洲故转, 其他手动, DIRECT]}
+Anchor_AI: &Anchor_AI {type: select, proxies: [家宽节点, 美国手动, 一键代理, 全局均衡, 香港手动, 日本手动, 澳门手动, 台湾手动, 韩国手动, 新加坡手动, 欧洲手动, 香港自动, 日本自动, 澳门自动, 台湾自动, 韩国自动, 新加坡自动, 美国自动, 欧洲自动, 香港故转, 日本故转, 澳门故转, 台湾故转, 韩国故转, 新加坡故转, 美国故转, 欧洲故转, 其他手动]}
 Anchor_UK: &Anchor_UK {type: select, proxies: [欧洲手动,DIRECT]}
 # ③ 策略锚点
 Anchor_HS: &Anchor_HS {type: select, empty-fallback: REJECT, include-all: true, exclude-type: direct}
@@ -205,7 +205,7 @@ dns:
 # ※※※※※※※※※※※※※※※ 代理策略组 ※※※※※※※※※※※※※※※
 # 策略组（按服务分组）
 proxy-groups:
-  - {name: 一键代理, type: select, proxies: [全局均衡, 家宽节点, 香港手动, 澳门手动, 台湾手动, 日本手动, 韩国手动, 新加坡手动, 美国手动, 欧洲手动, 香港自动, 澳门自动, 台湾自动, 日本自动, 韩国自动, 新加坡自动, 美国自动, 欧洲自动, 香港故转, 澳门故转, 台湾故转, 日本故转, 韩国故转, 新加坡故转, 美国故转, 欧洲故转, 其他手动],             icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Rocket.png}
+  - {name: 一键代理, type: select, proxies: [全局均衡, 家宽节点, 香港手动, 日本手动, 澳门手动, 台湾手动, 韩国手动, 新加坡手动, 美国手动, 欧洲手动, 香港自动, 日本自动, 澳门自动, 台湾自动, 韩国自动, 新加坡自动, 美国自动, 欧洲自动, 香港故转, 日本故转, 澳门故转, 台湾故转, 韩国故转, 新加坡故转, 美国故转, 欧洲故转, 其他手动],             icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Rocket.png}
   - {name: Streaming, <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/YouTube.png}
   - {name: GitHub,    <<: *Anchor_OB, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/github(1).png}
   - {name: Google,    <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Google.png}
@@ -234,6 +234,11 @@ proxy-groups:
   - {name: 香港手动,   <<: *Anchor_HS, filter: *Anchor_HK, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Hongkong(3).png}
   - {name: 香港自动,   <<: *Anchor_UT, filter: *Anchor_HK, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Hongkong(3).png}
 
+  # 日本组
+  - {name: 日本故转,   <<: *Anchor_FB, proxies: [日本手动, 日本自动], icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Japan(2).png}
+  - {name: 日本手动,   <<: *Anchor_HS, filter: *Anchor_JP, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Japan(2).png}
+  - {name: 日本自动,   <<: *Anchor_UT, filter: *Anchor_JP, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Japan(2).png}
+
   # 澳门组
   - {name: 澳门故转,   <<: *Anchor_FB, proxies: [澳门手动, 澳门自动], icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Macao.png}
   - {name: 澳门手动,   <<: *Anchor_HS, filter: *Anchor_MO, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Macao.png}
@@ -243,11 +248,6 @@ proxy-groups:
   - {name: 台湾故转,   <<: *Anchor_FB, proxies: [台湾手动, 台湾自动], icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/taiwan(4).png}
   - {name: 台湾手动,   <<: *Anchor_HS, filter: *Anchor_TW, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/taiwan(4).png}
   - {name: 台湾自动,   <<: *Anchor_UT, filter: *Anchor_TW, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/taiwan(4).png}
-
-  # 日本组
-  - {name: 日本故转,   <<: *Anchor_FB, proxies: [日本手动, 日本自动], icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Japan(2).png}
-  - {name: 日本手动,   <<: *Anchor_HS, filter: *Anchor_JP, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Japan(2).png}
-  - {name: 日本自动,   <<: *Anchor_UT, filter: *Anchor_JP, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Japan(2).png}
 
   # 韩国组
   - {name: 韩国故转,   <<: *Anchor_FB, proxies: [韩国手动, 韩国自动], icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Korea(2).png}
