@@ -235,9 +235,9 @@ function main(config) {
   // --- 4. 策略组 (Proxy Groups) ---
   const commonProxies = [
     "一键代理", "全局均衡", "家宽节点",
-    "香港手动", "澳门手动", "台湾手动", "日本手动", "韩国手动", "新加坡手动", "美国手动", "欧洲手动",
-    "香港自动", "澳门自动", "台湾自动", "日本自动", "韩国自动", "新加坡自动", "美国自动", "欧洲自动",
-    "香港故转", "澳门故转", "台湾故转", "日本故转", "韩国故转", "新加坡故转", "美国故转", "欧洲故转",
+    "香港手动", "日本手动", "澳门手动", "台湾手动", "韩国手动", "新加坡手动", "美国手动", "欧洲手动",
+    "香港自动", "日本自动", "澳门自动", "台湾自动", "韩国自动", "新加坡自动", "美国自动", "欧洲自动",
+    "香港故转", "日本故转", "澳门故转", "台湾故转", "韩国故转", "新加坡故转", "美国故转", "欧洲故转",
     "其他手动"
   ];
   const specialProxies = [...commonProxies, "DIRECT"];
@@ -288,7 +288,7 @@ function main(config) {
     },
     { name: "家宽节点", type: "select", "include-all": true, "exclude-filter": excludeInfoFilter, filter: homeFilter, icon: homeIcon },
 
-    ...["香港", "澳门", "台湾", "日本", "韩国", "新加坡", "美国", "欧洲"].map(region => {
+    ...["香港", "日本", "澳门", "台湾", "韩国", "新加坡", "美国", "欧洲"].map(region => {
       const iconMap = {
         "香港": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Hongkong(3).png",
         "澳门": "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Macao.png",
