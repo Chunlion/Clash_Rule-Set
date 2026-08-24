@@ -250,7 +250,7 @@ rules:
   # 服务分流
   - GEOSITE,private,DIRECT                                              # Private Domain
   - GEOIP,private,DIRECT,no-resolve                                     # Private IP
-  # - RULE-SET,vowifi,VoWiFi                                            # VoWiFi
+  - RULE-SET,vowifi,VoWiFi                                              # VoWiFi
 
   - GEOSITE,microsoft@cn,DIRECT                                         # Microsoft中国
   - GEOSITE,apple@cn,DIRECT                                             # Apple中国

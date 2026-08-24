@@ -313,7 +313,7 @@ function main(config) {
     // 服务分流
     "GEOSITE,private,DIRECT",
     "GEOIP,private,DIRECT,no-resolve",
-    // "RULE-SET,vowifi,VoWiFi",
+    "RULE-SET,vowifi,VoWiFi",
     "GEOSITE,microsoft@cn,DIRECT",
     "GEOSITE,apple@cn,DIRECT",
     "GEOSITE,category-ai-!cn,AI Services",
