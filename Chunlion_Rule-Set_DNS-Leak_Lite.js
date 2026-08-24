@@ -273,7 +273,7 @@ function main(config) {
     { name: 'PayPal', type: 'select', proxies: Anchor_SP, icon: 'https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/paypal(2).png' },
     { name: 'Crypto', type: 'select', proxies: Anchor_SP, icon: 'https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/Bitcoin.png' },
     { name: 'Games', type: 'select', proxies: Anchor_SP, icon: 'https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Game.png' },
-    { name: 'VoWiFi', type: 'select', proxies: ['欧洲节点', 'DIRECT'], icon: 'https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/WiFi.png' },
+    { name: 'VoWiFi', type: 'select', proxies: ['欧洲节点', '美国节点', '其他节点'], icon: 'https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/WiFi.png' },
     { name: '兜底流量', type: 'select', proxies: Anchor_OB, icon: 'https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png' },
     // 区域与特殊策略组
     { name: '全局最优', type: 'url-test', url: 'https://www.gstatic.com/generate_204', interval: 300, tolerance: 30, timeout: 2000, hidden: true, 'include-all': true, 'exclude-filter': excludeInfoFilter },
