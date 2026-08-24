@@ -11,6 +11,7 @@ Anchor_PR: &Anchor_PR {type: http, interval: 86400, proxy: DIRECT, health-check:
 Anchor_OB: &Anchor_OB {type: select, proxies: [一键代理, 全局最优, 稳定备用, 香港节点, 日本节点, 澳门节点, 台湾节点, 韩国节点, 新加坡节点, 美国节点, 欧洲节点, 家宽节点, 其他节点]}
 Anchor_SP: &Anchor_SP {type: select, proxies: [一键代理, 全局最优, 稳定备用, 香港节点, 日本节点, 澳门节点, 台湾节点, 韩国节点, 新加坡节点, 美国节点, 欧洲节点, 家宽节点, 其他节点, DIRECT]}
 Anchor_AI: &Anchor_AI {type: select, proxies: [家宽节点, 美国节点, 一键代理, 香港节点, 日本节点, 澳门节点, 台湾节点, 韩国节点, 新加坡节点, 欧洲节点, 其他节点]}
+Anchor_UK: &Anchor_UK {type: select, proxies: [欧洲节点,DIRECT]}
 # ③ 策略锚点
 Anchor_HS: &Anchor_HS {type: select, empty-fallback: REJECT, include-all: true, exclude-type: direct}
 Anchor_UT_Global: &Anchor_UT_Global {type: url-test, empty-fallback: REJECT, expected-status: 204, url: 'https://www.gstatic.com/generate_204', interval: 300, tolerance: 30, timeout: 2000, hidden: true, include-all: true, exclude-type: direct}
@@ -155,6 +156,7 @@ dns:
   fake-ip-filter:
     - "rule-set:fakeip_filter"                                         # 真实解析  外部维护的 Fake-IP 兼容域名
     - "+.ts.net"                                                       # Tailscale MagicDNS
+    - "+.pub.3gppnetwork.org"                                         # VoWiFi ePDG
     - "+.lan"                                                           # 真实解析  局域网域名，避免路由器、NAS、打印机访问异常
     - "+.local"                                                         # 真实解析  mDNS / Bonjour / 本地域名
     - "geosite:cn"                                                      # 真实解析  国内域名，配合国内直连规则使用
@@ -218,6 +220,7 @@ proxy-groups:
   - {name: PayPal,    <<: *Anchor_SP, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/paypal(2).png}
   - {name: Crypto,    <<: *Anchor_SP, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/Bitcoin.png}
   - {name: Games,      <<: *Anchor_SP, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Game.png}
+  - {name: VoWiFi,     <<: *Anchor_UK, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/WiFi.png}
   - {name: 兜底流量,   <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png}
 
 # 策略组（按区域分组）- 仅保留选择，拒绝后台并发测速灾难
@@ -247,6 +250,7 @@ rules:
   # 服务分流
   - GEOSITE,private,DIRECT                                              # Private Domain
   - GEOIP,private,DIRECT,no-resolve                                     # Private IP
+  - RULE-SET,vowifi,VoWiFi                                              # VoWiFi
 
   - GEOSITE,microsoft@cn,DIRECT                                         # Microsoft中国
   - GEOSITE,apple@cn,DIRECT                                             # Apple中国
@@ -294,5 +298,6 @@ rule-providers:
   emby_ip: { <<: *Anchor_IP, url: "https://cdn.jsdelivr.net/gh/666OS/rules@release/mihomo/ip/Emby.mrs"}
   add_direct_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/Seven1echo/Yaml@main/rules/Seven1_Direct_Domain.mrs"}
   add_emby: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/Chunlion/Clash-Icons@main/Emby.mrs"}
+  vowifi: { <<: *Anchor_CL, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/UK-wifi-call.list"}
   cn_ip: { <<: *Anchor_IP, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.mrs"}
 # ※※※※※※※※※※※※※※※ 配置结束 ※※※※※※※※※※※※※※※

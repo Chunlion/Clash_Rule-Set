@@ -156,6 +156,7 @@ dns:
   fake-ip-filter:
     - "rule-set:fakeip_filter"                                         # 真实解析  外部维护的 Fake-IP 兼容域名
     - "+.ts.net"                                                       # Tailscale MagicDNS
+    - "+.pub.3gppnetwork.org"                                         # VoWiFi ePDG
     - "+.lan"                                                           # 真实解析  局域网域名，避免路由器、NAS、打印机访问异常
     - "+.local"                                                         # 真实解析  mDNS / Bonjour / 本地域名
     - "geosite:cn"                                                      # 真实解析  国内域名，配合国内直连规则使用（与 rule-set:cn_domain 同源，保留一份即可）
@@ -219,7 +220,7 @@ proxy-groups:
   - {name: PayPal,    <<: *Anchor_SP, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/paypal(2).png}
   - {name: Crypto,    <<: *Anchor_SP, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/Bitcoin.png}
   - {name: Games,     <<: *Anchor_SP, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Game.png}
-  - {name: UKwifi,    <<: *Anchor_UK, icon: https://www.giffgaff.design/iconography/icons/library/coverage-signal.svg}
+  - {name: VoWiFi,    <<: *Anchor_UK, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/WiFi.png}
   - {name: 兜底流量,   <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png}
 
 # 策略组（按区域分组）
@@ -281,7 +282,7 @@ rules:
   - RULE-SET,ads_domain,REJECT                                          # 屏蔽广告
   - RULE-SET,private_domain,DIRECT                                      # Private
   - RULE-SET,private_ip,DIRECT,no-resolve                               # Private
-  - RULE-SET,ukwifi_ip,UKwifi                                           # UKwifi
+  - RULE-SET,vowifi,VoWiFi                                              # VoWiFi
   - RULE-SET,microsoft_cn,DIRECT                                        # Microsoft中国
   - RULE-SET,apple_cn,DIRECT                                            # Apple中国
   - RULE-SET,speedtest_domain,DIRECT                                    # Speedtest
@@ -356,7 +357,7 @@ rule-providers:
   telegram_ip: { <<: *Anchor_IP, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/telegram.mrs"}
   twitter_ip: { <<: *Anchor_IP, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/twitter.mrs"}
   netflix_ip: { <<: *Anchor_IP, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/netflix.mrs"}
-  ukwifi_ip: { <<: *Anchor_CL, url: "https://cdn.jsdelivr.net/gh/iniwex5/tools@main/rules/UK-wifi-call.list"}
+  vowifi: { <<: *Anchor_CL, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/UK-wifi-call.list"}
   cn_ip: { <<: *Anchor_IP, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.mrs"}
 
 # ※※※※※※※※※※※※※※※ 配置结束 ※※※※※※※※※※※※※※※

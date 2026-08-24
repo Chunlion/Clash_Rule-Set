@@ -191,6 +191,7 @@ function main(config) {
     'fake-ip-filter': [
       'rule-set:fakeip_filter',
       '+.ts.net',
+      '+.pub.3gppnetwork.org',
       '+.lan',
       '+.local',
       'geosite:cn',
@@ -267,7 +268,7 @@ function main(config) {
     { name: "PayPal", type: "select", proxies: specialProxies, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/paypal(2).png" },
     { name: "Crypto", type: "select", proxies: specialProxies, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/Bitcoin.png" },
     { name: "Games", type: "select", proxies: specialProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Game.png" },
-    { name: "UKwifi", type: "select", proxies: ["欧洲手动", "DIRECT"], icon: "https://www.giffgaff.design/iconography/icons/library/coverage-signal.svg" },
+    { name: "VoWiFi", type: "select", proxies: ["欧洲手动", "DIRECT"], icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/WiFi.png" },
     { name: "兜底流量", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png" },
 
     // 区域自动/手动组
@@ -379,7 +380,7 @@ function main(config) {
     "telegram_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/telegram.mrs" },
     "twitter_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/twitter.mrs" },
     "netflix_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/netflix.mrs" },
-    "ukwifi_ip": { type: "http", behavior: "classical", format: "text", interval: 86400, url: "https://cdn.jsdelivr.net/gh/iniwex5/tools@main/rules/UK-wifi-call.list" },
+    "vowifi": { type: "http", behavior: "classical", format: "text", interval: 86400, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/UK-wifi-call.list" },
     "cn_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.mrs" }
   };
   for (const provider of Object.values(config["rule-providers"])) {
@@ -394,7 +395,7 @@ function main(config) {
     "RULE-SET,ads_domain,REJECT",
     "RULE-SET,private_domain,DIRECT",
     "RULE-SET,private_ip,DIRECT,no-resolve",
-    "RULE-SET,ukwifi_ip,UKwifi",
+    "RULE-SET,vowifi,VoWiFi",
     "RULE-SET,microsoft_cn,DIRECT",
     "RULE-SET,apple_cn,DIRECT",
     "RULE-SET,speedtest_domain,DIRECT",

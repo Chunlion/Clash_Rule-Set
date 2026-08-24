@@ -162,8 +162,8 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 
 | 🧩 版本 | 🌐 服务策略组 |
 | :-- | :-- |
-| 🚀 完整版 | 🚀 一键代理、📺 Streaming、🐙 GitHub、🔎 Google、🤖 AI Services、🎞️ Emby、🍎 Apple、✈️ Telegram、🐦 Twitter、🎵 TikTok、🪟 Microsoft、💳 PayPal、₿ Crypto、🎮 Games、🇬🇧 UKwifi、🧰 兜底流量 |
-| ⚡ Lite 版 | 🚀 一键代理、📺 Streaming、✈️ Telegram、🎞️ Emby、🔎 Google、🤖 AI Services、🎵 TikTok、💳 PayPal、₿ Crypto、🎮 Games、🧰 兜底流量 |
+| 🚀 完整版 | 🚀 一键代理、📺 Streaming、🐙 GitHub、🔎 Google、🤖 AI Services、🎞️ Emby、🍎 Apple、✈️ Telegram、🐦 Twitter、🎵 TikTok、🪟 Microsoft、💳 PayPal、₿ Crypto、🎮 Games、📶 VoWiFi、🧰 兜底流量 |
+| ⚡ Lite 版 | 🚀 一键代理、📺 Streaming、✈️ Telegram、🎞️ Emby、🔎 Google、🤖 AI Services、🎵 TikTok、💳 PayPal、₿ Crypto、🎮 Games、📶 VoWiFi、🧰 兜底流量 |
 
 ### 🗺️ 区域策略组
 
@@ -200,7 +200,7 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 | 💳 PayPal | ✅ | ✅ |
 | ₿ Crypto | ✅ | ✅ |
 | 🎮 Games | ✅ | ✅ |
-| 🇬🇧 UKwifi | ✅ | ❌ |
+| 📶 VoWiFi | ✅ | ✅ |
 | 🧰 兜底流量 | ✅ | ✅ |
 | ⚡ 全局最优 | ❌ | ✅ |
 | 🛟 稳定备用 | ❌ | ✅ |
