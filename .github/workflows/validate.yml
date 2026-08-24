@@ -5,12 +5,14 @@ on:
     paths:
       - "Chunlion_Rule-Set_DNS-Leak*.js"
       - "Chunlion_Rule-Set_DNS-Leak*.yaml"
+      - "rules/**"
       - "scripts/validate.py"
       - ".github/workflows/validate.yml"
   pull_request:
     paths:
       - "Chunlion_Rule-Set_DNS-Leak*.js"
       - "Chunlion_Rule-Set_DNS-Leak*.yaml"
+      - "rules/**"
       - "scripts/validate.py"
       - ".github/workflows/validate.yml"
   schedule:

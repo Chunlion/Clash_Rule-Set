@@ -37,7 +37,7 @@
 | Clash Verge Rev，已有机场订阅 | 完整 / Lite | **JS** | 使用 Script 覆写 |
 | OpenWrt / Nikki / FlClash | 完整 / Lite | **YAML** | 直接导入完整配置 |
 | 需要精细服务分流 | **完整** | YAML / JS | 43 个策略组，服务分类更细 |
-| 节点多或设备资源有限 | **Lite** | YAML / JS | 23 个策略组，规则源更少 |
+| 节点多或设备资源有限 | **Lite** | YAML / JS | 24 个策略组，规则源更少 |
 
 <details>
 <summary><strong>📦 展开查看项目文件说明</strong></summary>
@@ -133,7 +133,7 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 | 测速状态     | HTTP 204      | 仅 204 响应视为可用节点    |
 | 空节点回退   | REJECT        | 动态节点组为空时自动拒绝   |
 | 规则源更新   | 一键代理      | 远程规则集通过代理下载     |
-| 规则格式     | MRS / GEOSITE | 减少文本规则体积与加载压力 |
+| 规则格式     | MRS / GEOSITE / text | 兼顾规则体积与自定义规则 |
 
 ---
 
@@ -169,15 +169,15 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 
 | 🧩 版本 | 🗺️ 区域策略组 |
 | :-- | :-- |
-| 🚀 完整版 | 🇭🇰 香港、🇲🇴 澳门、🇹🇼 台湾、🇯🇵 日本、🇰🇷 韩国、🇸🇬 新加坡、🇺🇸 美国、🇪🇺 欧洲均包含 ✋ 手动、⚡ 自动、🔁 故转；另有 ⚖️ 全局均衡、🏠 家宽节点、📦 其他手动 |
-| ⚡ Lite 版 | 🇭🇰 香港、🇲🇴 澳门、🇹🇼 台湾、🇯🇵 日本、🇰🇷 韩国、🇸🇬 新加坡、🇺🇸 美国、🇪🇺 欧洲均为 📍 节点组；另有 🏠 家宽节点、📦 其他节点 |
+| 🚀 完整版 | 🇭🇰 香港、🇯🇵 日本、🇲🇴 澳门、🇹🇼 台湾、🇰🇷 韩国、🇸🇬 新加坡、🇺🇸 美国、🇪🇺 欧洲均包含 ✋ 手动、⚡ 自动、🔁 故转；另有 ⚖️ 全局均衡、🏠 家宽节点、📦 其他手动 |
+| ⚡ Lite 版 | 🇭🇰 香港、🇯🇵 日本、🇲🇴 澳门、🇹🇼 台湾、🇰🇷 韩国、🇸🇬 新加坡、🇺🇸 美国、🇪🇺 欧洲均为 📍 节点组；另有 🏠 家宽节点、📦 其他节点 |
 
 ### 节点分组对比
 
 | 📌 特征维度 | 🚀 完整版 | ⚡ Lite 版 |
 | :-- | :--: | :--: |
-| 🧩 策略组数量 | 43 | 23 |
-| 🌐 服务策略组数量 | 16 | 11 |
+| 🧩 策略组数量 | 43 | 24 |
+| 🌐 服务策略组数量 | 16 | 12 |
 | 🗺️ 区域分组形态 | ✋ 手动 + ⚡ 自动 + 🔁 故转 | 📍 节点 |
 | ⚡ 全局最优 | ❌ | ✅ |
 | 🛟 稳定备用 | ❌ | ✅ |
@@ -314,7 +314,7 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
    - 动态节点组、Fallback 与 URL-Test 组无可用节点时使用 `REJECT`，不自动改走其他节点。
    - 修正了 `add_direct_domain`（直连域名）的规则层级，确保其优先级高于 `geolocation-!cn`。
 5. 规则源优化
-   - 规则源统一走 `cdn.jsdelivr.net` 多节点 CDN（GitHub Release 附件除外），广告规则改用 anti-AD 官方地址，下载更稳。
+   - 规则源主要走 `cdn.jsdelivr.net` 多节点 CDN；GitHub Release 附件和本仓库 VoWiFi 规则集保留原地址，广告规则使用 anti-AD 官方地址。
    - 所有远程规则集通过“一键代理”更新；订阅源仍保持 `DIRECT`，避免首启代理依赖。
    - 四份配置统一使用 PayPal 金融分流与 Crypto 加密货币分流。
 6. 连接层兼容
@@ -331,27 +331,6 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
    - 所有 `include-all` 动态组排除 `direct` 出站，避免全局测速误选直连；订阅信息节点过滤补充获取、版本、官址、已用、联系、说明、教程、关注等常见标签。
 
 </details>
-
----
-
-## 🧪 维护与自检
-
-修改配置后建议完成三类检查：
-
-| 检查项 | 目标 |
-| :-- | :-- |
-| YAML 语法 | 客户端可以正常解析和导入 |
-| JS 语法 | 覆写脚本能够通过 `node --check` |
-| 规则源 | URL 可访问，`rules` 引用均有对应提供者 |
-
-> [!TIP]
-> 仓库会在每次推送或 PR 时校验 YAML/JS 一致性，并在每周一巡检规则源与 geodata 地址。
-
-**维护原则**
-
-- 规则顺序比数量更重要，直连、私有、特殊规则应放在泛规则前。
-- DNS 相关配置要和规则层级保持一致，避免直连域名走远端解析。
-- 节点分组正则只按地区关键词归类，线路标签如 IEPL / IPLC / BGP / 倍率不参与地区判断。
 
 ---
 

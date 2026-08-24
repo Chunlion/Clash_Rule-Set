@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import ipaddress
 import json
 import subprocess
 import urllib.error
@@ -21,6 +22,8 @@ QUIC_BLOCK_RULE = "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT"
 RULE_PROVIDER_SIZE_LIMIT = 8 * 1024 * 1024
 RULE_PROVIDER_BEHAVIORS = {"domain", "ipcidr", "classical"}
 RULE_PROVIDER_FORMATS = {"yaml", "text", "mrs"}
+LOCAL_RULE_URL_PREFIX = "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/"
+LOCAL_CLASSICAL_RULE_TYPES = {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "IP-CIDR", "IP-CIDR6"}
 INFO_FILTER_TOKENS = (
     "获取",
     "下次",
@@ -109,6 +112,34 @@ def load_js(path: Path, initial_config: dict[str, Any] | None = None) -> dict[st
     return config
 
 
+def validate_local_classical_rule_provider(name: str, provider_name: str, provider: dict[str, Any]) -> None:
+    url = provider.get("url", "")
+    if not url.startswith(LOCAL_RULE_URL_PREFIX):
+        return
+    if provider.get("behavior") != "classical" or provider.get("format") != "text":
+        raise AssertionError(f"{name}: local rule provider {provider_name!r} must use classical text format")
+
+    rule_path = (ROOT / url.removeprefix(LOCAL_RULE_URL_PREFIX)).resolve()
+    if not rule_path.is_relative_to(ROOT) or not rule_path.is_file():
+        raise AssertionError(f"{name}: local rule provider {provider_name!r} file is missing")
+
+    for line_number, raw_line in enumerate(rule_path.read_text(encoding="utf-8").splitlines(), start=1):
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        parts = [part.strip() for part in line.split(",")]
+        if len(parts) < 2 or not all(parts):
+            raise AssertionError(f"{rule_path.name}:{line_number}: invalid classical rule")
+        rule_type = parts[0]
+        if rule_type not in LOCAL_CLASSICAL_RULE_TYPES:
+            raise AssertionError(f"{rule_path.name}:{line_number}: unsupported rule type {rule_type!r}")
+        if rule_type in {"IP-CIDR", "IP-CIDR6"}:
+            try:
+                ipaddress.ip_network(parts[1], strict=False)
+            except ValueError as error:
+                raise AssertionError(f"{rule_path.name}:{line_number}: invalid CIDR {parts[1]!r}") from error
+
+
 def validate_references(name: str, config: dict[str, Any]) -> None:
     groups = config.get("proxy-groups", [])
     rules = config.get("rules", [])
@@ -179,6 +210,7 @@ def validate_references(name: str, config: dict[str, Any]) -> None:
             raise AssertionError(f"{name}: invalid rule provider format {rule_format!r}")
         if rule_format == "mrs" and behavior not in {"domain", "ipcidr"}:
             raise AssertionError(f"{name}: MRS rule provider {provider_name!r} must use domain or ipcidr")
+        validate_local_classical_rule_provider(name, provider_name, provider)
 
 
 def normalized_groups(config: dict[str, Any]) -> list[dict[str, Any]]:
@@ -406,7 +438,9 @@ def probe_url(url: str, size_limit: int | None = None) -> tuple[int, int | None]
                     return status, len(content)
             except urllib.error.HTTPError as error:
                 last_error = f"{method} -> HTTP {error.code}"
-                break  # HTTP 状态明确，重试无益；部分源不支持 HEAD，换 GET 再试
+                if error.code in {403, 408, 425, 429} or 500 <= error.code < 600:
+                    continue
+                break  # 部分源不支持 HEAD，改用 GET。
             except (OSError, ValueError) as error:
                 last_error = f"{method} -> {error}"
     return last_error

@@ -268,7 +268,7 @@ function main(config) {
     { name: "PayPal", type: "select", proxies: specialProxies, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/paypal(2).png" },
     { name: "Crypto", type: "select", proxies: specialProxies, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/Bitcoin.png" },
     { name: "Games", type: "select", proxies: specialProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Game.png" },
-    { name: "VoWiFi", type: "select", proxies: ["欧洲手动", "DIRECT"], icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/WiFi.png" },
+    { name: "VoWiFi", type: "select", proxies: ["欧洲手动", "美国手动", "其他手动"], icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/WiFi.png" },
     { name: "兜底流量", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png" },
 
     // 区域自动/手动组
