@@ -1,22 +1,22 @@
 # Apple 定位服务
 DOMAIN-SUFFIX,gspe1-ssl.ls.apple.com
 
-# Vodafone UK ePDG（Wi-Fi Calling）
+# Vodafone UK ePDG（VoWiFi 网关）
 DOMAIN-SUFFIX,epdg.epc.mnc015.mcc234.pub.3gppnetwork.org
 DOMAIN-SUFFIX,ss.epdg.epc.mnc015.mcc234.pub.3gppnetwork.org
 DOMAIN-SUFFIX,ss.epdg.epc.geo.mnc015.mcc234.pub.3gppnetwork.org
 
-# Vodafone UK IMS entitlement（VoWiFi 开通与鉴权）
+# Vodafone UK IMS 授权服务（VoWiFi 开通与鉴权）
 DOMAIN-SUFFIX,entsrv-uk.vodafone.com
 
-# Vodafone UK eSIM SM-DP+ 激活服务器
+# Vodafone UK eSIM 激活（SM-DP+）
 DOMAIN-SUFFIX,vuk-gto.prod.ondemandconnectivity.com
 
-# Vodafone UK 网络段（VoWiFi）
+# Vodafone UK 运营商网络段
 IP-CIDR,88.82.0.0/19
 
-# EE / BT UK 网络段（VoWiFi）
+# EE / BT UK 运营商网络段
 IP-CIDR,46.68.0.0/17
 
-# O2 UK 网络段（VoWiFi）
+# O2 UK 运营商网络段
 IP-CIDR,87.194.0.0/16
