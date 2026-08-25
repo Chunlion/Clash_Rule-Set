@@ -1,22 +1,11 @@
 # UK ePDG（覆盖所有英国运营商 MNC）
 DOMAIN-SUFFIX,mcc234.pub.3gppnetwork.org
 
-# Vodafone UK ePDG（VoWiFi 网关）
-DOMAIN-SUFFIX,epdg.epc.mnc015.mcc234.pub.3gppnetwork.org
-DOMAIN-SUFFIX,ss.epdg.epc.mnc015.mcc234.pub.3gppnetwork.org
-DOMAIN-SUFFIX,ss.epdg.epc.geo.mnc015.mcc234.pub.3gppnetwork.org
+# Apple 地区检测
+DOMAIN-SUFFIX,gspe1-ssl.ls.apple.com
 
 # Vodafone UK IMS 授权服务（VoWiFi 开通与鉴权）
 DOMAIN-SUFFIX,entsrv-uk.vodafone.com
 
 # Vodafone UK eSIM 激活（SM-DP+）
 DOMAIN-SUFFIX,vuk-gto.prod.ondemandconnectivity.com
-
-# Vodafone UK 运营商网络段
-IP-CIDR,88.82.0.0/19
-
-# EE / BT UK 运营商网络段
-IP-CIDR,46.68.0.0/17
-
-# O2 UK 运营商网络段
-IP-CIDR,87.194.0.0/16
