@@ -1,3 +1,6 @@
+# UK ePDG（覆盖所有英国运营商 MNC）
+DOMAIN-SUFFIX,mcc234.pub.3gppnetwork.org
+
 # Vodafone UK ePDG（VoWiFi 网关）
 DOMAIN-SUFFIX,epdg.epc.mnc015.mcc234.pub.3gppnetwork.org
 DOMAIN-SUFFIX,ss.epdg.epc.mnc015.mcc234.pub.3gppnetwork.org
