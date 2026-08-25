@@ -4,6 +4,14 @@ DOMAIN-KEYWORD,epdg.epc
 # UK ePDG（覆盖所有英国运营商 MNC）
 DOMAIN-SUFFIX,mcc234.pub.3gppnetwork.org
 
+# 运营商专用 VoWiFi 域名
+DOMAIN,sentitlement2.mobile.att.net
+DOMAIN,vvm.mobile.att.net
+DOMAIN,wo.vzwwo.com
+DOMAIN,primgw.vowifi2.spcsdns.net
+DOMAIN,crl.t-mobile.com
+DOMAIN,epdg.ims.2degrees.net.nz
+
 # Apple 地区检测
 DOMAIN-SUFFIX,gspe1-ssl.ls.apple.com
 

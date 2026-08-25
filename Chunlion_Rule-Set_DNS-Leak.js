@@ -190,6 +190,7 @@ function main(config) {
     'prefer-h3': false,
     'fake-ip-filter': [
       'rule-set:fakeip_filter',
+      'rule-set:vowifi',
       '+.ts.net',
       '+.pub.3gppnetwork.org',
       '+.lan',
