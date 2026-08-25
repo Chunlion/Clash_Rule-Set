@@ -1,3 +1,6 @@
+# 全球标准 ePDG
+DOMAIN-KEYWORD,epdg.epc
+
 # UK ePDG（覆盖所有英国运营商 MNC）
 DOMAIN-SUFFIX,mcc234.pub.3gppnetwork.org
 
