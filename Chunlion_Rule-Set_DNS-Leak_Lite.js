@@ -324,6 +324,7 @@ function main(config) {
     "GEOSITE,netflix,Streaming",
     "GEOSITE,disney,Streaming",
     "GEOSITE,spotify,Streaming",
+    "RULE-SET,douyin_domain,DIRECT",
     "GEOSITE,tiktok,TikTok",
     "GEOSITE,telegram,Telegram",
     "GEOIP,telegram,Telegram,no-resolve",
@@ -355,6 +356,7 @@ function main(config) {
     add_direct_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://cdn.jsdelivr.net/gh/Seven1echo/Yaml@main/rules/Seven1_Direct_Domain.mrs" },
     add_emby: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://cdn.jsdelivr.net/gh/Chunlion/Clash-Icons@main/Emby.mrs" },
     vowifi: { type: 'http', interval: 86400, behavior: 'classical', format: 'text', url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/UK-wifi-call.list" },
+    douyin_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/douyin.mrs" },
     cn_ip: { type: 'http', interval: 86400, behavior: 'ipcidr', format: 'mrs', url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.mrs" }
   };
   for (const provider of Object.values(config['rule-providers'])) {

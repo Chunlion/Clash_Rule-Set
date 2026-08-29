@@ -299,6 +299,7 @@ rules:
   - RULE-SET,emby_domain,Emby                                           # Emby
   - RULE-SET,apple_domain,Apple                                         # 苹果服务
   - RULE-SET,telegram_domain,Telegram                                   # Telegram
+  - RULE-SET,douyin_domain,DIRECT                                       # 抖音直连
   - RULE-SET,tiktok_domain,TikTok                                       # TikTok
   - RULE-SET,twitter_domain,Twitter                                     # Twitter
   - RULE-SET,netflix_domain,Streaming                                   # Netflix
@@ -340,6 +341,7 @@ rule-providers:
   add_emby: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/Chunlion/Clash-Icons@main/Emby.mrs"}
   apple_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/apple.mrs"}
   telegram_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/telegram.mrs"}
+  douyin_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/douyin.mrs"}
   tiktok_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/tiktok.mrs"}
   twitter_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/twitter.mrs"}
   netflix_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/netflix.mrs"}

@@ -264,6 +264,7 @@ rules:
   - GEOSITE,netflix,Streaming                                           # Netflix
   - GEOSITE,disney,Streaming                                            # Disney+
   - GEOSITE,spotify,Streaming                                           # Spotify
+  - RULE-SET,douyin_domain,DIRECT                                       # 抖音直连
   - GEOSITE,tiktok,TikTok                                               # TikTok
 
   - GEOSITE,telegram,Telegram                                           # Telegram
@@ -300,5 +301,6 @@ rule-providers:
   add_direct_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/Seven1echo/Yaml@main/rules/Seven1_Direct_Domain.mrs"}
   add_emby: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/Chunlion/Clash-Icons@main/Emby.mrs"}
   vowifi: { <<: *Anchor_CL, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/UK-wifi-call.list"}
+  douyin_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/douyin.mrs"}
   cn_ip: { <<: *Anchor_IP, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.mrs"}
 # ※※※※※※※※※※※※※※※ 配置结束 ※※※※※※※※※※※※※※※
