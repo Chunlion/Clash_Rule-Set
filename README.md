@@ -141,8 +141,8 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 
 | 对比项 | 🚀 完整版 | ⚡ Lite 版 |
 | :-- | :--: | :--: |
-| 策略组数量 | **43** | **23** |
-| 服务策略组 | 16 | 11 |
+| 策略组数量 | **43** | **24** |
+| 服务策略组 | 16 | 12 |
 | 地区模式 | 手动 + 自动 + 故转 | 单一地区选择组 |
 | 全局均衡 | ✅ | — |
 | 全局最优 / 稳定备用 | — | ✅ |
@@ -245,8 +245,8 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 ### 2️⃣ 规则优先解析
 
 - `respect-rules: true`
-- 先规则匹配，再走 DNS 解析路径。
-- 境外域名由 Fake-IP 交给代理侧远程解析，天然防污染；因此不再配置老式 `fallback` / `fallback-filter`（与 `respect-rules` 机制重复，实际不再生效）。
+- DNS 上游连接遵循路由规则。
+- Fake-IP 代理连接通常由代理侧解析。本配置不启用 `fallback` / `fallback-filter`；它们仍受支持，负责解析回退，与 `respect-rules` 的连接路由作用不同。
 
 ### 3️⃣ 分角色 DNS 服务器
 
@@ -283,7 +283,7 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 
 ### 7️⃣ 节点 hosts 与保守嗅探
 
-- JS 覆写只保留与实际节点服务器域名匹配的原订阅 hosts、`nameserver-policy` 和 `proxy-server-nameserver-policy`，避免覆盖节点域名所需的内网解析，同时不把无关映射带入新配置。
+- JS 覆写为顶层及 inline/payload 节点保留匹配的 hosts 和 DNS policy；存在尚未展开的 HTTP/file 订阅集合时，保留显式域名映射，并将 DNS policy 用于节点解析。基于规则集的 policy 不在此保留范围内。
 - Sniffer 不嗅探回环、私网、链路本地及 `100.64.0.0/10` 目标，减少 NAS、路由器、远控、Tailscale 和内网 HTTP 被改写的概率。
 - 全局 `override-destination` 与 `parse-pure-ip` 保持关闭，仅 HTTP 协议嗅探按原配置覆盖目标。
 
@@ -308,7 +308,7 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
    - `proxy-server-nameserver` 升级使用 `DoH (alidns 和 doh.pub)`。
    - JS 覆写会保留订阅中非公共的私有 DNS，以及与实际节点服务器域名匹配的 hosts 和 DNS policy，避免覆写后节点域名失效。
    - 显式启用配置 hosts 与系统 hosts，并为回环、私网、链路本地和 CGNAT/Tailscale 目标关闭嗅探。
-   - 移除老式 `fallback` / `fallback-filter`：防污染统一由 Fake-IP + `respect-rules` 承担，避免两套机制并存造成误解。
+   - 不启用额外的 `fallback` / `fallback-filter` 解析回退。
 4. 测速与直连优化
    - 测试链接统一使用 `www.gstatic.com/generate_204`，仅 HTTP 204 响应视为可用，减少劫持页误判。
    - 动态节点组、Fallback 与 URL-Test 组无可用节点时使用 `REJECT`，不自动改走其他节点。
@@ -324,7 +324,7 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 7. 地区正则与安全加固
    - 地区正则的 2–3 字母代码（HK/UK/GB/SEL/OSA 等）统一加 `\b` 单词边界，修复 `Fukuoka` 误入欧洲组、`South Africa` 误入韩国组、带 `10GB` 标签误入欧洲组等错分。
    - “其他”组排除正则补充 `(?i)` 与地区词全集，全大写命名（如 `RUSSIA`、`PANAMA`）不再凭空消失。
-   - 面板 API 默认启用密码 `123456`（首次打开 zashboard 时输入；建议改成自己的随机值）。
+   - 面板 API 默认密码为 `123456`；JS 保留已有非空密码，未设置时使用默认值，建议自行修改。
    - 图标地址统一为 `raw.githubusercontent.com` 写法。
 8. 节点选择增强
    - 完整版新增懒加载 `sticky-sessions` 全局均衡组；同一来源与目标的连接保持在同一节点，未选择该组时不进行测速。
@@ -352,7 +352,7 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 - 已开启 `TUN 模式` 时，可将 Windows 网卡 DNS 改为 `127.0.0.1`，由 `dns-hijack` 接管 DNS 请求；未开启 TUN 时不要这样设置。
 - 对防泄露要求较高时可启用 `strict-route: true`；Windows 会增加 DNS 泄露防护规则，但可能影响 VirtualBox 等软件。
 - 关闭客户端内额外 DNS 劫持插件，避免重复重定向。
-- 禁用浏览器的“使用安全 DNS”，并关闭实验性的 QUIC 功能。
+- 禁用浏览器的“使用安全 DNS”；配置仅拒绝境外 UDP 443，国内和私网继续按后续规则分流。
 - WebRTC 泄露可使用 [WebRTC Network Limiter](https://chromewebstore.google.com/detail/webrtc-network-limiter/npeicpdbkakmehahjeeohfdhnlpdklia) 限制。
 - Windows 可在组策略中启用“禁用智能多宿主名称解析”。
 

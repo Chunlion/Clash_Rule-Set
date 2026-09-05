@@ -200,8 +200,8 @@ dns:
     - https://dns.alidns.com/dns-query                                  # 默认解析  阿里 DoH，普通域名默认解析
     - https://doh.pub/dns-query                                         # 默认解析  腾讯 DoH，普通域名备用解析
 
-  # 不再配置 fallback / fallback-filter：境外域名由 Fake-IP 交给代理侧远程解析，
-  # 配合 respect-rules 已天然防污染；老式 GeoIP fallback 与其重复且实际不再生效。
+  # 本配置不启用 fallback / fallback-filter；Fake-IP 代理连接通常由代理侧解析。
+  # respect-rules 控制 DNS 连接路由，不替代 fallback 的解析回退功能。
 
 
 # ※※※※※※※※※※※※※※※ 代理策略组 ※※※※※※※※※※※※※※※
@@ -278,7 +278,7 @@ proxy-groups:
 
 # ※※※※※※※※※※※※※※※ 规则匹配 ※※※※※※※※※※※※※※※
 rules:
-  - AND,((NETWORK,UDP),(DST-PORT,443)),REJECT                          # 屏蔽 QUIC / HTTP/3
+  - AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((OR,((GEOSITE,cn),(GEOSITE,private),(GEOIP,private),(RULE-SET,cn_ip)))))),REJECT                          # 仅屏蔽境外 UDP 443；国内和私网继续按后续规则分流
    # 服务分流
   - RULE-SET,ads_domain,REJECT                                          # 屏蔽广告
   - RULE-SET,private_domain,DIRECT                                      # Private

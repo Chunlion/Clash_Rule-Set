@@ -38,7 +38,7 @@ function collectProxyServerDomains(proxies = []) {
     .filter(Boolean));
 }
 
-function hostPatternMatchesDomains(pattern, domains) {
+function hostPatternMatchesDomains(pattern, domains, preserveUnknown = false) {
   if (typeof pattern !== 'string') {
     return false;
   }
@@ -49,6 +49,8 @@ function hostPatternMatchesDomains(pattern, domains) {
       return false;
     }
 
+    if (preserveUnknown) return true;
+
     const suffix = candidate.startsWith('+.') || candidate.startsWith('*.')
       ? candidate.slice(2)
       : candidate.startsWith('.') ? candidate.slice(1) : null;
@@ -58,14 +60,14 @@ function hostPatternMatchesDomains(pattern, domains) {
   });
 }
 
-function collectProxyDomainMappings(sources, domains) {
+function collectProxyDomainMappings(sources, domains, preserveUnknown = false) {
   const mappings = {};
   for (const source of sources) {
     if (!source || typeof source !== 'object' || Array.isArray(source)) {
       continue;
     }
     for (const [pattern, value] of Object.entries(source)) {
-      if (hostPatternMatchesDomains(pattern, domains)) {
+      if (hostPatternMatchesDomains(pattern, domains, preserveUnknown)) {
         mappings[pattern] = value;
       }
     }
@@ -75,13 +77,19 @@ function collectProxyDomainMappings(sources, domains) {
 
 function main(config) {
   const originalDnsConfig = config['dns'] || {};
-  const proxyServerDomains = collectProxyServerDomains(config['proxies']);
+  const providers = Object.values(config['proxy-providers'] || {});
+  const proxyServerDomains = collectProxyServerDomains([
+    ...(Array.isArray(config['proxies']) ? config['proxies'] : []),
+    ...providers.flatMap(provider => Array.isArray(provider.payload) ? provider.payload : [])
+  ]);
+  // HTTP/file 集合在覆写阶段尚未展开，保留显式域名映射供后续节点解析。
+  const preserveUnknown = providers.some(provider => provider.type === 'http' || provider.type === 'file');
   const privateNameservers = collectPrivateNameservers(originalDnsConfig);
   const proxyServerPolicy = collectProxyDomainMappings([
     originalDnsConfig['nameserver-policy'],
     originalDnsConfig['proxy-server-nameserver-policy']
-  ], proxyServerDomains);
-  const proxyServerHosts = collectProxyDomainMappings([config['hosts']], proxyServerDomains);
+  ], proxyServerDomains, preserveUnknown);
+  const proxyServerHosts = collectProxyDomainMappings([config['hosts']], proxyServerDomains, preserveUnknown);
 
   // ==================== 基础配置 ====================
   config['mixed-port'] = 7893;
@@ -118,7 +126,10 @@ function main(config) {
   };
   config['external-controller'] = '127.0.0.1:9090';
   config['external-ui'] = 'ui';
-  config['secret'] = '123456';
+  if (typeof config['secret'] !== 'string' || !config['secret'].trim()) {
+    config['secret'] = '123456';
+  }
+  delete config['global-client-fingerprint'];
   config['external-ui-url'] = 'https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip';
 
   // ==================== TUN 配置 ====================
@@ -229,8 +240,8 @@ function main(config) {
       'rule-set:add_direct_domain': ['223.5.5.5', '119.29.29.29'],
       'geosite:cn,private': ['223.5.5.5', '119.29.29.29']
     },
-    // 不再配置 fallback / fallback-filter：境外域名由 Fake-IP 交给代理侧远程解析，
-    // 配合 respect-rules 已天然防污染；老式 GeoIP fallback 与其重复且实际不再生效。
+    // 本配置不启用 fallback / fallback-filter；Fake-IP 代理连接通常由代理侧解析。
+    // respect-rules 控制 DNS 连接路由，不替代 fallback 的解析回退功能。
     'nameserver': ['https://dns.alidns.com/dns-query', 'https://doh.pub/dns-query']
   };
 
@@ -393,7 +404,7 @@ function main(config) {
   }
   // --- 6. 规则匹配 (Rules) ---
   config["rules"] = [
-    "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
+    "AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((OR,((GEOSITE,cn),(GEOSITE,private),(GEOIP,private),(RULE-SET,cn_ip)))))),REJECT",
     "RULE-SET,ads_domain,REJECT",
     "RULE-SET,private_domain,DIRECT",
     "RULE-SET,private_ip,DIRECT,no-resolve",

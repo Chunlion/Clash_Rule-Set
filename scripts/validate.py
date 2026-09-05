@@ -18,7 +18,7 @@ PAIRS = (
     "Chunlion_Rule-Set_DNS-Leak_Lite",
 )
 BUILTIN_TARGETS = {"DIRECT", "REJECT", "REJECT-DROP", "PASS"}
-QUIC_BLOCK_RULE = "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT"
+QUIC_BLOCK_RULE = "AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((OR,((GEOSITE,cn),(GEOSITE,private),(GEOIP,private),(RULE-SET,cn_ip)))))),REJECT"
 RULE_PROVIDER_SIZE_LIMIT = 8 * 1024 * 1024
 RULE_PROVIDER_BEHAVIORS = {"domain", "ipcidr", "classical"}
 RULE_PROVIDER_FORMATS = {"yaml", "text", "mrs"}
@@ -179,9 +179,9 @@ def validate_references(name: str, config: dict[str, Any]) -> None:
             if not provider or provider.get("behavior") not in {"domain", "classical"}:
                 raise AssertionError(f"{name}: invalid nameserver-policy rule provider {provider_name!r}")
 
-    # 防污染由 Fake-IP + respect-rules 承担，禁止再引入与其重复的老式 fallback。
+    # 当前配置选择不启用额外的 DNS fallback 解析。
     if "fallback" in dns or "fallback-filter" in dns:
-        raise AssertionError(f"{name}: dns fallback/fallback-filter is superseded by respect-rules")
+        raise AssertionError(f"{name}: dns fallback/fallback-filter is not enabled in this configuration")
     if dns.get("respect-rules") is not True:
         raise AssertionError(f"{name}: dns respect-rules must be enabled")
 
@@ -326,6 +326,8 @@ def validate_pair(stem: str) -> None:
     private_dns_config = load_js(
         ROOT / f"{stem}.js",
         {
+            "secret": "custom-dashboard-secret",
+            "global-client-fingerprint": "chrome",
             "proxies": [
                 {"name": "node-a", "type": "ss", "server": "edge.node.example"},
                 {"name": "node-b", "type": "trojan", "server": "api.other.net"},
@@ -353,6 +355,32 @@ def validate_pair(stem: str) -> None:
             },
         },
     )
+    if private_dns_config.get("secret") != "custom-dashboard-secret":
+        raise AssertionError(f"{stem}: JS override replaced the existing dashboard secret")
+    if "global-client-fingerprint" in private_dns_config:
+        raise AssertionError(f"{stem}: JS override retained deprecated global fingerprint")
+
+    for provider_type in ("http", "file", "inline"):
+        provider = {"type": provider_type}
+        if provider_type == "inline":
+            provider["payload"] = [{"name": "inline-node", "server": "edge.node.example"}]
+        rendered = load_js(
+            ROOT / f"{stem}.js",
+            {
+                "proxy-providers": {"subscription": provider},
+                "hosts": {"edge.node.example": "10.0.0.8"},
+                "dns": {
+                    "nameserver-policy": {"+.node.example": ["10.0.0.53"]},
+                    "proxy-server-nameserver-policy": {"edge.node.example": ["10.0.0.54"]},
+                },
+            },
+        )
+        if rendered["hosts"].get("edge.node.example") != "10.0.0.8":
+            raise AssertionError(f"{stem}: {provider_type} provider lost its node hosts mapping")
+        policy = rendered["dns"].get("proxy-server-nameserver-policy", {})
+        if policy.get("+.node.example") != ["10.0.0.53"] or policy.get("edge.node.example") != ["10.0.0.54"]:
+            raise AssertionError(f"{stem}: {provider_type} provider lost its node DNS policy")
+
     proxy_nameservers = private_dns_config["dns"]["proxy-server-nameserver"]
     for private_nameserver in (
         "https://10.0.0.53/dns-query",
