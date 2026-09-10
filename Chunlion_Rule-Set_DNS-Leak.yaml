@@ -281,6 +281,9 @@ rules:
   - RULE-SET,ai,AI Services                                             # AI Services
   - RULE-SET,github_domain,GitHub                                       # GitHub
   - RULE-SET,youtube_domain,Streaming                                   # YouTube
+  - RULE-SET,instagram_domain,Streaming                                 # Instagram
+  - RULE-SET,twitch_domain,Streaming                                    # Twitch
+  - RULE-SET,twitch_ip,Streaming,no-resolve                             # Twitch IP
   - RULE-SET,google_domain,Google                                       # Google
   - RULE-SET,games_cn_domain,DIRECT                                     # 国内游戏
   - RULE-SET,games_domain,Games                                         # 游戏
@@ -290,6 +293,10 @@ rules:
   - RULE-SET,emby_domain,Emby                                           # Emby
   - RULE-SET,apple_domain,Apple                                         # 苹果服务
   - RULE-SET,telegram_domain,Telegram                                   # Telegram
+  - RULE-SET,line_domain,Telegram                                       # LINE
+  - RULE-SET,line_ip,Telegram,no-resolve                                # LINE IP
+  - RULE-SET,whatsapp_domain,Telegram                                   # WhatsApp
+  - RULE-SET,whatsapp_ip,Telegram,no-resolve                            # WhatsApp IP
   - RULE-SET,douyin_domain,DIRECT                                       # 抖音直连
   - RULE-SET,tiktok_domain,TikTok                                       # TikTok
   - RULE-SET,twitter_domain,Twitter                                     # Twitter
@@ -324,6 +331,9 @@ rule-providers:
   ai: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-ai-!cn.mrs"}
   github_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/github.mrs"}
   youtube_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/youtube.mrs"}
+  instagram_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/instagram_domain.mrs"}
+  twitch_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/twitch_domain.mrs"}
+  twitch_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/twitch_ip.mrs"}
   google_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/google.mrs"}
   onedrive_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/onedrive.mrs"}
   microsoft_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/microsoft.mrs"}
@@ -333,6 +343,10 @@ rule-providers:
   vowifi: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/UK-wifi-call.mrs"}
   apple_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/apple.mrs"}
   telegram_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/telegram.mrs"}
+  line_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/line_domain.mrs"}
+  line_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/line_ip.mrs"}
+  whatsapp_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/whatsapp_domain.mrs"}
+  whatsapp_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/whatsapp_ip.mrs"}
   douyin_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/douyin.mrs"}
   tiktok_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/tiktok.mrs"}
   twitter_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/twitter.mrs"}

@@ -249,6 +249,9 @@ rules:
   - RULE-SET,ai_not_cn_domain,AI Services                               # AI Services
 
   - RULE-SET,youtube_domain,Streaming                                   # YouTube
+  - RULE-SET,instagram_domain,Streaming                                 # Instagram
+  - RULE-SET,twitch_domain,Streaming                                    # Twitch
+  - RULE-SET,twitch_ip,Streaming,no-resolve                             # Twitch IP
   - RULE-SET,netflix_ip,Streaming,no-resolve                            # Netflix IP
   - RULE-SET,apple_tvplus_domain,Streaming                              # Apple TV+
   - RULE-SET,netflix_domain,Streaming                                   # Netflix
@@ -258,6 +261,10 @@ rules:
   - RULE-SET,tiktok_domain,TikTok                                       # TikTok
 
   - RULE-SET,telegram_domain,Telegram                                   # Telegram
+  - RULE-SET,line_domain,Telegram                                       # LINE
+  - RULE-SET,line_ip,Telegram,no-resolve                                # LINE IP
+  - RULE-SET,whatsapp_domain,Telegram                                   # WhatsApp
+  - RULE-SET,whatsapp_ip,Telegram,no-resolve                            # WhatsApp IP
   - RULE-SET,telegram_ip,Telegram,no-resolve                            # Telegram IP
 
   - RULE-SET,google_domain,Google                                       # Google
@@ -300,6 +307,9 @@ rule-providers:
   apple_cn_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple@cn.mrs"}
   ai_not_cn_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs"}
   youtube_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs"}
+  instagram_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/instagram_domain.mrs"}
+  twitch_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/twitch_domain.mrs"}
+  twitch_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/twitch_ip.mrs"}
   netflix_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.mrs"}
   apple_tvplus_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple-tvplus.mrs"}
   netflix_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs"}
@@ -307,6 +317,10 @@ rule-providers:
   spotify_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/spotify.mrs"}
   tiktok_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.mrs"}
   telegram_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs"}
+  line_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/line_domain.mrs"}
+  line_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/line_ip.mrs"}
+  whatsapp_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/whatsapp_domain.mrs"}
+  whatsapp_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/whatsapp_ip.mrs"}
   telegram_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs"}
   google_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs"}
   google_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.mrs"}
