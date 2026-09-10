@@ -19,7 +19,6 @@ Anchor_FB_Global: &Anchor_FB_Global {type: fallback, empty-fallback: REJECT, exp
 # ④ 规则锚点
 Anchor_DN: &Anchor_DN {type: http, interval: 86400, size-limit: 8388608, proxy: 一键代理, behavior: domain, format: mrs}
 Anchor_IP: &Anchor_IP {type: http, interval: 86400, size-limit: 8388608, proxy: 一键代理, behavior: ipcidr, format: mrs}
-Anchor_CL: &Anchor_CL {type: http, interval: 86400, size-limit: 8388608, proxy: 一键代理, behavior: classical, format: text}
 # ⑤ 区域锚点
 # 地区词决定归属；IEPL / IPLC / BGP / Game / 倍率等线路标签不参与地区判断。
 # 没有明确地区词的节点进入“其他”分组，避免把线路标签误当成地区特征。
@@ -68,16 +67,6 @@ ntp:
   port: 123                                                             # NTP 端口
   interval: 30                                                          # 校时间隔  单位：分钟
   dialer-proxy: DIRECT                                                  # 直连校时  不依赖代理节点
-
-# 地理数据
-geo-auto-update: true                                                   # 自动更新  geodata
-geo-update-interval: 24                                                 # 更新间隔  单位：小时
-geodata-mode: true                                                      # 数据分流  使用数据集进行规则与分流匹配
-geox-url:
-  geosite: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat
-  geoip:   https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat
-  mmdb:    https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.metadb
-  asn:     https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/GeoLite2-ASN.mmdb
 
 # 控制面板
 external-controller: 127.0.0.1:9090                                     # 面板地址
@@ -160,8 +149,8 @@ dns:
     - "+.pub.3gppnetwork.org"                                         # VoWiFi ePDG
     - "+.lan"                                                           # 真实解析  局域网域名，避免路由器、NAS、打印机访问异常
     - "+.local"                                                         # 真实解析  mDNS / Bonjour / 本地域名
-    - "geosite:cn"                                                      # 真实解析  国内域名，配合国内直连规则使用
-    - "geosite:private"                                                 # 真实解析  私有网络 / 内网相关域名
+    - "rule-set:cn_domain"                                              # 真实解析  国内域名，配合国内直连规则使用
+    - "rule-set:private_domain"                                         # 真实解析  私有网络 / 内网相关域名
     - "rule-set:add_direct_domain"                                      # 真实解析  自定义直连域名规则集
     - "+.msftconnecttest.com"                                           # 真实解析  Windows 网络连接测试
     - "+.msftncsi.com"                                                  # 真实解析  Windows NCSI 网络状态检测
@@ -194,7 +183,8 @@ dns:
 
   nameserver-policy:
     "rule-set:add_direct_domain": [223.5.5.5, 119.29.29.29]             # 策略解析  自定义直连域名使用国内 DNS
-    "geosite:cn,private": [223.5.5.5, 119.29.29.29]                     # 策略解析  国内 / 私有域名使用国内 DNS
+    "rule-set:cn_domain": [223.5.5.5, 119.29.29.29]                     # 策略解析  国内域名使用国内 DNS
+    "rule-set:private_domain": [223.5.5.5, 119.29.29.29]                # 策略解析  私有域名使用国内 DNS
 
   nameserver:
     - https://dns.alidns.com/dns-query                                  # 默认解析  阿里 DoH，普通域名默认解析
@@ -241,7 +231,7 @@ proxy-groups:
 
 # ※※※※※※※※※※※※※※※ 规则匹配 ※※※※※※※※※※※※※※※
 rules:
-  - AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((OR,((GEOSITE,cn),(GEOSITE,private),(GEOIP,private),(RULE-SET,cn_ip)))))),REJECT                          # 仅屏蔽境外 UDP 443；国内和私网继续按后续规则分流
+  - AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((OR,((RULE-SET,cn_domain),(RULE-SET,private_domain),(RULE-SET,private_ip),(RULE-SET,cn_ip)))))),REJECT      # 仅屏蔽境外 UDP 443；国内和私网继续按后续规则分流
    # 特殊自定义规则（无法被标准 Geo 替代的，保留外部调用）
   - RULE-SET,emby_domain,Emby                                           # Emby
   - RULE-SET,emby_ip,Emby,no-resolve                                    # Emby IP
@@ -249,48 +239,48 @@ rules:
   - RULE-SET,add_direct_domain,DIRECT                                   # 直连域名
 
   # 服务分流
-  - GEOSITE,private,DIRECT                                              # Private Domain
-  - GEOIP,private,DIRECT,no-resolve                                     # Private IP
+  - RULE-SET,private_domain,DIRECT                                      # Private Domain
+  - RULE-SET,private_ip,DIRECT,no-resolve                               # Private IP
   - RULE-SET,vowifi,VoWiFi                                              # VoWiFi
 
-  - GEOSITE,microsoft@cn,DIRECT                                         # Microsoft中国
-  - GEOSITE,apple@cn,DIRECT                                             # Apple中国
+  - RULE-SET,microsoft_cn_domain,DIRECT                                 # Microsoft中国
+  - RULE-SET,apple_cn_domain,DIRECT                                     # Apple中国
 
-  - GEOSITE,category-ai-!cn,AI Services                                 # AI Services
+  - RULE-SET,ai_not_cn_domain,AI Services                               # AI Services
 
-  - GEOSITE,youtube,Streaming                                           # YouTube
-  - GEOIP,netflix,Streaming,no-resolve                                  # Netflix IP
-  - GEOSITE,apple-tvplus,Streaming                                      # Apple TV+
-  - GEOSITE,netflix,Streaming                                           # Netflix
-  - GEOSITE,disney,Streaming                                            # Disney+
-  - GEOSITE,spotify,Streaming                                           # Spotify
+  - RULE-SET,youtube_domain,Streaming                                   # YouTube
+  - RULE-SET,netflix_ip,Streaming,no-resolve                            # Netflix IP
+  - RULE-SET,apple_tvplus_domain,Streaming                              # Apple TV+
+  - RULE-SET,netflix_domain,Streaming                                   # Netflix
+  - RULE-SET,disney_domain,Streaming                                    # Disney+
+  - RULE-SET,spotify_domain,Streaming                                   # Spotify
   - RULE-SET,douyin_domain,DIRECT                                       # 抖音直连
-  - GEOSITE,tiktok,TikTok                                               # TikTok
+  - RULE-SET,tiktok_domain,TikTok                                       # TikTok
 
-  - GEOSITE,telegram,Telegram                                           # Telegram
-  - GEOIP,telegram,Telegram,no-resolve                                  # Telegram IP
+  - RULE-SET,telegram_domain,Telegram                                   # Telegram
+  - RULE-SET,telegram_ip,Telegram,no-resolve                            # Telegram IP
 
-  - GEOSITE,google,Google                                               # Google
-  - GEOIP,google,Google,no-resolve                                      # Google IP
+  - RULE-SET,google_domain,Google                                       # Google
+  - RULE-SET,google_ip,Google,no-resolve                                # Google IP
 
   # 可选软件分流：与上方对应策略组同时取消注释后生效。
-  # - GEOSITE,github,GitHub
-  # - GEOSITE,apple,Apple
-  # - GEOSITE,twitter,Twitter
-  # - GEOIP,twitter,Twitter,no-resolve
-  # - GEOSITE,microsoft,Microsoft
+  # - RULE-SET,github_domain,GitHub
+  # - RULE-SET,apple_domain,Apple
+  # - RULE-SET,twitter_domain,Twitter
+  # - RULE-SET,twitter_ip,Twitter,no-resolve
+  # - RULE-SET,microsoft_domain,Microsoft
 
-  - GEOSITE,category-cryptocurrency,Crypto                              # 加密货币
-  - GEOSITE,paypal,PayPal                                               # PayPal
-  - GEOSITE,category-finance,PayPal                                     # 金融平台
+  - RULE-SET,cryptocurrency_domain,Crypto                               # 加密货币
+  - RULE-SET,paypal_domain,PayPal                                       # PayPal
+  - RULE-SET,finance_domain,PayPal                                      # 金融平台
 
-  - GEOSITE,category-games@cn,DIRECT                                    # 国内游戏
-  - GEOSITE,category-games,Games                                        # 游戏
+  - RULE-SET,games_cn_domain,DIRECT                                     # 国内游戏
+  - RULE-SET,games_domain,Games                                         # 游戏
 
   # 区域划分兜底
-  - GEOSITE,cn,DIRECT                                                   # 中国域名
-  - GEOIP,cn,DIRECT,no-resolve                                          # 中国IP
-  - GEOSITE,geolocation-!cn,一键代理                                     # 排除国内
+  - RULE-SET,cn_domain,DIRECT                                           # 中国域名
+  - RULE-SET,cn_ip,DIRECT,no-resolve                                    # 中国IP
+  - RULE-SET,geolocation_not_cn_domain,一键代理                          # 排除国内
   - MATCH,兜底流量                                                       # 兜底规则
 
 # 规则来源 (
@@ -300,7 +290,36 @@ rule-providers:
   emby_ip: { <<: *Anchor_IP, url: "https://cdn.jsdelivr.net/gh/666OS/rules@release/mihomo/ip/Emby.mrs"}
   add_direct_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/Seven1echo/Yaml@main/rules/Seven1_Direct_Domain.mrs"}
   add_emby: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/Chunlion/Clash-Icons@main/Emby.mrs"}
-  vowifi: { <<: *Anchor_CL, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/UK-wifi-call.list"}
+  vowifi: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/UK-wifi-call.mrs"}
   douyin_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/douyin.mrs"}
   cn_ip: { <<: *Anchor_IP, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.mrs"}
+
+  private_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs"}
+  private_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs"}
+  microsoft_cn_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft@cn.mrs"}
+  apple_cn_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple@cn.mrs"}
+  ai_not_cn_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs"}
+  youtube_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs"}
+  netflix_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.mrs"}
+  apple_tvplus_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple-tvplus.mrs"}
+  netflix_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs"}
+  disney_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/disney.mrs"}
+  spotify_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/spotify.mrs"}
+  tiktok_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.mrs"}
+  telegram_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs"}
+  telegram_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs"}
+  google_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs"}
+  google_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.mrs"}
+  github_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs"}
+  apple_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs"}
+  twitter_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/twitter.mrs"}
+  twitter_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.mrs"}
+  microsoft_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs"}
+  cryptocurrency_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-cryptocurrency.mrs"}
+  paypal_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/paypal.mrs"}
+  finance_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-finance.mrs"}
+  games_cn_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-games@cn.mrs"}
+  games_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-games.mrs"}
+  cn_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs"}
+  geolocation_not_cn_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs"}
 # ※※※※※※※※※※※※※※※ 配置结束 ※※※※※※※※※※※※※※※

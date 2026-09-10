@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-import ipaddress
 import json
 import subprocess
 import urllib.error
@@ -18,12 +17,11 @@ PAIRS = (
     "Chunlion_Rule-Set_DNS-Leak_Lite",
 )
 BUILTIN_TARGETS = {"DIRECT", "REJECT", "REJECT-DROP", "PASS"}
-QUIC_BLOCK_RULE = "AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((OR,((GEOSITE,cn),(GEOSITE,private),(GEOIP,private),(RULE-SET,cn_ip)))))),REJECT"
+QUIC_BLOCK_RULE = "AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((OR,((RULE-SET,cn_domain),(RULE-SET,private_domain),(RULE-SET,private_ip),(RULE-SET,cn_ip)))))),REJECT"
 RULE_PROVIDER_SIZE_LIMIT = 8 * 1024 * 1024
-RULE_PROVIDER_BEHAVIORS = {"domain", "ipcidr", "classical"}
-RULE_PROVIDER_FORMATS = {"yaml", "text", "mrs"}
+RULE_PROVIDER_BEHAVIORS = {"domain", "ipcidr"}
+RULE_PROVIDER_FORMATS = {"mrs"}
 LOCAL_RULE_URL_PREFIX = "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/"
-LOCAL_CLASSICAL_RULE_TYPES = {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "IP-CIDR", "IP-CIDR6"}
 INFO_FILTER_TOKENS = (
     "获取",
     "下次",
@@ -59,10 +57,6 @@ CRITICAL_KEYS = (
     "ipv6",
     "profile",
     "ntp",
-    "geo-auto-update",
-    "geo-update-interval",
-    "geodata-mode",
-    "geox-url",
     "external-controller",
     "external-ui-name",
     "external-ui",
@@ -112,32 +106,16 @@ def load_js(path: Path, initial_config: dict[str, Any] | None = None) -> dict[st
     return config
 
 
-def validate_local_classical_rule_provider(name: str, provider_name: str, provider: dict[str, Any]) -> None:
+def validate_local_mrs_rule_provider(name: str, provider_name: str, provider: dict[str, Any]) -> None:
     url = provider.get("url", "")
     if not url.startswith(LOCAL_RULE_URL_PREFIX):
         return
-    if provider.get("behavior") != "classical" or provider.get("format") != "text":
-        raise AssertionError(f"{name}: local rule provider {provider_name!r} must use classical text format")
+    if provider.get("format") != "mrs":
+        raise AssertionError(f"{name}: local rule provider {provider_name!r} must use MRS format")
 
     rule_path = (ROOT / url.removeprefix(LOCAL_RULE_URL_PREFIX)).resolve()
-    if not rule_path.is_relative_to(ROOT) or not rule_path.is_file():
+    if not rule_path.is_relative_to(ROOT) or not rule_path.is_file() or rule_path.suffix != ".mrs":
         raise AssertionError(f"{name}: local rule provider {provider_name!r} file is missing")
-
-    for line_number, raw_line in enumerate(rule_path.read_text(encoding="utf-8").splitlines(), start=1):
-        line = raw_line.strip()
-        if not line or line.startswith("#"):
-            continue
-        parts = [part.strip() for part in line.split(",")]
-        if len(parts) < 2 or not all(parts):
-            raise AssertionError(f"{rule_path.name}:{line_number}: invalid classical rule")
-        rule_type = parts[0]
-        if rule_type not in LOCAL_CLASSICAL_RULE_TYPES:
-            raise AssertionError(f"{rule_path.name}:{line_number}: unsupported rule type {rule_type!r}")
-        if rule_type in {"IP-CIDR", "IP-CIDR6"}:
-            try:
-                ipaddress.ip_network(parts[1], strict=False)
-            except ValueError as error:
-                raise AssertionError(f"{rule_path.name}:{line_number}: invalid CIDR {parts[1]!r}") from error
 
 
 def validate_references(name: str, config: dict[str, Any]) -> None:
@@ -208,9 +186,7 @@ def validate_references(name: str, config: dict[str, Any]) -> None:
             raise AssertionError(f"{name}: invalid rule provider behavior {behavior!r}")
         if rule_format not in RULE_PROVIDER_FORMATS:
             raise AssertionError(f"{name}: invalid rule provider format {rule_format!r}")
-        if rule_format == "mrs" and behavior not in {"domain", "ipcidr"}:
-            raise AssertionError(f"{name}: MRS rule provider {provider_name!r} must use domain or ipcidr")
-        validate_local_classical_rule_provider(name, provider_name, provider)
+        validate_local_mrs_rule_provider(name, provider_name, provider)
 
 
 def normalized_groups(config: dict[str, Any]) -> list[dict[str, Any]]:
@@ -408,10 +384,10 @@ def validate_pair(stem: str) -> None:
     if "unrelated.example" in proxy_policy:
         raise AssertionError(f"{stem}: JS override retained an unrelated DNS policy")
 
-    cn_index = yaml_config["rules"].index("GEOSITE,category-games@cn,DIRECT")
-    games_index = yaml_config["rules"].index("GEOSITE,category-games,Games")
+    cn_index = yaml_config["rules"].index("RULE-SET,games_cn_domain,DIRECT")
+    games_index = yaml_config["rules"].index("RULE-SET,games_domain,Games")
     if cn_index >= games_index:
-        raise AssertionError(f"{stem}: category-games@cn must precede category-games")
+        raise AssertionError(f"{stem}: games_cn_domain must precede games_domain")
 
     print(
         f"PASS {stem}: "
@@ -433,14 +409,6 @@ def collect_remote_rule_providers() -> dict[str, int]:
                     raise AssertionError(f"{url}: inconsistent size-limit across configurations")
                 providers[url] = size_limit
     return dict(sorted(providers.items()))
-
-
-def collect_geodata_urls() -> list[str]:
-    urls: set[str] = set()
-    for stem in PAIRS:
-        config = load_yaml(ROOT / f"{stem}.yaml")
-        urls.update(config.get("geox-url", {}).values())
-    return sorted(urls)
 
 
 def probe_url(url: str, size_limit: int | None = None) -> tuple[int, int | None] | str:
@@ -484,21 +452,13 @@ def check_remote_urls() -> None:
         else:
             print(f"FAIL rule source {url}: {result}")
             failures.append(url)
-    for url in collect_geodata_urls():
-        result = probe_url(url)
-        if isinstance(result, tuple):
-            status, _ = result
-            print(f"PASS geodata {url}: HTTP {status}")
-        else:
-            print(f"FAIL geodata {url}: {result}")
-            failures.append(url)
     if failures:
         raise AssertionError(f"{len(failures)} unreachable rule source(s): {failures}")
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Validate Clash rule-set configs")
-    parser.add_argument("--check-urls", action="store_true", help="probe every remote rule/geodata URL")
+    parser.add_argument("--check-urls", action="store_true", help="probe every remote MRS rule URL")
     args = parser.parse_args()
     for stem in PAIRS:
         validate_pair(stem)

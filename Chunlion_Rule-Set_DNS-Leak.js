@@ -115,15 +115,6 @@ function main(config) {
     'interval': 30,
     'dialer-proxy': 'DIRECT'
   };
-  config['geo-auto-update'] = true;
-  config['geo-update-interval'] = 24;
-  config['geodata-mode'] = true;
-  config['geox-url'] = {
-    'geosite': 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat',
-    'geoip': 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat',
-    'mmdb': 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.metadb',
-    'asn': 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/GeoLite2-ASN.mmdb'
-  };
   config['external-controller'] = '127.0.0.1:9090';
   config['external-ui'] = 'ui';
   if (typeof config['secret'] !== 'string' || !config['secret'].trim()) {
@@ -206,8 +197,8 @@ function main(config) {
       '+.pub.3gppnetwork.org',
       '+.lan',
       '+.local',
-      'geosite:cn',
-      'geosite:private',
+      'rule-set:cn_domain',
+      'rule-set:private_domain',
       'rule-set:add_direct_domain',
       '+.msftconnecttest.com',
       '+.msftncsi.com',
@@ -238,7 +229,8 @@ function main(config) {
     'direct-nameserver-follow-policy': true,
     'nameserver-policy': {
       'rule-set:add_direct_domain': ['223.5.5.5', '119.29.29.29'],
-      'geosite:cn,private': ['223.5.5.5', '119.29.29.29']
+      'rule-set:cn_domain': ['223.5.5.5', '119.29.29.29'],
+      'rule-set:private_domain': ['223.5.5.5', '119.29.29.29']
     },
     // 本配置不启用 fallback / fallback-filter；Fake-IP 代理连接通常由代理侧解析。
     // respect-rules 控制 DNS 连接路由，不替代 fallback 的解析回退功能。
@@ -371,6 +363,8 @@ function main(config) {
     "crypto_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-cryptocurrency.mrs" },
     "paypal_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/paypal.mrs" },
     "finance_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-finance.mrs" },
+    "games_cn_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-games@cn.mrs" },
+    "games_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-games.mrs" },
 
     "microsoft_cn": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/microsoft@cn.mrs" },
     "apple_cn": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/apple@cn.mrs" },
@@ -381,6 +375,7 @@ function main(config) {
     "appletv_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/apple-tvplus.mrs" },
     "emby_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/666OS/rules@release/mihomo/domain/Emby.mrs" },
     "add_emby": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/Chunlion/Clash-Icons@main/Emby.mrs" },
+    "vowifi": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/UK-wifi-call.mrs" },
     "apple_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/apple.mrs" },
 
     // IP 规则
@@ -393,7 +388,6 @@ function main(config) {
     "telegram_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/telegram.mrs" },
     "twitter_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/twitter.mrs" },
     "netflix_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/netflix.mrs" },
-    "vowifi": { type: "http", behavior: "classical", format: "text", interval: 86400, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/UK-wifi-call.list" },
     "cn_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.mrs" }
   };
   for (const provider of Object.values(config["rule-providers"])) {
@@ -404,7 +398,7 @@ function main(config) {
   }
   // --- 6. 规则匹配 (Rules) ---
   config["rules"] = [
-    "AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((OR,((GEOSITE,cn),(GEOSITE,private),(GEOIP,private),(RULE-SET,cn_ip)))))),REJECT",
+    "AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((OR,((RULE-SET,cn_domain),(RULE-SET,private_domain),(RULE-SET,private_ip),(RULE-SET,cn_ip)))))),REJECT",
     "RULE-SET,ads_domain,REJECT",
     "RULE-SET,private_domain,DIRECT",
     "RULE-SET,private_ip,DIRECT,no-resolve",
@@ -416,8 +410,8 @@ function main(config) {
     "RULE-SET,github_domain,GitHub",
     "RULE-SET,youtube_domain,Streaming",
     "RULE-SET,google_domain,Google",
-    "GEOSITE,category-games@cn,DIRECT",
-    "GEOSITE,category-games,Games",
+    "RULE-SET,games_cn_domain,DIRECT",
+    "RULE-SET,games_domain,Games",
     "RULE-SET,onedrive_domain,Microsoft",
     "RULE-SET,microsoft_domain,Microsoft",
     "RULE-SET,appletv_domain,Streaming",
