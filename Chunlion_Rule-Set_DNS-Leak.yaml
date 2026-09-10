@@ -275,6 +275,7 @@ rules:
   - RULE-SET,private_domain,DIRECT                                      # Private
   - RULE-SET,private_ip,DIRECT,no-resolve                               # Private
   - RULE-SET,vowifi,VoWiFi                                              # VoWiFi
+  - RULE-SET,vowifi_ip,VoWiFi,no-resolve                                # VoWiFi IP
   - RULE-SET,microsoft_cn,DIRECT                                        # Microsoft中国
   - RULE-SET,apple_cn,DIRECT                                            # Apple中国
   - RULE-SET,speedtest_domain,DIRECT                                    # Speedtest
@@ -341,6 +342,7 @@ rule-providers:
   emby_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/666OS/rules@release/mihomo/domain/Emby.mrs"}
   add_emby: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/Chunlion/Clash-Icons@main/Emby.mrs"}
   vowifi: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/UK-wifi-call.mrs"}
+  vowifi_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/UK-wifi-call-ip.mrs"}
   apple_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/apple.mrs"}
   telegram_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/telegram.mrs"}
   line_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/line_domain.mrs"}
