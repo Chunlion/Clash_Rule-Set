@@ -198,16 +198,16 @@ dns:
 # ※※※※※※※※※※※※※※※ 代理策略组 ※※※※※※※※※※※※※※※
 # 策略组（按服务分组）
 proxy-groups:
-  - {name: 一键代理, type: select, proxies: [全局均衡, 家宽节点, 香港手动, 日本手动, 澳门手动, 台湾手动, 韩国手动, 新加坡手动, 美国手动, 欧洲手动, 香港自动, 日本自动, 澳门自动, 台湾自动, 韩国自动, 新加坡自动, 美国自动, 欧洲自动, 香港故转, 日本故转, 澳门故转, 台湾故转, 韩国故转, 新加坡故转, 美国故转, 欧洲故转, 其他手动],             icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Rocket.png}
-  - {name: Streaming, <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/YouTube.png}
+  - {name: 一键代理, type: select, proxies: [全局均衡, 家宽节点, 香港手动, 日本手动, 澳门手动, 台湾手动, 韩国手动, 新加坡手动, 美国手动, 欧洲手动, 香港自动, 日本自动, 澳门自动, 台湾自动, 韩国自动, 新加坡自动, 美国自动, 欧洲自动, 香港故转, 日本故转, 澳门故转, 台湾故转, 韩国故转, 新加坡故转, 美国故转, 欧洲故转, 其他手动],             icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Rocket.png}
+  - {name: Streaming, <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/YouTube.png}
   - {name: GitHub,    <<: *Anchor_OB, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/github(1).png}
-  - {name: Google,    <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Google.png}
+  - {name: Google,    <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Google_Search.png}
   - {name: AI Services,   <<: *Anchor_AI, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AI.png}
   - {name: Emby,      <<: *Anchor_SP, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Emby.png}
   - {name: Apple,     <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Apple.png}
-  - {name: Telegram,  <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Telegram.png}
+  - {name: Telegram,  <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Telegram.png}
   - {name: Twitter,   <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Twitter.png}
-  - {name: TikTok,    <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/TikTok.png}
+  - {name: TikTok,    <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/TikTok.png}
   - {name: Microsoft, <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Microsoft.png}
   - {name: PayPal,    <<: *Anchor_SP, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/paypal(2).png}
   - {name: Crypto,    <<: *Anchor_SP, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/Bitcoin.png}
@@ -263,7 +263,7 @@ proxy-groups:
   - {name: 欧洲自动,   <<: *Anchor_UT, filter: *Anchor_EU, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/EuropeanUnion(2).png}
 
   # 其他组
-  - {name: 其他手动,   <<: *Anchor_HS, filter: *Anchor_OT, icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/OT.png}
+  - {name: 其他手动,   <<: *Anchor_HS, filter: *Anchor_OT, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Global.png}
 
 
 

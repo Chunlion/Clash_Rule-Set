@@ -196,13 +196,13 @@ dns:
 
 # ※※※※※※※※※※※※※※※ 代理策略组 ※※※※※※※※※※※※※※※
 proxy-groups:
-  - {name: 一键代理, type: select, proxies: [全局最优, 稳定备用, 香港节点, 日本节点, 澳门节点, 台湾节点, 韩国节点, 新加坡节点, 美国节点, 欧洲节点, 家宽节点, 其他节点], icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Rocket.png}
-  - {name: Streaming,   <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/YouTube.png}
-  - {name: Telegram,  <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Telegram.png}
+  - {name: 一键代理, type: select, proxies: [全局最优, 稳定备用, 香港节点, 日本节点, 澳门节点, 台湾节点, 韩国节点, 新加坡节点, 美国节点, 欧洲节点, 家宽节点, 其他节点], icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Rocket.png}
+  - {name: Streaming,   <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/YouTube.png}
+  - {name: Telegram,  <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Telegram.png}
   - {name: Emby,    <<: *Anchor_SP, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Emby.png}
-  - {name: Google,    <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Google.png}
+  - {name: Google,    <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Google_Search.png}
   - {name: AI Services,   <<: *Anchor_AI, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AI.png}
-  - {name: TikTok,    <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/TikTok.png}
+  - {name: TikTok,    <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/TikTok.png}
   # 可选软件分流：取消下方分组与对应规则的注释即可启用。
   # - {name: GitHub,    <<: *Anchor_OB, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/github(1).png}
   # - {name: Apple,     <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Apple.png}
@@ -226,7 +226,7 @@ proxy-groups:
   - {name: 新加坡节点, <<: *Anchor_HS, filter: *Anchor_SG, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/singapore.png}
   - {name: 美国节点,   <<: *Anchor_HS, filter: *Anchor_US, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/US(2).png}
   - {name: 欧洲节点,   <<: *Anchor_HS, filter: *Anchor_EU, icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/EuropeanUnion(2).png}
-  - {name: 其他节点,   <<: *Anchor_HS, filter: *Anchor_OT, icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/OT.png}
+  - {name: 其他节点,   <<: *Anchor_HS, filter: *Anchor_OT, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Global.png}
 
 
 # ※※※※※※※※※※※※※※※ 规则匹配 ※※※※※※※※※※※※※※※

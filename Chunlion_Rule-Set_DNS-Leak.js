@@ -257,17 +257,17 @@ function main(config) {
       name: "一键代理",
       type: "select",
       proxies: commonProxies.filter(p => p !== "一键代理"),
-      icon: "https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Rocket.png"
+      icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Rocket.png"
     },
-    { name: "Streaming", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/YouTube.png" },
+    { name: "Streaming", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/YouTube.png" },
     { name: "GitHub", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/github(1).png" },
-    { name: "Google", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Google.png" },
+    { name: "Google", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Google_Search.png" },
     { name: "AI Services", type: "select", proxies: aiProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AI.png" },
     { name: "Emby", type: "select", proxies: specialProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Emby.png" },
     { name: "Apple", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Apple.png" },
-    { name: "Telegram", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Telegram.png" },
+    { name: "Telegram", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Telegram.png" },
     { name: "Twitter", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Twitter.png" },
-    { name: "TikTok", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/TikTok.png" },
+    { name: "TikTok", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/TikTok.png" },
     { name: "Microsoft", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Microsoft.png" },
     { name: "PayPal", type: "select", proxies: specialProxies, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/paypal(2).png" },
     { name: "Crypto", type: "select", proxies: specialProxies, icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/Bitcoin.png" },
@@ -327,7 +327,7 @@ function main(config) {
       "include-all": true,
       "exclude-filter": excludeInfoFilter,
       filter: '^(?i)(?!.*(DIRECT|直接连接|香港|澳门|澳門|台湾|台灣|日本|韩国|韓國|首尔|首爾|新加坡|美国|美國|奥地利|比利时|保加利亚|克罗地亚|塞浦路斯|捷克|丹麦|爱沙尼亚|芬兰|法国|德国|希腊|匈牙利|爱尔兰|意大利|拉脱维亚|立陶宛|卢森堡|荷兰|波兰|葡萄牙|罗马尼亚|斯洛伐克|斯洛文尼亚|西班牙|瑞典|英国|Hong(?:\\s?Kong)?|Taiwan|Taipei|Kaohsiung|Macau|Macao|Japan|Tokyo|Osaka|Fukuoka|Korea|Seoul|Singapore|United\\s?States|America|United\\s?Kingdom|England|London|Germany|France|Netherlands|Amsterdam|Frankfurt|Paris|🇭🇰|🇲🇴|🇹🇼|🇸🇬|🇯🇵|🇰🇷|🇺🇸|🇬🇧|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|\\bHK\\b|\\bHKG\\b|\\bHKT\\b|\\bHKBN\\b|\\bMO\\b|\\bMFM\\b|\\bTW\\b|\\bTPE\\b|\\bTSA\\b|\\bKHH\\b|\\bJP\\b|\\bTYO\\b|\\bOSA\\b|\\bNRT\\b|\\bHND\\b|\\bKIX\\b|\\bCTS\\b|\\bFUK\\b|\\bKR\\b|\\bKOR\\b|\\bSEL\\b|\\bICN\\b|\\bSG\\b|\\bSGP\\b|\\bSIN\\b|\\bXSP\\b|\\bUS\\b|\\bUSA\\b|\\bNA\\b|\\bUK\\b|\\bGB\\b|\\bGBR\\b|\\bLON\\b|\\bSJC\\b|\\bJFK\\b|\\bLAX\\b|\\bORD\\b|\\bATL\\b|\\bDFW\\b|\\bSFO\\b|\\bMIA\\b|\\bSEA\\b|\\bIAD\\b|\\bCDG\\b|\\bFRA\\b|\\bAMS\\b|\\bMAD\\b|\\bBCN\\b|\\bFCO\\b|\\bMUC\\b|\\bBRU\\b|\\bLHR\\b|\\bLGW\\b)).*$',
-      icon: "https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/OT.png"
+      icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Global.png"
     }
   ];
 
