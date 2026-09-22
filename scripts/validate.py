@@ -267,6 +267,11 @@ def validate_pair(stem: str) -> None:
         raise AssertionError(f"{stem}: NTP settings mismatch")
 
     for group in yaml_config["proxy-groups"]:
+        if group["type"] == "select" and group.get("proxies"):
+            if group.get("default-selected") != group["proxies"][0]:
+                raise AssertionError(
+                    f"{stem}: select group {group['name']!r} must explicitly default to its first proxy"
+                )
         if group.get("include-all"):
             excluded_types = {item.lower() for item in group.get("exclude-type", "").split("|")}
             if "direct" not in excluded_types:

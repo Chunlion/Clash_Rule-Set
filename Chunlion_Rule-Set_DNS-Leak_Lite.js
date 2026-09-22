@@ -294,6 +294,9 @@ function main(config) {
   ];
 
   for (const group of config['proxy-groups']) {
+    if (group.type === 'select' && Array.isArray(group.proxies)) {
+      group['default-selected'] = group.proxies[0];
+    }
     if (group['include-all']) {
       group['exclude-type'] = 'direct';
     }
