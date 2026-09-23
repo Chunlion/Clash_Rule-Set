@@ -146,7 +146,7 @@ dns:
     - "rule-set:fakeip_filter"                                         # 真实解析  外部维护的 Fake-IP 兼容域名
     - "rule-set:vowifi"                                                # 真实解析  VoWiFi 网关与鉴权域名
     - "+.ts.net"                                                       # Tailscale MagicDNS
-    - "+.pub.3gppnetwork.org"                                         # VoWiFi ePDG
+    - "+.3gppnetwork.org"                                             # VoWiFi ePDG
     - "+.lan"                                                           # 真实解析  局域网域名，避免路由器、NAS、打印机访问异常
     - "+.local"                                                         # 真实解析  mDNS / Bonjour / 本地域名
     - "rule-set:cn_domain"                                              # 真实解析  国内域名，配合国内直连规则使用
@@ -241,6 +241,9 @@ rules:
   # 服务分流
   - RULE-SET,private_domain,DIRECT                                      # Private Domain
   - RULE-SET,private_ip,DIRECT,no-resolve                               # Private IP
+  - DOMAIN-SUFFIX,3gppnetwork.org,VoWiFi                               # VoWiFi ePDG
+  - AND,((NETWORK,UDP),(DST-PORT,500)),VoWiFi                           # VoWiFi IKE
+  - AND,((NETWORK,UDP),(DST-PORT,4500)),VoWiFi                          # VoWiFi IPsec NAT-T
   - RULE-SET,vowifi,VoWiFi                                              # VoWiFi
   - RULE-SET,vowifi_ip,VoWiFi,no-resolve                                # VoWiFi IP
 

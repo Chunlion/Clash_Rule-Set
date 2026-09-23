@@ -196,7 +196,7 @@ function main(config) {
       'rule-set:fakeip_filter',
       'rule-set:vowifi',
       '+.ts.net',
-      '+.pub.3gppnetwork.org',
+      '+.3gppnetwork.org',
       '+.lan',
       '+.local',
       'rule-set:cn_domain',
@@ -319,6 +319,9 @@ function main(config) {
     // 服务分流
     "RULE-SET,private_domain,DIRECT",
     "RULE-SET,private_ip,DIRECT,no-resolve",
+    "DOMAIN-SUFFIX,3gppnetwork.org,VoWiFi",
+    "AND,((NETWORK,UDP),(DST-PORT,500)),VoWiFi",
+    "AND,((NETWORK,UDP),(DST-PORT,4500)),VoWiFi",
     "RULE-SET,vowifi,VoWiFi",
     "RULE-SET,vowifi_ip,VoWiFi,no-resolve",
     "RULE-SET,microsoft_cn_domain,DIRECT",
