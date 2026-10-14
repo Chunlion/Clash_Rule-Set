@@ -1,3 +1,7 @@
 # Private local configuration
 Tailscale.yaml
 /Egern 精细分流.yaml
+/private-download/.private/
+/private-download/.wrangler/
+/private-download/.dev.vars*
+/private-download/__pycache__/

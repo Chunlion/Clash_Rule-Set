@@ -1,0 +1,16 @@
+{
+  "name": "clash-private-config-download",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-10-14",
+  "workers_dev": true,
+  "preview_urls": false,
+  "observability": {
+    "enabled": false
+  },
+  "r2_buckets": [
+    {
+      "binding": "CONFIG_BUCKET",
+      "bucket_name": "clash-private-config-files"
+    }
+  ]
+}
