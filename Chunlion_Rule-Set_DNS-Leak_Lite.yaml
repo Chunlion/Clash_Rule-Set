@@ -282,6 +282,7 @@ rules:
   # - RULE-SET,microsoft_domain,Microsoft
 
   - RULE-SET,cryptocurrency_domain,Crypto                               # 加密货币
+  - RULE-SET,crypto_extra_domain,Crypto                                 # 加密货币补充
   - RULE-SET,paypal_domain,PayPal                                       # PayPal
   - RULE-SET,finance_domain,PayPal                                      # 金融平台
   - RULE-SET,uk_banks_domain,PayPal                                     # 英国银行
@@ -336,6 +337,7 @@ rule-providers:
   twitter_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.mrs"}
   microsoft_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs"}
   cryptocurrency_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-cryptocurrency.mrs"}
+  crypto_extra_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/Crypto-extra.mrs"}
   paypal_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/paypal.mrs"}
   finance_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-finance.mrs"}
   uk_banks_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/UK-banks.mrs"}

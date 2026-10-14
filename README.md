@@ -242,6 +242,26 @@ Egern 在 `rules` 中添加以下规则，放在通用代理与兜底规则之�
     update_interval: 86400
 ```
 
+### 加密货币补充规则
+
+[rules/Crypto-extra.yaml](rules/Crypto-extra.yaml) 补充主规则遗漏的 Bybit、Binance、KuCoin 地区站，以及 Phantom、Rabby、Backpack、Ledger 等钱包域名。Mihomo 完整版和 Lite 版已接入 `Crypto` 策略组，同时提供 sing-box 格式。
+
+修改清单后，复用规则生成脚本：
+
+```sh
+python scripts/build_uk_banks.py --ruleset Crypto-extra --mihomo mihomo
+python scripts/build_uk_banks.py --ruleset Crypto-extra --mihomo mihomo --check
+```
+
+Egern 保留原加密货币规则，在通用代理和兜底之前添加补充集，`policy` 使用现有加密货币策略组名称：
+
+```yaml
+- rule_set:
+    match: https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/Crypto-extra.yaml
+    policy: Crypto
+    update_interval: 86400
+```
+
 ## 🔒 DNS 防泄露
 
 | 防护层 | 当前配置 | 作用 |

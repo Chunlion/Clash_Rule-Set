@@ -1,0 +1,64 @@
+# 加密货币补充：核对官网与官方 API 文档后，补充主规则遗漏的地区站和钱包域名。
+# 域名后缀包含子域名；不添加共享 CDN 的整个根域名。
+# 修改后运行 scripts/build_uk_banks.py --ruleset Crypto-extra。
+domain_suffix_set:
+  # Bybit 地区站：https://bybit-exchange.github.io/docs/v5/guide
+  - bybit.eu
+  - bybit.tr
+  - bybit-tr.com
+  - bybit.kz
+  - bybitgeorgia.ge
+  - bybit.ae
+  - bybit.id
+  # Binance TR / TH：官网与旧站跳转
+  - binance.tr
+  - trbinance.com
+  - binance.th
+  # KuCoin EU / TR：官网与地区站
+  - kucoin.eu
+  - kucoin.com.tr
+  # Backpack Exchange
+  - backpack.exchange
+  # LBank
+  - lbank.com
+  # Phemex
+  - phemex.com
+  # BitMart
+  - bitmart.com
+  # CoinEx
+  - coinex.com
+  # Bitunix
+  - bitunix.com
+  # BloFin
+  - blofin.com
+  # Bitget Wallet：旧域名跳转至 web3.bitget.com
+  - bitkeep.com
+  # Phantom：phantom.app 跳转至 phantom.com
+  - phantom.com
+  - phantom.app
+  # Rabby
+  - rabby.io
+  # Backpack Wallet
+  - backpack.app
+  # Exodus
+  - exodus.com
+  # Ledger：https://www.ledger.com/ongoing-phishing-campaigns
+  - ledger.com
+  - ledgerwallet.com
+  # Tangem
+  - tangem.com
+  # Solflare
+  - solflare.com
+  # Tonkeeper / Keeper：官网跳转
+  - tonkeeper.com
+  - keeperwallet.com
+  # Tonhub
+  - tonhub.com
+  # Keplr
+  - keplr.app
+  # Raydium
+  - raydium.io
+  # Jupiter
+  - jup.ag
+  # Cosmos
+  - cosmos.network
