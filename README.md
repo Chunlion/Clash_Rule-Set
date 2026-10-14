@@ -220,48 +220,6 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 
 ---
 
-### 英国银行规则
-
-英国银行与建筑互助社规则由本仓库维护，Mihomo 完整版和 Lite 版使用现有 `PayPal` 策略组，同时提供 sing-box 规则集。
-
-域名清单集中在 [rules/UK-banks.yaml](rules/UK-banks.yaml)，按机构分组，可直接供 Egern 使用。域名后缀包含子域名；App 使用其他独立接口域名时，可根据连接记录补充。
-
-修改清单后，使用 PyYAML 和 Mihomo 生成、核对 MRS 与 sing-box 文件；`--mihomo` 可指定可执行文件路径：
-
-```sh
-python scripts/build_uk_banks.py --mihomo mihomo
-python scripts/build_uk_banks.py --mihomo mihomo --check
-```
-
-Egern 在 `rules` 中添加以下规则，放在通用代理与兜底规则之前，并将 `policy` 改为现有金融策略组名称：
-
-```yaml
-- rule_set:
-    match: https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/UK-banks.yaml
-    policy: PayPal
-    update_interval: 86400
-```
-
-### 加密货币补充规则
-
-[rules/Crypto-extra.yaml](rules/Crypto-extra.yaml) 补充主规则遗漏的 Bybit、Binance、KuCoin 地区站，以及 Phantom、Rabby、Backpack、Ledger 等钱包域名。Mihomo 完整版和 Lite 版已接入 `Crypto` 策略组，同时提供 sing-box 格式。
-
-修改清单后，复用规则生成脚本：
-
-```sh
-python scripts/build_uk_banks.py --ruleset Crypto-extra --mihomo mihomo
-python scripts/build_uk_banks.py --ruleset Crypto-extra --mihomo mihomo --check
-```
-
-Egern 保留原加密货币规则，在通用代理和兜底之前添加补充集，`policy` 使用现有加密货币策略组名称：
-
-```yaml
-- rule_set:
-    match: https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/Crypto-extra.yaml
-    policy: Crypto
-    update_interval: 86400
-```
-
 ## 🔒 DNS 防泄露
 
 | 防护层 | 当前配置 | 作用 |
