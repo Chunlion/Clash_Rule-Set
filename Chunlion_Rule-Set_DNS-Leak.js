@@ -373,6 +373,7 @@ function main(config) {
     "crypto_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-cryptocurrency.mrs" },
     "paypal_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/paypal.mrs" },
     "finance_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-finance.mrs" },
+    "uk_banks_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/UK-banks.mrs" },
     "games_cn_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-games@cn.mrs" },
     "games_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-games.mrs" },
 
@@ -449,6 +450,7 @@ function main(config) {
     "RULE-SET,crypto_domain,Crypto",
     "RULE-SET,paypal_domain,PayPal",
     "RULE-SET,finance_domain,PayPal",
+    "RULE-SET,uk_banks_domain,PayPal",
     "RULE-SET,add_emby,Emby",
     "RULE-SET,add_direct_domain,DIRECT",
     "RULE-SET,emby_ip,Emby,no-resolve",

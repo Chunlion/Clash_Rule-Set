@@ -355,6 +355,7 @@ function main(config) {
     "RULE-SET,cryptocurrency_domain,Crypto",
     "RULE-SET,paypal_domain,PayPal",
     "RULE-SET,finance_domain,PayPal",
+    "RULE-SET,uk_banks_domain,PayPal",
     "RULE-SET,games_cn_domain,DIRECT",
     "RULE-SET,games_domain,Games",
     // 区域划分兜底
@@ -406,6 +407,7 @@ function main(config) {
     cryptocurrency_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-cryptocurrency.mrs" },
     paypal_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/paypal.mrs" },
     finance_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-finance.mrs" },
+    uk_banks_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/UK-banks.mrs" },
     games_cn_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-games@cn.mrs" },
     games_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-games.mrs" },
     cn_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs" },

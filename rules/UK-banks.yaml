@@ -1,0 +1,325 @@
+# 英国银行、银行品牌与建筑互助社；域名后缀匹配包含子域名。
+# 银行域名取自机构官网；机构名录与互助社域名来源：
+# https://www.bankofengland.co.uk/prudential-regulation/authorisations/which-firms-does-the-pra-regulate
+# https://www.bsa.org.uk/about-us/bsa-members
+# 修改本文件后运行 scripts/build_uk_banks.py，同步 Mihomo 与 sing-box 格式。
+domain_suffix_set:
+  # Monzo
+  - monzo.com
+  # Zopa
+  - zopa.com
+  # Lloyds
+  - lloydsbank.com
+  - lloydsbank.co.uk
+  - lloydsbankinggroup.com
+  - lloydsbankdirectinvestmentsonline.co.uk
+  # Halifax
+  - halifax.co.uk
+  - halifax-online.co.uk
+  - halifaxsharedealing-online.co.uk
+  # Bank of Scotland
+  - bankofscotland.co.uk
+  # Barclays / Barclaycard
+  - barclays.co.uk
+  - barclays.com
+  - barclaycard.co.uk
+  # HSBC / first direct / HSBC Innovation Banking
+  - hsbc.co.uk
+  - hsbc.com
+  - hsbcnet.com
+  - firstdirect.com
+  - hsbcinnovationbanking.com
+  # Santander / cahoot / Cater Allen
+  - santander.co.uk
+  - cahoot.com
+  - caterallen.co.uk
+  # Standard Chartered
+  - sc.com
+  - standardchartered.com
+  # NatWest / RBS / Ulster Bank / Coutts
+  - natwest.com
+  - natwestgroup.com
+  - natwestinternational.com
+  - rbs.co.uk
+  - rbs.com
+  - ulsterbank.co.uk
+  - coutts.com
+  # TSB
+  - tsb.co.uk
+  # Metro Bank
+  - metrobankonline.co.uk
+  # Co-operative Bank / smile
+  - co-operativebank.co.uk
+  - smile.co.uk
+  # Virgin Money / Clydesdale Bank / Yorkshire Bank
+  - virginmoney.com
+  - virginmoneyukplc.com
+  - cbonline.co.uk
+  - ybonline.co.uk
+  # Danske Bank UK
+  - danskebank.co.uk
+  # AIB UK
+  - aibgb.co.uk
+  - aibni.co.uk
+  # Bank of Ireland UK
+  - bankofirelanduk.com
+  - bankofireland.com
+  # Chase UK
+  - chase.co.uk
+  # Starling
+  - starlingbank.com
+  # Revolut
+  - revolut.com
+  # Kroo
+  - kroo.com
+  # Tandem
+  - tandem.co.uk
+  # Atom Bank
+  - atombank.co.uk
+  # Zempler Bank
+  - zemplerbank.com
+  # Monument
+  - monument.co
+  # LHV Bank
+  - lhv.com
+  # Afin Bank
+  - afinbank.com
+  # Aldermore
+  - aldermore.co.uk
+  # Allica Bank
+  - allica.bank
+  # Al Rayan Bank
+  - alrayanbank.co.uk
+  # Bank of London and The Middle East / Nomo
+  - blme.com
+  - nomo.bank
+  - nomobank.com
+  # Birmingham Bank
+  - birminghambank.com
+  # Cambridge & Counties Bank
+  - ccbank.co.uk
+  # Castle Trust Bank
+  - castletrust.co.uk
+  # Charter Savings Bank
+  - chartersavingsbank.co.uk
+  # Chetwood Bank
+  - chetwoodbank.co.uk
+  # ClearBank
+  - clear.bank
+  # Close Brothers
+  - closebrothers.com
+  # Crown Agents Bank
+  - crownagentsbank.com
+  # Cynergy Bank
+  - cynergybank.co.uk
+  # DF Capital
+  - dfcapital.bank
+  # Gatehouse Bank
+  - gatehousebank.com
+  # GB Bank
+  - gbbank.co.uk
+  # Griffin
+  - griffin.com
+  # Hampshire Trust Bank
+  - htb.co.uk
+  # Handelsbanken UK
+  - handelsbanken.co.uk
+  # HBL Bank UK
+  - hblbankuk.com
+  # Habib Bank AG Zurich
+  - habibbank.com
+  # ICICI Bank UK
+  - icicibank.co.uk
+  # Punjab National Bank International
+  - pnbint.com
+  # iFAST Global Bank
+  - ifastgb.com
+  # Investec
+  - investec.com
+  # Kingdom Bank
+  - kingdom.bank
+  # Marcus by Goldman Sachs
+  - marcus.co.uk
+  # OakNorth
+  - oaknorth.co.uk
+  # OSB Group
+  - osb.co.uk
+  # Oxbury
+  - oxbury.com
+  # Paragon Bank
+  - paragonbank.co.uk
+  # Perenna
+  - perenna.com
+  # RCI Bank
+  - rcibank.co.uk
+  # Recognise Bank
+  - recognisebank.co.uk
+  # Redwood Bank
+  - redwoodbank.co.uk
+  # Reliance Bank
+  - reliancebankltd.com
+  # Secure Trust Bank
+  - securetrustbank.com
+  # Shawbrook
+  - shawbrook.co.uk
+  # StreamBank
+  - streambank.co.uk
+  # Bank of London
+  - bankoflondon.com
+  # Charity Bank
+  - charitybank.org
+  # CAF Bank
+  - cafbank.org
+  # Triodos UK
+  - triodos.co.uk
+  # United Trust Bank
+  - utbank.co.uk
+  # Unity Trust Bank
+  - unity.co.uk
+  # Vanquis
+  - vanquis.co.uk
+  # Vida Bank / Vida Savings
+  - vidabank.co.uk
+  - vidasavings.co.uk
+  # NS&I
+  - nsandi.com
+  # Tesco Bank
+  - tescobank.com
+  # Sainsbury's Bank
+  - sainsburysbank.co.uk
+  # M&S Bank：仅银行与网银子域名，避免匹配整个零售网站。
+  - bank.marksandspencer.com
+  - www7.marksandspencer.com
+  # Arbuthnot Latham
+  - arbuthnotlatham.co.uk
+  # Brown Shipley
+  - brownshipley.com
+  # C. Hoare & Co.
+  - hoaresbank.co.uk
+  # Hampden Bank
+  - hampdenbank.com
+  - hampdenandco.com
+  # Weatherbys
+  - weatherbys.bank
+  # EFG Private Bank UK
+  - efginternational.com
+  # Rathbones
+  - rathbones.com
+  # Schroders
+  - schroders.com
+  # UBL UK
+  - ubluk.com
+  # Bank of Baroda UK
+  - bankofbarodauk.com
+  # Bank of Beirut UK
+  - bankofbeirut.co.uk
+  # Bank of Ceylon UK
+  - bankofceylon.co.uk
+  # Bank of Africa UK
+  - bankofafricaunitedkingdom.co.uk
+  # Bank ABC
+  - bank-abc.com
+  # British Arab Commercial Bank
+  - bacb.co.uk
+  # FCMB Bank UK
+  - fcmbuk.com
+  # FirstBank UK
+  - firstbankuk.com
+  # GTBank UK
+  - gtbankuk.com
+  # Zenith Bank UK
+  - zenith-bank.co.uk
+
+  # 建筑互助社及其银行品牌
+  # Bath
+  - bathbuildingsociety.co.uk
+  # Beverley
+  - beverleybs.co.uk
+  # Buckinghamshire
+  - bucksbs.co.uk
+  # Cambridge
+  - cambridgebs.co.uk
+  # Chelsea
+  - thechelsea.co.uk
+  # Chorley
+  - chorleybs.co.uk
+  # Coventry
+  - coventrybuildingsociety.co.uk
+  # Cumberland
+  - cumberland.co.uk
+  # Darlington
+  - darlington.co.uk
+  # Dudley
+  - dudleybuildingsociety.co.uk
+  # Earl Shilton
+  - esbs.co.uk
+  # Ecology
+  - ecology.co.uk
+  # Family / National Counties
+  - familybuildingsociety.co.uk
+  - ncbs.co.uk
+  # Furness
+  - furnessbs.co.uk
+  # Hanley Economic
+  - thehanley.co.uk
+  # Harpenden
+  - harpendenbs.co.uk
+  # Hinckley & Rugby
+  - hrbs.co.uk
+  # Leeds
+  - leedsbuildingsociety.co.uk
+  # Leek
+  - leekbs.co.uk
+  # Loughborough
+  - theloughborough.co.uk
+  # Manchester
+  - themanchester.co.uk
+  # Mansfield
+  - mansfieldbs.co.uk
+  # Market Harborough
+  - mhbs.co.uk
+  # Marsden
+  - themarsden.co.uk
+  # Melton
+  - themelton.co.uk
+  # Monmouthshire
+  - monbs.com
+  # Nationwide
+  - nationwide.co.uk
+  # Newbury
+  - newbury.co.uk
+  # Newcastle
+  - newcastle.co.uk
+  # Norwich & Peterborough
+  - nandp.co.uk
+  # Nottingham
+  - thenottingham.com
+  # Penrith
+  - penrithbs.co.uk
+  # Principality
+  - principality.co.uk
+  # Progressive
+  - theprogressive.com
+  # Saffron
+  - saffronbs.co.uk
+  # Scottish
+  - scottishbs.co.uk
+  # Skipton
+  - skipton.co.uk
+  # Stafford
+  - srbs.co.uk
+  # Suffolk
+  - suffolkbuildingsociety.co.uk
+  - ibs.co.uk
+  # Swansea
+  - swansea-bs.co.uk
+  # Teachers
+  - teachersbs.co.uk
+  # Tipton & Coseley
+  - thetipton.co.uk
+  # Vernon
+  - thevernon.co.uk
+  # West Bromwich
+  - westbrom.co.uk
+  # Yorkshire
+  - ybs.co.uk

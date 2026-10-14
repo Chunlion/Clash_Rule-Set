@@ -220,6 +220,28 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 
 ---
 
+### 英国银行规则
+
+英国银行与建筑互助社规则由本仓库维护，Mihomo 完整版和 Lite 版使用现有 `PayPal` 策略组，同时提供 sing-box 规则集。
+
+域名清单集中在 [rules/UK-banks.yaml](rules/UK-banks.yaml)，按机构分组，可直接供 Egern 使用。域名后缀包含子域名；App 使用其他独立接口域名时，可根据连接记录补充。
+
+修改清单后，使用 PyYAML 和 Mihomo 生成、核对 MRS 与 sing-box 文件；`--mihomo` 可指定可执行文件路径：
+
+```sh
+python scripts/build_uk_banks.py --mihomo mihomo
+python scripts/build_uk_banks.py --mihomo mihomo --check
+```
+
+Egern 在 `rules` 中添加以下规则，放在通用代理与兜底规则之前，并将 `policy` 改为现有金融策略组名称：
+
+```yaml
+- rule_set:
+    match: https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/UK-banks.yaml
+    policy: PayPal
+    update_interval: 86400
+```
+
 ## 🔒 DNS 防泄露
 
 | 防护层 | 当前配置 | 作用 |

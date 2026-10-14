@@ -310,6 +310,7 @@ rules:
   - RULE-SET,crypto_domain,Crypto                                       # 加密货币
   - RULE-SET,paypal_domain,PayPal                                       # PayPal
   - RULE-SET,finance_domain,PayPal                                      # 金融平台
+  - RULE-SET,uk_banks_domain,PayPal                                     # 英国银行
   - RULE-SET,add_emby,Emby                                              # Emby 补充
   - RULE-SET,add_direct_domain,DIRECT                                   # 直连域名
   - RULE-SET,emby_ip,Emby,no-resolve                                    # Emby IP
@@ -361,6 +362,7 @@ rule-providers:
   crypto_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-cryptocurrency.mrs"}
   paypal_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/paypal.mrs"}
   finance_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-finance.mrs"}
+  uk_banks_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/UK-banks.mrs"}
   games_cn_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-games@cn.mrs"}
   games_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-games.mrs"}
   geolocation-!cn: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/geolocation-!cn.mrs"}
