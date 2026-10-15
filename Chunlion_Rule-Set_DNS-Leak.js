@@ -270,7 +270,7 @@ function main(config) {
     { name: "TikTok", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/TikTok.png" },
     { name: "Microsoft", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Microsoft.png" },
     { name: "PayPal", type: "select", proxies: ["欧洲手动", ...specialProxies.filter(name => name !== "欧洲手动")], icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/paypal(2).png" },
-    { name: "Crypto", type: "select", proxies: ["台湾手动", ...specialProxies.filter(name => name !== "台湾手动")], icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/Bitcoin.png" },
+    { name: "Crypto", type: "select", proxies: ["台湾手动", ...specialProxies.filter(name => !["台湾手动", "香港手动", "香港自动", "香港故转", "新加坡手动", "新加坡自动", "新加坡故转", "日本手动", "日本自动", "日本故转"].includes(name))], icon: "https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/Bitcoin.png" },
     { name: "Games", type: "select", proxies: specialProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Game.png" },
     { name: "VoWiFi", type: "select", proxies: ["欧洲手动", "美国手动", "其他手动", "DIRECT"], icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/WiFi.png" },
     { name: "兜底流量", type: "select", proxies: commonProxies, icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png" },

@@ -208,8 +208,8 @@ proxy-groups:
   # - {name: Apple,     <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Apple.png}
   # - {name: Twitter,   <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Twitter.png}
   # - {name: Microsoft, <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Seven1echo/Yaml/main/icons/Microsoft.png}
-  - {name: PayPal,    <<: *Anchor_SP, default-selected: 欧洲节点, proxies: [欧洲节点, 一键代理, 全局最优, 稳定备用, 香港节点, 日本节点, 澳门节点, 台湾节点, 韩国节点, 新加坡节点, 美国节点, 家宽节点, 其他节点, DIRECT], icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/paypal(2).png}
-  - {name: Crypto,    <<: *Anchor_SP, default-selected: 台湾节点, proxies: [台湾节点, 一键代理, 全局最优, 稳定备用, 香港节点, 日本节点, 澳门节点, 韩国节点, 新加坡节点, 美国节点, 欧洲节点, 家宽节点, 其他节点, DIRECT], icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/Bitcoin.png}
+  - {name: PayPal,    <<: *Anchor_SP, default-selected: 欧洲节点, proxies: [欧洲节点, 一键代理, 香港节点, 日本节点, 澳门节点, 台湾节点, 韩国节点, 新加坡节点, 美国节点, 家宽节点, 其他节点, DIRECT], icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/paypal(2).png}
+  - {name: Crypto,    <<: *Anchor_SP, default-selected: 台湾节点, proxies: [台湾节点, 一键代理, 澳门节点, 韩国节点, 美国节点, 欧洲节点, 家宽节点, 其他节点, DIRECT], icon: https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/Bitcoin.png}
   - {name: Games,      <<: *Anchor_SP, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Game.png}
   - {name: VoWiFi,     <<: *Anchor_UK, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/WiFi.png}
   - {name: 兜底流量,   <<: *Anchor_OB, icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png}
