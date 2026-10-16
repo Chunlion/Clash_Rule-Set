@@ -1,0 +1,4 @@
+domain_set:
+- cdn.openaimerge.com
+domain_regex_set:
+- ^(?:[a-z0-9-]+-)?aiplatform\.googleapis\.com$
