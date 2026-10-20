@@ -17,7 +17,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Build domain rules from an Egern YAML source")
     parser.add_argument(
         "--ruleset",
-        choices=("UK-banks", "Crypto-extra", "Finance-custom", "Crypto-custom", "AI-custom"),
+        choices=("UK-banks", "Crypto-extra", "Finance-custom", "Crypto-custom", "AI-custom", "Proxy-custom"),
         default="UK-banks",
     )
     parser.add_argument("--mihomo", default="mihomo", help="Mihomo executable path")
