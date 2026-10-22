@@ -144,6 +144,24 @@ dns:
   respect-rules: true                                                   # 遵循规则  强制遵循规则顺序
   prefer-h3: false                                                      # 关闭 HTTP/3 支持
   fake-ip-filter:
+    - "mtalk.google.com"
+    - "mtalk4.google.com"
+    - "mtalk-staging.google.com"
+    - "mtalk-dev.google.com"
+    - "alt1-mtalk.google.com"
+    - "alt2-mtalk.google.com"
+    - "alt3-mtalk.google.com"
+    - "alt4-mtalk.google.com"
+    - "alt5-mtalk.google.com"
+    - "alt6-mtalk.google.com"
+    - "alt7-mtalk.google.com"
+    - "alt8-mtalk.google.com"
+    - "android.apis.google.com"
+    - "device-provisioning.googleapis.com"
+    - "firebaseinstallations.googleapis.com"
+    - "fcm.googleapis.com"
+    - "fcm-xmpp.googleapis.com"
+    - "iid.googleapis.com"
     - "rule-set:fakeip_filter"                                         # 真实解析  外部维护的 Fake-IP 兼容域名
     - "rule-set:vowifi"                                                # 真实解析  VoWiFi 网关与鉴权域名
     - "+.ts.net"                                                       # Tailscale MagicDNS
