@@ -282,7 +282,7 @@ function main(config) {
       name: "全局均衡",
       type: "load-balance",
       strategy: "sticky-sessions",
-      url: "https://www.gstatic.com/generate_204",
+      url: "https://www.google.com/generate_204",
       interval: 300,
       lazy: true,
       timeout: 2000,
@@ -315,9 +315,9 @@ function main(config) {
         "欧洲": '^(?i)(?=.*(奥地利|奥地利共和国|比利时|保加利亚|克罗地亚|塞浦路斯|捷克|丹麦|爱沙尼亚|芬兰|法国|德国|希腊|匈牙利|爱尔兰|意大利|拉脱维亚|立陶宛|卢森堡|荷兰|波兰|葡萄牙|罗马尼亚|斯洛伐克|斯洛文尼亚|西班牙|瑞典|英国|London|United\\s?Kingdom|England|Germany|France|Netherlands|Amsterdam|Frankfurt|Paris|\\bLON\\b|\\bUK\\b|\\bGB\\b|\\bGBR\\b|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|🇬🇧|\\bCDG\\b|\\bFRA\\b|\\bAMS\\b|\\bMAD\\b|\\bBCN\\b|\\bFCO\\b|\\bMUC\\b|\\bBRU\\b|\\bLHR\\b|\\bLGW\\b)).*$'
       };
       return [
-        { name: `${region}故转`, type: "fallback", url: "https://www.gstatic.com/generate_204", interval: 180, lazy: false, timeout: 2000, "max-failed-times": 2, proxies: [`${region}手动`, `${region}自动`], icon: iconMap[region], hidden: true },
+        { name: `${region}故转`, type: "fallback", url: "https://www.google.com/generate_204", interval: 180, lazy: false, timeout: 2000, "max-failed-times": 2, proxies: [`${region}手动`, `${region}自动`], icon: iconMap[region], hidden: true },
         { name: `${region}手动`, type: "select", "include-all": true, "exclude-filter": excludeInfoFilter, filter: filterMap[region], icon: iconMap[region] },
-        { name: `${region}自动`, type: "url-test", url: "https://www.gstatic.com/generate_204", interval: 300, lazy: false, tolerance: 30, timeout: 2000, "max-failed-times": 3, "include-all": true, "exclude-filter": excludeInfoFilter, filter: filterMap[region], icon: iconMap[region], hidden: true }
+        { name: `${region}自动`, type: "url-test", url: "https://www.google.com/generate_204", interval: 300, lazy: false, tolerance: 30, timeout: 2000, "max-failed-times": 3, "include-all": true, "exclude-filter": excludeInfoFilter, filter: filterMap[region], icon: iconMap[region], hidden: true }
       ];
     }).flat(),
 

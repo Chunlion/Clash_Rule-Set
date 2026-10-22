@@ -310,7 +310,7 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
    - 显式启用配置 hosts 与系统 hosts，并为回环、私网、链路本地和 CGNAT/Tailscale 目标关闭嗅探。
    - 不启用额外的 `fallback` / `fallback-filter` 解析回退。
 4. 测速与直连优化
-   - 测试链接统一使用 `www.gstatic.com/generate_204`，仅 HTTP 204 响应视为可用，减少劫持页误判。
+   - 测试链接统一使用 `https://www.google.com/generate_204`，仅 HTTP 204 响应视为可用，减少劫持页误判。
    - 动态节点组、Fallback 与 URL-Test 组无可用节点时使用 `REJECT`，不自动改走其他节点。
    - 修正了 `add_direct_domain`（直连域名）的规则层级，确保其优先级高于 `geolocation-!cn`。
 5. 规则源优化
