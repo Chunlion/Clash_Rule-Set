@@ -7,6 +7,7 @@ on:
       - "Chunlion_Rule-Set_DNS-Leak*.yaml"
       - "rules/**"
       - "scripts/validate.py"
+      - "scripts/build_uk_banks.py"
       - "requirements.txt"
       - ".github/workflows/validate.yml"
   pull_request:
@@ -15,6 +16,7 @@ on:
       - "Chunlion_Rule-Set_DNS-Leak*.yaml"
       - "rules/**"
       - "scripts/validate.py"
+      - "scripts/build_uk_banks.py"
       - "requirements.txt"
       - ".github/workflows/validate.yml"
   schedule:
@@ -36,6 +38,19 @@ jobs:
         with:
           node-version: "24"
       - run: python -m pip install -r requirements.txt
+      - name: Install Mihomo
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download --repo MetaCubeX/mihomo --pattern 'mihomo-linux-amd64-compatible-*.gz' --output "$RUNNER_TEMP/mihomo.gz"
+          gzip -d "$RUNNER_TEMP/mihomo.gz"
+          chmod +x "$RUNNER_TEMP/mihomo"
+          echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
+      - name: Check compiled rule sets
+        run: |
+          for ruleset in rules/*.mrs; do
+            python scripts/build_uk_banks.py --ruleset "$(basename "$ruleset" .mrs)" --check
+          done
       - run: python scripts/validate.py
         if: github.event_name == 'push' || github.event_name == 'pull_request'
       - run: python scripts/validate.py --check-urls

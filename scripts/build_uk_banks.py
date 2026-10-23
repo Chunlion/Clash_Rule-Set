@@ -89,33 +89,6 @@ def decode(mihomo: str, behavior: str, mrs_path: Path, temp: Path) -> set[str]:
     return {line.strip() for line in text_path.read_text(encoding="utf-8").splitlines() if line.strip()}
 
 
-def canonical(lines: set[str], behavior: str) -> set[tuple[str, str]]:
-    """按语义归一：`+.x` 与 `domain-suffix,x` 等价，裸域名与 `domain,x` 等价。
-
-    MRS 保存的是原始规则文本，历史上不同工具写出的前缀形式不同，比对前必须归一，
-    否则会误判为不同步并触发无意义的重建。
-    """
-    if behavior == "ipcidr":
-        return {("cidr", line.lower()) for line in lines}
-    result = set()
-    for line in lines:
-        rule = line.strip()
-        lowered = rule.lower()
-        for prefix, kind in (("domain-suffix,", "suffix"), ("domain-keyword,", "keyword"), ("keyword,", "keyword")):
-            if lowered.startswith(prefix):
-                result.add((kind, lowered.removeprefix(prefix)))
-                break
-        else:
-            if lowered.startswith("+.") or lowered.startswith("*."):
-                result.add(("suffix", lowered[2:]))
-            elif lowered.startswith("domain,"):
-                result.add(("exact", lowered.removeprefix("domain,")))
-            else:
-                # 裸域名即精确匹配；其余带逗号的规则类型保持原样。
-                result.add(("literal", lowered) if "," in lowered else ("exact", lowered))
-    return result
-
-
 def compile_rules(mihomo: str, behavior: str, lines: set[str], target: Path, temp: Path) -> None:
     text_path = temp / "payload.txt"
     text_path.write_text("".join(f"{line}\n" for line in sorted(lines)), encoding="utf-8")
@@ -212,12 +185,12 @@ def main() -> None:
         if args.check:
             if not mrs_path.is_file():
                 raise ValueError(f"{mrs_path.name} is missing; build the rule set first")
-            if canonical(decode(mihomo, behavior, mrs_path, Path(temp)), behavior) != canonical(lines, behavior):
+            if decode(mihomo, behavior, mrs_path, Path(temp)) != lines:
                 raise ValueError(f"{mrs_path.name} is out of sync; rebuild the rules")
         else:
             built = Path(temp) / f"{args.ruleset}.mrs"
             compile_rules(mihomo, behavior, lines, built, Path(temp))
-            if canonical(decode(mihomo, behavior, built, Path(temp)), behavior) != canonical(lines, behavior):
+            if decode(mihomo, behavior, built, Path(temp)) != lines:
                 raise ValueError(f"{args.ruleset}: rebuilt MRS does not reproduce the source rules")
             mrs_path.write_bytes(built.read_bytes())
 
