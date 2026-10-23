@@ -63,12 +63,6 @@ python scripts/build_uk_banks.py --ruleset <名称> --mihomo /path/to/mihomo --c
 # 不带 --ruleset 则处理全部规则集；domain_keyword_set 会随 MRS 一同产出为 *-keyword-mihomo.yaml
 ```
 
-> [!IMPORTANT]
-> **公开 / 本地边界**
->
-> 本仓库只保存可直接公开的内容：四个配置文件、`rules/` 下的规则源与产物、`scripts/` 校验与构建脚本。
-> 含订阅链接、Tailscale 密钥、内网地址、面板端口的设备定制配置一律只留在本地，由 `.gitignore` 拦截，CI 也会在提交时校验；它们再从公开仓库拉取 `rules/*` 作为自己的规则源。
-
 ---
 
 ## 📥 快速导入
