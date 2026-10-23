@@ -55,14 +55,6 @@
 
 </details>
 
-```bash
-# 改完 rules/<名称>.yaml 后重新生成 MRS
-python scripts/build_uk_banks.py --ruleset <名称> --mihomo /path/to/mihomo
-# 深度校验：确认 YAML 源能完整重建已发布的 MRS（CI 不做此项，需本地核心）
-python scripts/build_uk_banks.py --ruleset <名称> --mihomo /path/to/mihomo --check
-# 不带 --ruleset 则处理全部规则集；domain_keyword_set 会随 MRS 一同产出为 *-keyword-mihomo.yaml
-```
-
 ---
 
 ## 📥 快速导入
