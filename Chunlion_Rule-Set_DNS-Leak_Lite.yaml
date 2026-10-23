@@ -316,11 +316,13 @@ rule-providers:
   telegram_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs"}
   google_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs"}
   google_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.mrs"}
-  github_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs"}
-  apple_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs"}
-  twitter_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/twitter.mrs"}
-  twitter_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.mrs"}
-  microsoft_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs"}
+  # 可选软件组规则源：Lite 默认不启用，与上方被注释的 GitHub / Apple / Twitter / Microsoft
+  # 策略组及对应 RULE-SET 规则一起解注释后再生效。存量 provider 无规则引用时不会被下载。
+  # github_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs"}
+  # apple_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs"}
+  # twitter_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/twitter.mrs"}
+  # twitter_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.mrs"}
+  # microsoft_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs"}
   cryptocurrency_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-cryptocurrency.mrs"}
   crypto_extra_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/Crypto-extra.mrs"}
   paypal_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/paypal.mrs"}

@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import argparse
 import ipaddress
-import json
 import re
+import shutil
 import subprocess
 import tempfile
 from pathlib import Path
@@ -13,7 +13,6 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 RULES_DIR = ROOT / "rules"
-SING_BOX_RULESETS = frozenset({"UK-banks", "Crypto-extra"})
 LABEL_PATTERN = r"[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
 DOMAIN_PATTERN = rf"(?:{LABEL_PATTERN}\.)+{LABEL_PATTERN}"
 # fake-ip-filter 的通配后缀：任一标签可为 *（Mihomo 后缀匹配将 * 当作通配标签，
@@ -135,11 +134,6 @@ def write_side_outputs(ruleset: str, source: dict[str, list[str]]) -> None:
             yaml.safe_dump({"payload": [f"DOMAIN-REGEX,{pattern}" for pattern in regexes]}, sort_keys=False),
             encoding="utf-8",
         )
-    if ruleset in SING_BOX_RULESETS:
-        sing_box = {"version": 1, "rules": [{"domain_suffix": sorted(source["domain_suffix_set"])}]}
-        (RULES_DIR / f"{ruleset}-sing-box.json").write_text(
-            json.dumps(sing_box, indent=2) + "\n", encoding="utf-8"
-        )
     keywords = keyword_lines(source, RULES_DIR / f"{ruleset}.yaml")
     if keywords:
         (RULES_DIR / f"{ruleset}-keyword-mihomo.yaml").write_text(
@@ -157,11 +151,6 @@ def check_side_outputs(ruleset: str, source: dict[str, list[str]]) -> None:
         actual = yaml.safe_load((RULES_DIR / f"{ruleset}-regex-mihomo.yaml").read_text(encoding="utf-8"))
         if actual != expected:
             raise ValueError(f"{ruleset}-regex-mihomo.yaml is out of sync; rebuild the rules")
-    if ruleset in SING_BOX_RULESETS:
-        expected = {"version": 1, "rules": [{"domain_suffix": sorted(source["domain_suffix_set"])}]}
-        actual = json.loads((RULES_DIR / f"{ruleset}-sing-box.json").read_text(encoding="utf-8"))
-        if actual != expected:
-            raise ValueError(f"{ruleset}-sing-box.json is out of sync; rebuild the rules")
     keywords = keyword_lines(source, RULES_DIR / f"{ruleset}.yaml")
     keyword_path = RULES_DIR / f"{ruleset}-keyword-mihomo.yaml"
     if keywords:
@@ -171,6 +160,16 @@ def check_side_outputs(ruleset: str, source: dict[str, list[str]]) -> None:
             raise ValueError(f"{ruleset}-keyword-mihomo.yaml is out of sync; rebuild the rules")
     elif keyword_path.exists():
         raise ValueError(f"{ruleset}-keyword-mihomo.yaml is stale; the source has no keyword rules")
+
+
+def resolve_mihomo(path: str) -> str:
+    """MRS 编译依赖外部 mihomo 核心；缺失时给出可执行的提示，而不是 subprocess 的裸 traceback。"""
+    resolved = shutil.which(path) or (path if Path(path).is_file() else None)
+    if resolved is None:
+        raise SystemExit(
+            f"mihomo not found: {path!r}. 用 --mihomo 指向 mihomo 可执行文件（版本需与产出 MRS 的核心一致）。"
+        )
+    return resolved
 
 
 def main() -> None:
@@ -209,15 +208,16 @@ def main() -> None:
         return
 
     with tempfile.TemporaryDirectory(prefix=f"{args.ruleset.lower()}-") as temp:
+        mihomo = resolve_mihomo(args.mihomo)
         if args.check:
             if not mrs_path.is_file():
                 raise ValueError(f"{mrs_path.name} is missing; build the rule set first")
-            if canonical(decode(args.mihomo, behavior, mrs_path, Path(temp)), behavior) != canonical(lines, behavior):
+            if canonical(decode(mihomo, behavior, mrs_path, Path(temp)), behavior) != canonical(lines, behavior):
                 raise ValueError(f"{mrs_path.name} is out of sync; rebuild the rules")
         else:
             built = Path(temp) / f"{args.ruleset}.mrs"
-            compile_rules(args.mihomo, behavior, lines, built, Path(temp))
-            if canonical(decode(args.mihomo, behavior, built, Path(temp)), behavior) != canonical(lines, behavior):
+            compile_rules(mihomo, behavior, lines, built, Path(temp))
+            if canonical(decode(mihomo, behavior, built, Path(temp)), behavior) != canonical(lines, behavior):
                 raise ValueError(f"{args.ruleset}: rebuilt MRS does not reproduce the source rules")
             mrs_path.write_bytes(built.read_bytes())
 

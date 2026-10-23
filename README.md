@@ -51,7 +51,6 @@
 | `rules/*.yaml` | 规则源 | 唯一可编辑的规则定义，支持 `domain_set` / `domain_suffix_set` / `domain_keyword_set` / `domain_regex_set` / `ip_cidr_set` |
 | `rules/*.mrs` | 规则产物 | 由同名 YAML 编译生成，供 Mihomo 引用 |
 | `rules/*-keyword-mihomo.yaml` | 关键字规则产物 | `domain_keyword_set` 的编译结果；`DOMAIN-KEYWORD` 无法编入 MRS，由配置以 `behavior: classical, format: yaml` 引用 |
-| `rules/*-sing-box.json` | 归档产物 | 保留的历史输出，当前配置未引用 |
 
 </details>
 
