@@ -1,0 +1,4 @@
+# 英国运营商 VoWiFi 网关地址。
+# 修改后运行 scripts/build_uk_banks.py --ruleset UK-wifi-call-ip 重新生成 MRS。
+ip_cidr_set:
+  - 124.6.181.102/32

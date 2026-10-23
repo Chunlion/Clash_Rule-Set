@@ -1,0 +1,8 @@
+# Instagram 域名；keyword 覆盖未单独登记的社交子域。
+# 修改后运行 scripts/build_uk_banks.py --ruleset instagram_domain 重新生成 MRS。
+domain_suffix_set:
+  - cdninstagram.com
+  - instagr.am
+  - instagram.com
+domain_keyword_set:
+  - instagram

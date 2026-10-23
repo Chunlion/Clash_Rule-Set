@@ -511,11 +511,22 @@ def check_public_boundary() -> None:
     print(f"PASS public boundary: {len(tracked)} tracked files, no private configs or credentials")
 
 
+def check_rule_set_sources() -> None:
+    """每个 MRS 产物都必须有同名 YAML 源，MRS 只是可重建的编译结果。"""
+    rules_dir = ROOT / "rules"
+    artifacts = sorted(rules_dir.glob("*.mrs"))
+    missing = [mrs.name for mrs in artifacts if not (rules_dir / f"{mrs.stem}.yaml").is_file()]
+    if missing:
+        raise AssertionError(f"rule sets without a YAML source: {missing}")
+    print(f"PASS rule sources: {len(artifacts)} rule sets have a YAML source")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Validate Clash rule-set configs")
     parser.add_argument("--check-urls", action="store_true", help="probe every remote MRS rule URL")
     args = parser.parse_args()
     check_public_boundary()
+    check_rule_set_sources()
     for stem in PAIRS:
         validate_pair(stem)
     if args.check_urls:

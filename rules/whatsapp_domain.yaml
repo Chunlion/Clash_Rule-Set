@@ -1,0 +1,11 @@
+# WhatsApp 域名；graph.facebook.com 为登录与消息接口。
+# 修改后运行 scripts/build_uk_banks.py --ruleset whatsapp_domain 重新生成 MRS。
+domain_set:
+  - graph.facebook.com
+domain_suffix_set:
+  - bintray.com
+  - whatsapp.biz
+  - whatsapp.com
+  - whatsapp.net
+domain_keyword_set:
+  - whatsapp

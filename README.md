@@ -48,11 +48,18 @@
 | `Chunlion_Rule-Set_DNS-Leak.js` | 完整 JS | 为已有订阅注入完整策略与规则 |
 | `Chunlion_Rule-Set_DNS-Leak_Lite.yaml` | Lite YAML | 保留核心 DNS、防泄露和常用服务分流 |
 | `Chunlion_Rule-Set_DNS-Leak_Lite.js` | Lite JS | 轻量覆写，适合节点较多或低资源设备 |
-| `rules/*.yaml` | 规则源 | 自定义分流规则的唯一可编辑源文件 |
-| `rules/*.mrs` | 规则产物 | 由对应 YAML 编译生成，供 Mihomo 引用 |
+| `rules/*.yaml` | 规则源 | 唯一可编辑的规则定义，支持 `domain_set` / `domain_suffix_set` / `domain_keyword_set` / `domain_regex_set` / `ip_cidr_set` |
+| `rules/*.mrs` | 规则产物 | 由同名 YAML 编译生成，供 Mihomo 引用 |
 | `rules/*-sing-box.json` | 归档产物 | 保留的历史输出，当前配置未引用 |
 
 </details>
+
+```bash
+# 改完 rules/<名称>.yaml 后重新生成 MRS
+python scripts/build_uk_banks.py --ruleset <名称> --mihomo /path/to/mihomo
+# 深度校验：确认 YAML 源能完整重建已发布的 MRS（CI 不做此项，需本地核心）
+python scripts/build_uk_banks.py --ruleset <名称> --mihomo /path/to/mihomo --check
+```
 
 > [!IMPORTANT]
 > **公开 / 本地边界**

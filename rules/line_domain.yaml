@@ -1,0 +1,11 @@
+# LINE 域名。
+# 修改后运行 scripts/build_uk_banks.py --ruleset line_domain 重新生成 MRS。
+domain_suffix_set:
+  - lin.ee
+  - line-apps.com
+  - line-cdn.net
+  - line-scdn.net
+  - line.me
+  - linecorp.com
+  - naver.jp
+  - nhncorp.jp

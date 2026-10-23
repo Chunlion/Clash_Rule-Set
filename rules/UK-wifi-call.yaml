@@ -1,0 +1,16 @@
+# 英国运营商 VoWiFi 网关与鉴权域名。
+# 修改后运行 scripts/build_uk_banks.py --ruleset UK-wifi-call 重新生成 MRS。
+domain_set:
+  - crl.t-mobile.com
+  - epdg.ims.2degrees.net.nz
+  - primgw.vowifi2.spcsdns.net
+  - sentitlement2.mobile.att.net
+  - vvm.mobile.att.net
+  - wo.vzwwo.com
+domain_suffix_set:
+  - entsrv-uk.vodafone.com
+  - gspe1-ssl.ls.apple.com
+  - mcc234.pub.3gppnetwork.org
+  - vuk-gto.prod.ondemandconnectivity.com
+domain_keyword_set:
+  - epdg.epc
