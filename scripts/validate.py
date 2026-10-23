@@ -110,24 +110,50 @@ process.stdout.write(JSON.stringify(config));
 """
 
 
+class DuplicateKeyLoader(yaml.SafeLoader):
+    """拒绝显式重复键。
+
+    PyYAML 默认让后出现的键静默覆盖前者：手维护的长配置里写重一个 `rules:` 或 `dns:`
+    段落，等于悄悄丢掉半份配置且无任何告警。合并键（`<<`）的覆盖语义是 YAML 规范行为，
+    这里只查显式键。
+    """
+
+    def construct_mapping(self, node: Any, deep: bool = False) -> Any:
+        seen: set[Any] = set()
+        for key_node, _ in node.value:
+            if key_node.tag == "tag:yaml.org,2002:merge":
+                continue
+            key = self.construct_object(key_node, deep=deep)
+            if key in seen:
+                raise yaml.YAMLError(f"duplicate key {key!r} (line {key_node.start_mark.line + 1})")
+            seen.add(key)
+        return super().construct_mapping(node, deep)
+
+
 def load_yaml(path: Path) -> dict[str, Any]:
     with path.open(encoding="utf-8") as file:
-        config = yaml.safe_load(file)
+        try:
+            config = yaml.load(file, Loader=DuplicateKeyLoader)
+        except yaml.YAMLError as error:
+            raise AssertionError(f"{path.name}: invalid YAML: {error}") from error
     if not isinstance(config, dict):
         raise AssertionError(f"{path.name}: top-level config must be a mapping")
     return config
 
 
 def load_js(path: Path, initial_config: dict[str, Any] | None = None) -> dict[str, Any]:
-    subprocess.run(["node", "--check", str(path)], check=True, capture_output=True, text=True)
-    result = subprocess.run(
-        ["node", "-e", NODE_RENDER, str(path)],
-        check=True,
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        input=json.dumps(initial_config or {"proxies": [], "proxy-providers": {}}),
-    )
+    try:
+        subprocess.run(["node", "--check", str(path)], check=True, capture_output=True, text=True)
+        result = subprocess.run(
+            ["node", "-e", NODE_RENDER, str(path)],
+            check=True,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            input=json.dumps(initial_config or {"proxies": [], "proxy-providers": {}}),
+        )
+    except FileNotFoundError as error:
+        raise AssertionError("node not found; install Node.js to render the JS configs") from error
     config = json.loads(result.stdout)
     if not isinstance(config, dict):
         raise AssertionError(f"{path.name}: main() must return a config object")

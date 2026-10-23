@@ -12,3 +12,9 @@
 
 # 本地工作记录
 /.workbuddy/
+
+# Python 运行时缓存与系统杂项
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
