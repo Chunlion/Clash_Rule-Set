@@ -19,8 +19,23 @@ PAIRS = (
 BUILTIN_TARGETS = {"DIRECT", "REJECT", "REJECT-DROP", "PASS"}
 QUIC_BLOCK_RULE = "AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((OR,((RULE-SET,cn_domain),(RULE-SET,private_domain),(RULE-SET,private_ip),(RULE-SET,cn_ip)))))),REJECT"
 RULE_PROVIDER_SIZE_LIMIT = 8 * 1024 * 1024
-RULE_PROVIDER_BEHAVIORS = {"domain", "ipcidr"}
-RULE_PROVIDER_FORMATS = {"mrs"}
+# behavior 与 format 必须配对：domain/ipcidr 走 MRS 二进制集，classical 走 YAML 文本集
+# （如 rules/<名称>-keyword-mihomo.yaml，DOMAIN-KEYWORD 等无法编译为 MRS 的条目）。
+RULE_PROVIDER_FORMATS_BY_BEHAVIOR = {
+    "domain": {"mrs"},
+    "ipcidr": {"mrs"},
+    "classical": {"yaml"},
+}
+# fake-ip-filter 的规范收敛形态：只允许 rule-set 引用，内联条目一律移入
+# rules/fakeip-filter-extra.yaml——改一处，六份配置同时生效。
+EXPECTED_FAKEIP_FILTER = [
+    "rule-set:fakeip_filter",
+    "rule-set:fakeip_filter_extra",
+    "rule-set:vowifi",
+    "rule-set:cn_domain",
+    "rule-set:private_domain",
+    "rule-set:add_direct_domain",
+]
 LOCAL_RULE_URL_PREFIX = "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/"
 # 只允许公开内容进仓库：设备定制配置与运行时状态必须留在本地。
 PRIVATE_CONFIG_NAMES = (
@@ -119,15 +134,14 @@ def load_js(path: Path, initial_config: dict[str, Any] | None = None) -> dict[st
     return config
 
 
-def validate_local_mrs_rule_provider(name: str, provider_name: str, provider: dict[str, Any]) -> None:
+def validate_local_rule_provider(name: str, provider_name: str, provider: dict[str, Any]) -> None:
+    """本地规则 URL 必须指向仓库内真实产物：domain/ipcidr 为 .mrs，classical 为 .yaml。"""
     url = provider.get("url", "")
     if not url.startswith(LOCAL_RULE_URL_PREFIX):
         return
-    if provider.get("format") != "mrs":
-        raise AssertionError(f"{name}: local rule provider {provider_name!r} must use MRS format")
-
+    expected_suffix = ".mrs" if provider.get("behavior") in {"domain", "ipcidr"} else ".yaml"
     rule_path = (ROOT / url.removeprefix(LOCAL_RULE_URL_PREFIX)).resolve()
-    if not rule_path.is_relative_to(ROOT) or not rule_path.is_file() or rule_path.suffix != ".mrs":
+    if not rule_path.is_relative_to(ROOT) or not rule_path.is_file() or rule_path.suffix != expected_suffix:
         raise AssertionError(f"{name}: local rule provider {provider_name!r} file is missing")
 
 
@@ -156,12 +170,20 @@ def validate_references(name: str, config: dict[str, Any]) -> None:
                 raise AssertionError(f"{name}: group {group['name']!r} references {target!r}")
 
     dns = config.get("dns", {})
-    for item in dns.get("fake-ip-filter", []):
-        if item.startswith("rule-set:"):
-            provider_name = item.removeprefix("rule-set:")
-            provider = providers.get(provider_name)
-            if not provider or provider.get("behavior") not in {"domain", "classical"}:
-                raise AssertionError(f"{name}: invalid fake-ip rule provider {provider_name!r}")
+    fake_ip_filter = dns.get("fake-ip-filter", [])
+    inline_entries = [item for item in fake_ip_filter if not item.startswith("rule-set:")]
+    if inline_entries:
+        raise AssertionError(
+            f"{name}: fake-ip-filter must reference rule sets only; "
+            f"move inline entries into rules/fakeip-filter-extra.yaml: {inline_entries}"
+        )
+    if "rule-set:fakeip_filter_extra" not in fake_ip_filter:
+        raise AssertionError(f"{name}: fake-ip-filter must reference rule-set:fakeip_filter_extra")
+    for item in fake_ip_filter:
+        provider_name = item.removeprefix("rule-set:")
+        provider = providers.get(provider_name)
+        if not provider or provider.get("behavior") not in {"domain", "classical"}:
+            raise AssertionError(f"{name}: invalid fake-ip rule provider {provider_name!r}")
 
     for policy_key in dns.get("nameserver-policy", {}):
         if policy_key.startswith("rule-set:"):
@@ -195,11 +217,15 @@ def validate_references(name: str, config: dict[str, Any]) -> None:
 
         behavior = provider.get("behavior")
         rule_format = provider.get("format")
-        if behavior not in RULE_PROVIDER_BEHAVIORS:
+        allowed_formats = RULE_PROVIDER_FORMATS_BY_BEHAVIOR.get(behavior)
+        if allowed_formats is None:
             raise AssertionError(f"{name}: invalid rule provider behavior {behavior!r}")
-        if rule_format not in RULE_PROVIDER_FORMATS:
-            raise AssertionError(f"{name}: invalid rule provider format {rule_format!r}")
-        validate_local_mrs_rule_provider(name, provider_name, provider)
+        if rule_format not in allowed_formats:
+            raise AssertionError(
+                f"{name}: rule provider {provider_name!r} with behavior {behavior!r} "
+                f"must use format {'/'.join(sorted(allowed_formats))}"
+            )
+        validate_local_rule_provider(name, provider_name, provider)
 
 
 def normalized_groups(config: dict[str, Any]) -> list[dict[str, Any]]:
@@ -229,6 +255,9 @@ def validate_pair(stem: str) -> None:
     dns = yaml_config["dns"]
     if dns.get("use-hosts") is not True or dns.get("use-system-hosts") is not True:
         raise AssertionError(f"{stem}: configured and system hosts must be enabled")
+    # fake-ip-filter 只允许规范化的六条 rule-set 引用；JS 侧由 CRITICAL_KEYS 的 dns 一致性兜底。
+    if dns.get("fake-ip-filter") != EXPECTED_FAKEIP_FILTER:
+        raise AssertionError(f"{stem}: fake-ip-filter must match the canonical rule-set references")
 
     expected_private_addresses = [
         "127.0.0.0/8",

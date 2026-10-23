@@ -1,0 +1,61 @@
+# Fake-IP 过滤补充集（单一真源）：各配置的 fake-ip-filter 只保留 rule-set 引用，
+# 手工条目全部收敛到本文件——改一处，六份配置同时生效，不再有内联副本。
+#
+# 收录标准（fake-ip-filter-mode: blacklist，每多一条就削弱一分分流精度）：
+#   1. 确实需要真实 IP：推送、时间同步、打洞、局域网、反向解析、连通性探测；
+#   2. 不被外部 fakeip_filter（DustinWin）与 vowifi / cn_domain / private_domain 覆盖。
+#
+# 已核删（对 DustinWin fakeip-filter.mrs 逐条 grep 验证确被覆盖）：
+#   +.3gppnetwork.org（外部集与 vowifi 双覆盖）
+#   localhost.ptlogin2.qq.com / localhost.sec.qq.com（外部集覆盖）
+#   time.windows.com / time.google.com / time.apple.com（外部集覆盖）
+#   time-ios.apple.com（外部集未收录，但被下方 +.apple.com 吸收）
+#
+# 通配后缀的展开语义（Mihomo DomainSet，*.x 的 * 只匹配单个标签）：
+#   stun.*   → stun.X（stun 打头两级）与 X.stun.<任意深度>（eu.stun.twilio.com）
+#   stun.*.* → stun.X.Y（stun 打头三级）与 X.Y.stun.<任意深度>
+#   两者合起来覆盖常见 STUN/TURN 形态；stun 打头四级以上（stun.l.google.com）
+#   由外部 fakeip_filter 的精确条目覆盖（已核实收录 stun.l.google.com）。
+#   历史上的裸写法 stun.*（内联时按精确域名匹配）是死条目，已废弃。
+#
+# 保留说明：+.lan / +.local / +.home.arpa / +.msftconnecttest.com / +.msftncsi.com
+#   外部集亦有收录，仍留本地冗余——外部集的增删不应影响局域网与连通性探测。
+#
+# 修改后运行 scripts/build_uk_banks.py --ruleset fakeip-filter-extra --mihomo <mihomo 路径> 重新生成 MRS。
+domain_set:
+  # FCM / Google Play 推送与设备预配。外部集无任何 google 条目（grep 零命中），
+  # 删除会导致 Android 推送与唤醒拿到 Fake-IP。勿以 *.google.com 代替——
+  # 那将令全部 Google 服务回到真实 IP，反而扩大泄露面。
+  - mtalk.google.com
+  - mtalk4.google.com
+  - mtalk-staging.google.com
+  - mtalk-dev.google.com
+  - alt1-mtalk.google.com
+  - alt2-mtalk.google.com
+  - alt3-mtalk.google.com
+  - alt4-mtalk.google.com
+  - alt5-mtalk.google.com
+  - alt6-mtalk.google.com
+  - alt7-mtalk.google.com
+  - alt8-mtalk.google.com
+  - android.apis.google.com
+  - device-provisioning.googleapis.com
+  - firebaseinstallations.googleapis.com
+  - fcm.googleapis.com
+  - fcm-xmpp.googleapis.com
+  - iid.googleapis.com
+domain_suffix_set:
+  - ts.net                    # Tailscale MagicDNS
+  - lan                       # 局域网：路由器、NAS、打印机
+  - local                     # mDNS / Bonjour
+  - home.arpa                 # RFC 8375 家庭网络域名（缺口一：Egern 侧已有 home.arpa → system）
+  - apple.com                 # APNs 推送与唤醒（缺口二：此前仅在 sniffer.skip-domain 排除嗅探）
+  - in-addr.arpa              # IPv4 反向解析
+  - ip6.arpa                  # IPv6 反向解析
+  - ntp.org                   # NTP；外部集只收 pool.ntp.org 等，未覆盖 ntp.org 本身
+  - msftconnecttest.com       # Windows 连通性探测
+  - msftncsi.com              # Windows NCSI 探测
+  - stun.*                    # STUN：stun.X 与 X.stun.<任意深度>（eu.stun.twilio.com）
+  - stun.*.*                  # STUN：stun.X.Y 与 X.Y.stun.<任意深度>
+  - turn.*                    # TURN：turn.X 与 X.turn.<任意深度>
+  - turn.*.*                  # TURN：turn.X.Y 与 X.Y.turn.<任意深度>

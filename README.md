@@ -50,6 +50,7 @@
 | `Chunlion_Rule-Set_DNS-Leak_Lite.js` | Lite JS | 轻量覆写，适合节点较多或低资源设备 |
 | `rules/*.yaml` | 规则源 | 唯一可编辑的规则定义，支持 `domain_set` / `domain_suffix_set` / `domain_keyword_set` / `domain_regex_set` / `ip_cidr_set` |
 | `rules/*.mrs` | 规则产物 | 由同名 YAML 编译生成，供 Mihomo 引用 |
+| `rules/*-keyword-mihomo.yaml` | 关键字规则产物 | `domain_keyword_set` 的编译结果；`DOMAIN-KEYWORD` 无法编入 MRS，由配置以 `behavior: classical, format: yaml` 引用 |
 | `rules/*-sing-box.json` | 归档产物 | 保留的历史输出，当前配置未引用 |
 
 </details>
@@ -59,6 +60,7 @@
 python scripts/build_uk_banks.py --ruleset <名称> --mihomo /path/to/mihomo
 # 深度校验：确认 YAML 源能完整重建已发布的 MRS（CI 不做此项，需本地核心）
 python scripts/build_uk_banks.py --ruleset <名称> --mihomo /path/to/mihomo --check
+# 不带 --ruleset 则处理全部规则集；domain_keyword_set 会随 MRS 一同产出为 *-keyword-mihomo.yaml
 ```
 
 > [!IMPORTANT]
@@ -285,14 +287,28 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 
 ### 5️⃣ fake-ip-filter 增强
 
-已将以下项纳入真实解析路径：
+Fake-IP 过滤已收敛为**单一真源**：六份配置的 `fake-ip-filter` 只保留六条 `rule-set:` 引用，全部手工条目集中在 `rules/fakeip-filter-extra.yaml`——改一处，六份配置同时生效。`scripts/validate.py` 强制该形态，内联条目无法通过校验。
 
-- `rule-set:fakeip_filter`（外部维护的 Fake-IP 兼容域名）
-- `rule-set:add_direct_domain`
-- `geosite:cn`（与 `rule-set:cn_domain` 同源，保留一份）
-- `geosite:private`（与 `rule-set:private_domain` 同源，保留一份）
-- 常见局域网/NTP/STUN/Windows 探测域名
-- `services.googleapis.cn` 映射至 `services.googleapis.com`，改善 Google Play 下载兼容性
+- `rule-set:fakeip_filter`（外部维护的 Fake-IP 兼容域名，DustinWin）
+- `rule-set:fakeip_filter_extra`（仓库自维护补充集，即原先的内联清单）
+- `rule-set:vowifi`（VoWiFi 网关与鉴权域名）
+- `rule-set:cn_domain` / `rule-set:private_domain` / `rule-set:add_direct_domain`
+
+`fakeip-filter-extra.yaml` 的收录标准：确实需要真实 IP（推送、时间同步、打洞、局域网、反向解析、连通性探测），且不被外部 `fakeip_filter` 覆盖：
+
+| 类别 | 条目 |
+| --- | --- |
+| FCM / Google Play | `mtalk.google.com` 等 12 个 mtalk 主机 + `android.apis.google.com` + 6 个 googleapis 精确域名 |
+| APNs 推送与唤醒 | `+.apple.com`（同时吸收 `time-ios.apple.com` 等时间同步主机） |
+| 家庭网络与局域网 | `+.home.arpa`（RFC 8375）、`+.lan`、`+.local` |
+| STUN / TURN 打洞 | `+.stun.*`、`+.stun.*.*`、`+.turn.*`、`+.turn.*.*`（覆盖 `eu.stun.twilio.com` 等前缀形态） |
+| 时间同步 | `+.ntp.org` |
+| 反向解析 | `+.in-addr.arpa`、`+.ip6.arpa` |
+| 连通性探测 | `+.msftconnecttest.com`、`+.msftncsi.com` |
+| Tailscale | `+.ts.net` |
+
+已核删（对 DustinWin 外部集逐条验证确被覆盖）：`+.3gppnetwork.org`、`localhost.ptlogin2.qq.com` / `localhost.sec.qq.com`、`time.windows.com` / `time.apple.com` / `time.google.com`。
+`stun` 打头四级以上的主机（如 `stun.l.google.com`）由外部 `fakeip_filter` 的精确条目覆盖；`+.lan` / `+.local` / `+.home.arpa` / `+.msftconnecttest.com` / `+.msftncsi.com` 外部集亦有收录，仍保留本地冗余——外部集的增删不应影响局域网与连通性探测。
 
 ### 6️⃣ TUN + DNS 劫持
 
@@ -323,7 +339,7 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
    - 同时使用 `emby_domain` 与 `emby_ip`，提升命中率。
 3. DNS 策略增强
    - `nameserver-policy` 增加 `add_direct_domain`，并与 `geosite:cn,private` 配合覆盖国内/私有域名（去除同源重复登记）。
-   - `fake-ip-filter` 增加国内、私有、直连规则以及更多局域网 / NTP / STUN / TURN / 反向解析域名，并补充 `home.arpa` 家庭网络后缀。
+   - `fake-ip-filter` 收敛为单一真源：六份配置只保留六条 `rule-set:` 引用，手工条目全部集中在 `rules/fakeip-filter-extra.yaml`（FCM/APNs/home.arpa/lan/local/ntp/stun/turn/反向解析/连通性探测），被外部集覆盖的冗余项已核删；validate.py 禁止内联条目回流。
    - `proxy-server-nameserver` 升级使用 `DoH (alidns 和 doh.pub)`。
    - JS 覆写会保留订阅中非公共的私有 DNS，以及与实际节点服务器域名匹配的 hosts 和 DNS policy，避免覆写后节点域名失效。
    - 显式启用配置 hosts 与系统 hosts，并为回环、私网、链路本地和 CGNAT/Tailscale 目标关闭嗅探。
@@ -348,6 +364,9 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 8. 节点选择增强
    - 完整版新增懒加载 `sticky-sessions` 全局均衡组；同一来源与目标的连接保持在同一节点，未选择该组时不进行测速。
    - 所有 `include-all` 动态组排除 `direct` 出站，避免全局测速误选直连；订阅信息节点过滤补充获取、版本、官址、已用、联系、说明、教程、关注等常见标签。
+9. 规则集构建修复与关键字拆分
+   - 修复构建脚本对 `behavior: domain` 文本格式的误用：此前产出的 5 个 MRS（VoWiFi / Instagram / LINE / Twitch / WhatsApp）整集静默失效，域名规则从未命中；现已重建并经运行判决确认恢复。
+   - `domain_keyword_set` 不再挤进 domain 载荷，改产出独立的 `*-keyword-mihomo.yaml`（classical YAML provider）。经逐一核对域名集覆盖后，仅保留 VoWiFi 的 `epdg.epc`：域名集只列英国 MCC 234，漫游时访属地运营商的 ePDG（`epdg.epc.mncXXX.mccYYY.pub.3gppnetwork.org`）无法穷举；Instagram / Twitch / WhatsApp 的关键字均被各自域名后缀完整覆盖，已移除。
 
 </details>
 

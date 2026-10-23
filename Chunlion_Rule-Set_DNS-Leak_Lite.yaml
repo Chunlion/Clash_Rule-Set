@@ -143,48 +143,12 @@ dns:
   respect-rules: true                                                   # 遵循规则  强制遵循规则顺序
   prefer-h3: false                                                      # 关闭 HTTP/3 支持
   fake-ip-filter:
-    - "mtalk.google.com"
-    - "mtalk4.google.com"
-    - "mtalk-staging.google.com"
-    - "mtalk-dev.google.com"
-    - "alt1-mtalk.google.com"
-    - "alt2-mtalk.google.com"
-    - "alt3-mtalk.google.com"
-    - "alt4-mtalk.google.com"
-    - "alt5-mtalk.google.com"
-    - "alt6-mtalk.google.com"
-    - "alt7-mtalk.google.com"
-    - "alt8-mtalk.google.com"
-    - "android.apis.google.com"
-    - "device-provisioning.googleapis.com"
-    - "firebaseinstallations.googleapis.com"
-    - "fcm.googleapis.com"
-    - "fcm-xmpp.googleapis.com"
-    - "iid.googleapis.com"
     - "rule-set:fakeip_filter"                                         # 真实解析  外部维护的 Fake-IP 兼容域名
+    - "rule-set:fakeip_filter_extra"                                   # 真实解析  仓库自维护补充集（FCM/APNs/home.arpa/stun/turn/ntp）
     - "rule-set:vowifi"                                                # 真实解析  VoWiFi 网关与鉴权域名
-    - "+.ts.net"                                                       # Tailscale MagicDNS
-    - "+.3gppnetwork.org"                                             # VoWiFi ePDG
-    - "+.lan"                                                           # 真实解析  局域网域名，避免路由器、NAS、打印机访问异常
-    - "+.local"                                                         # 真实解析  mDNS / Bonjour / 本地域名
-    - "+.home.arpa"                                                     # 真实解析  RFC 8375 家庭网络，部分路由器以此发布内网域名
     - "rule-set:cn_domain"                                              # 真实解析  国内域名，配合国内直连规则使用
     - "rule-set:private_domain"                                         # 真实解析  私有网络 / 内网相关域名
     - "rule-set:add_direct_domain"                                      # 真实解析  自定义直连域名规则集
-    - "+.msftconnecttest.com"                                           # 真实解析  Windows 网络连接测试
-    - "+.msftncsi.com"                                                  # 真实解析  Windows NCSI 网络状态检测
-    - "localhost.ptlogin2.qq.com"                                       # 真实解析  QQ 登录相关
-    - "localhost.sec.qq.com"                                            # 真实解析  QQ 安全登录相关
-    - "+.in-addr.arpa"                                                  # 真实解析  IPv4 反向解析
-    - "+.ip6.arpa"                                                      # 真实解析  IPv6 反向解析
-    - "stun.*"                                                          # 真实解析  常见 STUN 服务
-    - "+.stun.*.*"                                                      # 真实解析  多级 STUN 域名
-    - "+.turn.*.*"                                                      # 真实解析  TURN 中继服务
-    - "+.ntp.org"                                                       # 真实解析  NTP 时间同步服务
-    - "time.windows.com"                                                # 真实解析  Windows 时间同步
-    - "time.apple.com"                                                  # 真实解析  Apple 时间同步
-    - "time-ios.apple.com"                                              # 真实解析  iOS 时间同步
-    - "time.google.com"                                                 # 真实解析  Google 时间同步
 
   default-nameserver:
     - 223.5.5.5                                                         # 默认 DNS  阿里云，用于解析 DoH / DoT 服务器域名
@@ -264,6 +228,7 @@ rules:
   - AND,((NETWORK,UDP),(DST-PORT,500)),VoWiFi                           # VoWiFi IKE
   - AND,((NETWORK,UDP),(DST-PORT,4500)),VoWiFi                          # VoWiFi IPsec NAT-T
   - RULE-SET,vowifi,VoWiFi                                              # VoWiFi
+  - RULE-SET,vowifi_keyword,VoWiFi                                      # VoWiFi 漫游 ePDG（epdg.epc.*，域名集仅列 mcc234）
   - RULE-SET,vowifi_ip,VoWiFi,no-resolve                                # VoWiFi IP
 
   - RULE-SET,microsoft_cn_domain,DIRECT                                 # Microsoft中国
@@ -317,11 +282,13 @@ rules:
 # 规则来源 (
 rule-providers:
   fakeip_filter: { <<: *Anchor_DN, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter.mrs"}
+  fakeip_filter_extra: {type: http, interval: 86400, size-limit: 8388608, proxy: 一键代理, behavior: domain, format: mrs, url: 'https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/fakeip-filter-extra.mrs'}
   emby_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/666OS/rules@release/mihomo/domain/Emby.mrs"}
   emby_ip: { <<: *Anchor_IP, url: "https://cdn.jsdelivr.net/gh/666OS/rules@release/mihomo/ip/Emby.mrs"}
   add_direct_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/Seven1echo/Yaml@main/rules/Seven1_Direct_Domain.mrs"}
   add_emby: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/Chunlion/Clash-Icons@main/Emby.mrs"}
   vowifi: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/UK-wifi-call.mrs"}
+  vowifi_keyword: {type: http, interval: 86400, size-limit: 8388608, proxy: 一键代理, behavior: classical, format: yaml, url: 'https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/UK-wifi-call-keyword-mihomo.yaml'}
   vowifi_ip: { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/UK-wifi-call-ip.mrs"}
   douyin_domain: { <<: *Anchor_DN, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/douyin.mrs"}
   cn_ip: { <<: *Anchor_IP, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.mrs"}
