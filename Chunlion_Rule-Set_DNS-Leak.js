@@ -133,6 +133,7 @@ function main(config) {
     'auto-redirect': true,
     'strict-route': false,
     'endpoint-independent-nat': true,
+    // 大陆 IP 流量不进入 TUN，因此针对大陆落地 IP 的 IP 规则不会生效。
     'route-exclude-address-set': ['cn_ip']
   };
 
@@ -215,6 +216,7 @@ function main(config) {
       '+.3gppnetwork.org',
       '+.lan',
       '+.local',
+      '+.home.arpa',
       'rule-set:cn_domain',
       'rule-set:private_domain',
       'rule-set:add_direct_domain',
@@ -410,7 +412,6 @@ function main(config) {
     "apple_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/apple.mrs" },
 
     // IP 规则
-    "geolocation-!cn": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/geolocation-!cn.mrs" },
     "cn_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/cn.mrs" },
     "add_direct_domain": { type: "http", behavior: "domain", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/Seven1echo/Yaml@main/rules/Seven1_Direct_Domain.mrs" },
     "private_ip": { type: "http", behavior: "ipcidr", format: "mrs", interval: 86400, url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/private.mrs" },
@@ -480,7 +481,6 @@ function main(config) {
     "RULE-SET,netflix_ip,Streaming,no-resolve",
     "RULE-SET,cn_domain,DIRECT",
     "RULE-SET,cn_ip,DIRECT,no-resolve",
-    "RULE-SET,geolocation-!cn,一键代理",
     "MATCH,兜底流量"
   ];
 

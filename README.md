@@ -48,8 +48,17 @@
 | `Chunlion_Rule-Set_DNS-Leak.js` | 完整 JS | 为已有订阅注入完整策略与规则 |
 | `Chunlion_Rule-Set_DNS-Leak_Lite.yaml` | Lite YAML | 保留核心 DNS、防泄露和常用服务分流 |
 | `Chunlion_Rule-Set_DNS-Leak_Lite.js` | Lite JS | 轻量覆写，适合节点较多或低资源设备 |
+| `rules/*.yaml` | 规则源 | 自定义分流规则的唯一可编辑源文件 |
+| `rules/*.mrs` | 规则产物 | 由对应 YAML 编译生成，供 Mihomo 引用 |
+| `rules/*-sing-box.json` | 归档产物 | 保留的历史输出，当前配置未引用 |
 
 </details>
+
+> [!IMPORTANT]
+> **公开 / 本地边界**
+>
+> 本仓库只保存可直接公开的内容：四个配置文件、`rules/` 下的规则源与产物、`scripts/` 校验与构建脚本。
+> 含订阅链接、Tailscale 密钥、内网地址、面板端口的设备定制配置一律只留在本地，由 `.gitignore` 拦截，CI 也会在提交时校验；它们再从公开仓库拉取 `rules/*` 作为自己的规则源。
 
 ---
 
@@ -150,6 +159,9 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 
 > [!TIP]
 > 完整版适合需要细分服务和多种地区选择方式的用户；Lite 版减少后台测速与外部规则源，更适合节点较多或资源有限的设备。
+
+> [!NOTE]
+> 规则表以 `MATCH,兜底流量` 收尾：未命中国内域名、国内 IP 及各项服务规则的流量，统一由「🧰 兜底流量」组决定走代理还是直连。想让全部剩余流量强制走代理，把该组设为「一键代理」即可。
 
 ### ⚡ Lite 版分流界面
 
@@ -304,7 +316,7 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
    - 同时使用 `emby_domain` 与 `emby_ip`，提升命中率。
 3. DNS 策略增强
    - `nameserver-policy` 增加 `add_direct_domain`，并与 `geosite:cn,private` 配合覆盖国内/私有域名（去除同源重复登记）。
-   - `fake-ip-filter` 增加国内、私有、直连规则以及更多局域网/NTP/STUN/TURN/Xbox 探测域名。
+   - `fake-ip-filter` 增加国内、私有、直连规则以及更多局域网 / NTP / STUN / TURN / 反向解析域名，并补充 `home.arpa` 家庭网络后缀。
    - `proxy-server-nameserver` 升级使用 `DoH (alidns 和 doh.pub)`。
    - JS 覆写会保留订阅中非公共的私有 DNS，以及与实际节点服务器域名匹配的 hosts 和 DNS policy，避免覆写后节点域名失效。
    - 显式启用配置 hosts 与系统 hosts，并为回环、私网、链路本地和 CGNAT/Tailscale 目标关闭嗅探。
@@ -316,7 +328,7 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 5. 规则源优化
    - 规则源主要走 `cdn.jsdelivr.net` 多节点 CDN；GitHub Release 附件和本仓库 VoWiFi 规则集保留原地址，广告规则使用 anti-AD 官方地址。
    - 所有远程规则集通过“一键代理”更新；订阅源仍保持 `DIRECT`，避免首启代理依赖。
-   - 四份配置统一使用 PayPal 金融分流与 Crypto 加密货币分流。
+   - 各版本统一使用 PayPal 金融分流与 Crypto 加密货币分流。
 6. 连接层兼容
    - 移除 [Mihomo v1.19.27](https://github.com/MetaCubeX/mihomo/releases/tag/v1.19.27) 已废弃的 `global-client-fingerprint`；TLS 指纹改由订阅节点自身的 `client-fingerprint` 管理。
    - 设置 TCP Keep Alive 空闲 600 秒、探测间隔 60 秒，降低频繁探测带来的移动设备耗电。

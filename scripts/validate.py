@@ -22,6 +22,19 @@ RULE_PROVIDER_SIZE_LIMIT = 8 * 1024 * 1024
 RULE_PROVIDER_BEHAVIORS = {"domain", "ipcidr"}
 RULE_PROVIDER_FORMATS = {"mrs"}
 LOCAL_RULE_URL_PREFIX = "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/"
+# 只允许公开内容进仓库：设备定制配置与运行时状态必须留在本地。
+PRIVATE_CONFIG_NAMES = (
+    "F50.yaml",
+    "Sparkle.yaml",
+    "Bettbox.yaml",
+    "Tailscale.yaml",
+    "Egern 精细分流.yaml",
+)
+PRIVATE_PATH_PREFIXES = ("private-download/",)
+RUNTIME_STATE_NAMES = ("cache.db",)
+SECRET_MARKERS = (b"tskey-", b"auth-key:", b"token=", b"&sub=")
+# 本文件本身定义上述特征串，扫描时按定义跳过。
+SECRET_SCAN_EXEMPT = ("scripts/validate.py",)
 INFO_FILTER_TOKENS = (
     "获取",
     "下次",
@@ -461,10 +474,48 @@ def check_remote_urls() -> None:
         raise AssertionError(f"{len(failures)} unreachable rule source(s): {failures}")
 
 
+def check_public_boundary() -> None:
+    """确保私有设备配置与凭据从未进入版本库。"""
+    if not (ROOT / ".git").exists():
+        print("SKIP public boundary check: not a git working tree")
+        return
+    result = subprocess.run(["git", "ls-files", "-z"], cwd=ROOT, capture_output=True)
+    if result.returncode:
+        raise AssertionError("git ls-files failed; the public/local file boundary cannot be verified")
+    tracked = [path for path in result.stdout.decode("utf-8").split("\0") if path]
+
+    ignored = {
+        line.strip().lstrip("/")
+        for line in (ROOT / ".gitignore").read_text(encoding="utf-8").splitlines()
+        if line.strip() and not line.strip().startswith("#")
+    }
+    for name in PRIVATE_CONFIG_NAMES + RUNTIME_STATE_NAMES:
+        if name not in ignored:
+            raise AssertionError(f".gitignore must keep {name!r} local-only")
+
+    for path in tracked:
+        if (
+            path in PRIVATE_CONFIG_NAMES
+            or path in RUNTIME_STATE_NAMES
+            or path.startswith(PRIVATE_PATH_PREFIXES)
+        ):
+            raise AssertionError(f"private file {path!r} must not be tracked")
+        if path in SECRET_SCAN_EXEMPT:
+            continue
+        content = (ROOT / path).read_bytes()
+        for marker in SECRET_MARKERS:
+            if marker in content:
+                raise AssertionError(
+                    f"tracked file {path!r} contains credential marker {marker.decode()!r}"
+                )
+    print(f"PASS public boundary: {len(tracked)} tracked files, no private configs or credentials")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Validate Clash rule-set configs")
     parser.add_argument("--check-urls", action="store_true", help="probe every remote MRS rule URL")
     args = parser.parse_args()
+    check_public_boundary()
     for stem in PAIRS:
         validate_pair(stem)
     if args.check_urls:

@@ -1,4 +1,14 @@
 # Private local configuration
-Tailscale.yaml
+# 设备定制配置内含订阅凭据与 Tailscale 密钥，只允许留在本地，禁止提交或推送。
+/F50.yaml
+/Sparkle.yaml
+/Bettbox.yaml
+/Tailscale.yaml
 /Egern 精细分流.yaml
 /private-download/
+
+# Mihomo 运行时状态：store-selected / store-fake-ip 会写入节点选择与 Fake-IP 映射。
+/cache.db
+
+# 本地工作记录
+/.workbuddy/

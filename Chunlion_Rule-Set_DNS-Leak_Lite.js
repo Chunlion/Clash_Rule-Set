@@ -135,6 +135,7 @@ function main(config) {
     'auto-redirect': true,
     'strict-route': false,
     'endpoint-independent-nat': true,
+    // 大陆 IP 流量不进入 TUN，因此针对大陆落地 IP 的 IP 规则不会生效。
     'route-exclude-address-set': ['cn_ip']
   };
 
@@ -217,6 +218,7 @@ function main(config) {
       '+.3gppnetwork.org',
       '+.lan',
       '+.local',
+      '+.home.arpa',
       'rule-set:cn_domain',
       'rule-set:private_domain',
       'rule-set:add_direct_domain',
@@ -380,7 +382,6 @@ function main(config) {
     // 区域划分兜底
     "RULE-SET,cn_domain,DIRECT",
     "RULE-SET,cn_ip,DIRECT,no-resolve",
-    "RULE-SET,geolocation_not_cn_domain,一键代理",
     "MATCH,兜底流量"
   ];
 
@@ -430,8 +431,7 @@ function main(config) {
     uk_banks_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/rules/UK-banks.mrs" },
     games_cn_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-games@cn.mrs" },
     games_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-games.mrs" },
-    cn_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs" },
-    geolocation_not_cn_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs" }
+    cn_domain: { type: 'http', interval: 86400, behavior: 'domain', format: 'mrs', url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs" }
   };
   for (const provider of Object.values(config['rule-providers'])) {
     if (provider.type === 'http') {

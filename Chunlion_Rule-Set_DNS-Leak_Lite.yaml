@@ -84,7 +84,7 @@ tun:
   auto-redirect: true                                                   # 自动定向  自动将流量重定向至 TUN  （仅 Linux 生效）
   strict-route: false                                                   # 路由模式  严格路由模式
   endpoint-independent-nat: true                                        # 端点无关  NAT（提高 NAT 类型兼容性，适用于 P2P 和游戏）
-  route-exclude-address-set: [cn_ip]                                    # 绕过大陆  匹配大陆 IP-CIDR 的流量不进入 TUN
+  route-exclude-address-set: [cn_ip]                                    # 绕过大陆  命中大陆 IP 的流量不进入 TUN；此类连接不经内核，针对大陆落地 IP 的 IP 规则不会生效
 
 # 嗅探功能
 sniffer:
@@ -167,6 +167,7 @@ dns:
     - "+.3gppnetwork.org"                                             # VoWiFi ePDG
     - "+.lan"                                                           # 真实解析  局域网域名，避免路由器、NAS、打印机访问异常
     - "+.local"                                                         # 真实解析  mDNS / Bonjour / 本地域名
+    - "+.home.arpa"                                                     # 真实解析  RFC 8375 家庭网络，部分路由器以此发布内网域名
     - "rule-set:cn_domain"                                              # 真实解析  国内域名，配合国内直连规则使用
     - "rule-set:private_domain"                                         # 真实解析  私有网络 / 内网相关域名
     - "rule-set:add_direct_domain"                                      # 真实解析  自定义直连域名规则集
@@ -259,7 +260,7 @@ rules:
   # 服务分流
   - RULE-SET,private_domain,DIRECT                                      # Private Domain
   - RULE-SET,private_ip,DIRECT,no-resolve                               # Private IP
-  - DOMAIN-SUFFIX,3gppnetwork.org,VoWiFi                               # VoWiFi ePDG
+  - DOMAIN-SUFFIX,3gppnetwork.org,VoWiFi                                # VoWiFi ePDG
   - AND,((NETWORK,UDP),(DST-PORT,500)),VoWiFi                           # VoWiFi IKE
   - AND,((NETWORK,UDP),(DST-PORT,4500)),VoWiFi                          # VoWiFi IPsec NAT-T
   - RULE-SET,vowifi,VoWiFi                                              # VoWiFi
@@ -311,8 +312,7 @@ rules:
   # 区域划分兜底
   - RULE-SET,cn_domain,DIRECT                                           # 中国域名
   - RULE-SET,cn_ip,DIRECT,no-resolve                                    # 中国IP
-  - RULE-SET,geolocation_not_cn_domain,一键代理                          # 排除国内
-  - MATCH,兜底流量                                                       # 兜底规则
+  - MATCH,兜底流量                                                       # 兜底规则  未命中以上规则的流量统一交给兜底组，由该组自选直连或代理
 
 # 规则来源 (
 rule-providers:
@@ -362,5 +362,4 @@ rule-providers:
   games_cn_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-games@cn.mrs"}
   games_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-games.mrs"}
   cn_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs"}
-  geolocation_not_cn_domain: { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs"}
 # ※※※※※※※※※※※※※※※ 配置结束 ※※※※※※※※※※※※※※※
