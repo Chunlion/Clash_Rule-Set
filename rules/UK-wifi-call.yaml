@@ -1,9 +1,9 @@
-# 英国运营商 VoWiFi 网关与鉴权域名。
+# 英国运营商 VoWiFi 网关与鉴权域名；美国 / 新西兰运营商条目为漫游场景有意保留。
+# 已删除 primgw.vowifi2.spcsdns.net：公共 DNS 已返回 NXDOMAIN（Sprint 并入 T-Mobile 后退役）。
 # 修改后运行 scripts/build_uk_banks.py --ruleset UK-wifi-call 重新生成 MRS。
 domain_set:
   - crl.t-mobile.com
   - epdg.ims.2degrees.net.nz
-  - primgw.vowifi2.spcsdns.net
   - sentitlement2.mobile.att.net
   - vvm.mobile.att.net
   - wo.vzwwo.com

@@ -1,11 +1,11 @@
 # Twitch 域名；keyword 覆盖 ttvnw 统计与视频子域。
+# 已删除 twitch-ext.rootonline.de：第三方工具站（已 301 至 twitch-tools.rootonline.de），非 Twitch 基础设施。
 # 修改后运行 scripts/build_uk_banks.py --ruleset twitch_domain 重新生成 MRS。
 domain_suffix_set:
   - ext-twitch.tv
   - jtvnw.net
   - live-video.net
   - ttvnw.net
-  - twitch-ext.rootonline.de
   - twitch.tv
   - twitchcdn.net
   - twitchsvc.net
