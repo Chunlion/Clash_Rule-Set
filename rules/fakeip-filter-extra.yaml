@@ -9,7 +9,6 @@
 #   +.3gppnetwork.org（外部集与 vowifi 双覆盖）
 #   localhost.ptlogin2.qq.com / localhost.sec.qq.com（外部集覆盖）
 #   time.windows.com / time.google.com / time.apple.com（外部集覆盖）
-#   time-ios.apple.com（外部集未收录，但被下方 +.apple.com 吸收）
 #
 # 通配后缀的展开语义（Mihomo DomainSet，*.x 的 * 只匹配单个标签）：
 #   stun.*   → stun.X（stun 打头两级）与 X.stun.<任意深度>（eu.stun.twilio.com）
@@ -44,12 +43,13 @@ domain_set:
   - fcm.googleapis.com
   - fcm-xmpp.googleapis.com
   - iid.googleapis.com
+  - time-ios.apple.com        # iOS 时间同步
 domain_suffix_set:
   - ts.net                    # Tailscale MagicDNS
   - lan                       # 局域网：路由器、NAS、打印机
   - local                     # mDNS / Bonjour
   - home.arpa                 # RFC 8375 家庭网络域名（缺口一：Egern 侧已有 home.arpa → system）
-  - apple.com                 # APNs 推送与唤醒（缺口二：此前仅在 sniffer.skip-domain 排除嗅探）
+  - push.apple.com            # APNs 推送与唤醒
   - in-addr.arpa              # IPv4 反向解析
   - ip6.arpa                  # IPv6 反向解析
   - ntp.org                   # NTP；外部集只收 pool.ntp.org 等，未覆盖 ntp.org 本身

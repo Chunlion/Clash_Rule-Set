@@ -284,10 +284,10 @@ Fake-IP 过滤已收敛为**单一真源**：六份配置的 `fake-ip-filter` �
 | 类别 | 条目 |
 | --- | --- |
 | FCM / Google Play | `mtalk.google.com` 等 12 个 mtalk 主机 + `android.apis.google.com` + 6 个 googleapis 精确域名 |
-| APNs 推送与唤醒 | `+.apple.com`（同时吸收 `time-ios.apple.com` 等时间同步主机） |
+| APNs 推送与唤醒 | `+.push.apple.com` |
 | 家庭网络与局域网 | `+.home.arpa`（RFC 8375）、`+.lan`、`+.local` |
 | STUN / TURN 打洞 | `+.stun.*`、`+.stun.*.*`、`+.turn.*`、`+.turn.*.*`（覆盖 `eu.stun.twilio.com` 等前缀形态） |
-| 时间同步 | `+.ntp.org` |
+| 时间同步 | `+.ntp.org`、`time-ios.apple.com` |
 | 反向解析 | `+.in-addr.arpa`、`+.ip6.arpa` |
 | 连通性探测 | `+.msftconnecttest.com`、`+.msftncsi.com` |
 | Tailscale | `+.ts.net` |
