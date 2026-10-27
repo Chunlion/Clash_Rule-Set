@@ -16,3 +16,7 @@ domain_suffix_set:
 - paysend.com
 - transfergo.com
 - lemfi.com
+- lemonade.finance
+domain_set:
+- lemonadefi.app.link
+- lemfi.api.crowdin.com
