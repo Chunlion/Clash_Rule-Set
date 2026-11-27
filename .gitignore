@@ -1,8 +1,13 @@
 # Private local configuration
 # 设备定制配置内含订阅凭据与 Tailscale 密钥，只允许留在本地，禁止提交或推送。
 /F50.yaml
+/F50-FakeIP.yaml
+/F50-分享版.yaml
+/F50-分享版-FakeIP.yaml
 /Sparkle.yaml
 /Bettbox.yaml
+/FlClash.yaml
+/FlClash-Android.yaml
 /Tailscale.yaml
 /Egern 精细分流.yaml
 /private-download/

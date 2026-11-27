@@ -131,7 +131,7 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 | TCP Keep Alive | 600 / 60 秒 | 空闲 600 秒，间隔 60 秒探测 |
 | 控制面板     | Zashboard     | external-ui-url 已预置     |
 | NTP          | 30 分钟       | 内核校时，默认不写系统时间 |
-| Fallback 检测 | 180 秒 / 2 次 | 更快发现并切换不可用节点   |
+| Fallback 检测 | 120 秒 / 1 次（lazy） | 按需探测，最快切换不可用节点 |
 | URL-Test 容差 | 30 ms         | 新节点至少快 30 ms 才切换  |
 | 测速状态     | HTTP 204      | 仅 204 响应视为可用节点    |
 | 空节点回退   | REJECT        | 动态节点组为空时自动拒绝   |
@@ -245,8 +245,8 @@ https://raw.githubusercontent.com/Chunlion/Clash_Rule-Set/main/Chunlion_Rule-Set
 ### 1️⃣ Fake-IP 增强模式
 
 - `enhanced-mode: fake-ip`
-- `fake-ip-range: 198.18.0.1/16`
-- `DNS ipv6: false`（DNS 层关闭 IPv6 解析）
+- `fake-ip-range: 198.18.0.1/16` / `fake-ip-range6: fc00::/18`
+- `ipv6: true` 与 `DNS ipv6: true`（启用双栈支持与 Fake-IPv6 地址池）
 
 ### 2️⃣ 规则优先解析
 

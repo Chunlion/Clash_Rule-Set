@@ -14,8 +14,8 @@ Anchor_AI: &Anchor_AI {type: select, default-selected: 家宽节点, proxies: [�
 Anchor_UK: &Anchor_UK {type: select, default-selected: 欧洲节点, proxies: [欧洲节点,美国节点,其他节点,DIRECT]}
 # ③ 策略锚点
 Anchor_HS: &Anchor_HS {type: select, empty-fallback: REJECT, include-all: true, exclude-type: direct}
-Anchor_UT_Global: &Anchor_UT_Global {type: url-test, empty-fallback: REJECT, expected-status: 204, url: 'https://www.google.com/generate_204', interval: 300, tolerance: 30, timeout: 2000, hidden: true, include-all: true, exclude-type: direct}
-Anchor_FB_Global: &Anchor_FB_Global {type: fallback, empty-fallback: REJECT, expected-status: 204, url: 'https://www.google.com/generate_204', interval: 180, timeout: 2000, max-failed-times: 2, hidden: true}
+Anchor_UT_Global: &Anchor_UT_Global {type: url-test, empty-fallback: REJECT, expected-status: 204, url: 'https://www.google.com/generate_204', interval: 300, lazy: true, tolerance: 30, timeout: 2500, hidden: true, include-all: true, exclude-type: direct}
+Anchor_FB_Global: &Anchor_FB_Global {type: fallback, empty-fallback: REJECT, expected-status: 204, url: 'https://www.google.com/generate_204', interval: 120, lazy: true, timeout: 2500, max-failed-times: 1, hidden: true}
 # ④ 规则锚点
 Anchor_DN: &Anchor_DN {type: http, interval: 86400, size-limit: 8388608, proxy: 一键代理, behavior: domain, format: mrs}
 Anchor_IP: &Anchor_IP {type: http, interval: 86400, size-limit: 8388608, proxy: 一键代理, behavior: ipcidr, format: mrs}
@@ -54,7 +54,7 @@ unified-delay: true                                                     # 统一
 keep-alive-idle: 600                                                    # 保活空闲  TCP Keep Alive 最大空闲时间，降低移动设备频繁探测
 keep-alive-interval: 60                                                 # 保活探测  TCP Keep Alive 探测间隔
 log-level: info                                                         # 日志级别  silent（静默）/ error（错误）/ warning（警告）/ info（信息）/ debug（调试）
-ipv6: false                                                             # 网络协议  是否启用 IPv6 支持
+ipv6: true                                                              # 网络协议  启用 IPv6 支持
 profile:
   store-selected: true                                                  # 保存选择  记住上次选择的节点和策略组
   store-fake-ip: true                                                   # 保存映射  Fake-IP 映射以加快 DNS 命中
@@ -136,9 +136,10 @@ dns:
   use-system-hosts: true                                                # 系统 Hosts  DNS 查询同时遵循系统 hosts
   cache-algorithm: arc                                                  # 缓存算法  自适应替换缓存（较LRU命中率更优）
   listen: 127.0.0.1:7874                                                # 监听服务  仅监听本机，避免 DNS 暴露到局域网
-  ipv6: false                                                           # 网络协议  关闭 IPv6 DNS 解析支持(防止DNS泄露)
-  enhanced-mode: fake-ip                                                # 增强模式  FDNS 增强模式（Fake-IP，用于防止 DNS 泄露）
-  fake-ip-range: 198.18.0.1/16                                          # 虚拟地址  Fake-IP 虚拟地址池范围
+  ipv6: true                                                            # 网络协议  启用 IPv6 DNS 解析支持
+  enhanced-mode: fake-ip                                                # 增强模式  DNS 增强模式（Fake-IP，用于防止 DNS 泄露）
+  fake-ip-range: 198.18.0.1/16                                          # 虚拟地址  Fake-IPv4 虚拟地址池范围
+  fake-ip-range6: fc00::/18                                             # 虚拟地址  Fake-IPv6 虚拟地址池范围
   fake-ip-filter-mode: blacklist                                        # 过滤模式  Fake-IP 过滤模式（命中规则则返回真实 IP）
   respect-rules: true                                                   # 遵循规则  强制遵循规则顺序
   prefer-h3: false                                                      # 关闭 HTTP/3 支持

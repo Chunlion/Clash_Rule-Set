@@ -40,8 +40,13 @@ LOCAL_RULE_URL_PREFIX = "https://raw.githubusercontent.com/Chunlion/Clash_Rule-S
 # 只允许公开内容进仓库：设备定制配置与运行时状态必须留在本地。
 PRIVATE_CONFIG_NAMES = (
     "F50.yaml",
+    "F50-FakeIP.yaml",
+    "F50-分享版.yaml",
+    "F50-分享版-FakeIP.yaml",
     "Sparkle.yaml",
     "Bettbox.yaml",
+    "FlClash.yaml",
+    "FlClash-Android.yaml",
     "Tailscale.yaml",
     "Egern 精细分流.yaml",
 )
@@ -348,13 +353,13 @@ def validate_pair(stem: str) -> None:
         if group["type"] == "fallback":
             if group.get("empty-fallback") != "REJECT" or group.get("expected-status") != 204:
                 raise AssertionError(f"{stem}: fallback groups must reject empty members and require HTTP 204")
-            if group.get("interval") != 180 or group.get("max-failed-times") != 2:
+            if group.get("interval") != 120 or group.get("max-failed-times") != 1 or group.get("lazy") is not True:
                 raise AssertionError(f"{stem}: fallback health-check settings mismatch")
         elif group["type"] == "url-test":
             if group.get("empty-fallback") != "REJECT" or group.get("expected-status") != 204:
                 raise AssertionError(f"{stem}: url-test groups must reject empty members and require HTTP 204")
-            if group.get("tolerance") != 30:
-                raise AssertionError(f"{stem}: url-test tolerance must be 30 ms")
+            if group.get("tolerance") != 30 or group.get("lazy") is not True:
+                raise AssertionError(f"{stem}: url-test tolerance/lazy mismatch")
         elif group["type"] == "load-balance":
             if group.get("empty-fallback") != "REJECT" or group.get("expected-status") != 204:
                 raise AssertionError(f"{stem}: load-balance groups must reject empty members and require HTTP 204")

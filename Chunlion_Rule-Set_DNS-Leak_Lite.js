@@ -102,7 +102,7 @@ function main(config) {
   config['keep-alive-idle'] = 600;
   config['keep-alive-interval'] = 60;
   config['log-level'] = 'info';
-  config['ipv6'] = false;
+  config['ipv6'] = true;
   config['profile'] = {
     'store-selected': true,
     'store-fake-ip': true
@@ -187,9 +187,10 @@ function main(config) {
     'use-system-hosts': true,
     'cache-algorithm': 'arc',
     'listen': '127.0.0.1:7874',
-    'ipv6': false,
+    'ipv6': true,
     'enhanced-mode': 'fake-ip',
     'fake-ip-range': '198.18.0.1/16',
+    'fake-ip-range6': 'fc00::/18',
     'fake-ip-filter-mode': 'blacklist',
     'respect-rules': true,
     'prefer-h3': false,
@@ -263,8 +264,8 @@ function main(config) {
     { name: 'VoWiFi', type: 'select', proxies: ['欧洲节点', '美国节点', '其他节点', 'DIRECT'], icon: 'https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/WiFi.png' },
     { name: '兜底流量', type: 'select', proxies: Anchor_OB, icon: 'https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png' },
     // 区域与特殊策略组
-    { name: '全局最优', type: 'url-test', url: 'https://www.google.com/generate_204', interval: 300, tolerance: 30, timeout: 2000, hidden: true, 'include-all': true, 'exclude-filter': excludeInfoFilter },
-    { name: '稳定备用', type: 'fallback', url: 'https://www.google.com/generate_204', interval: 180, timeout: 2000, 'max-failed-times': 2, hidden: true, proxies: ['香港节点', '日本节点', '澳门节点', '新加坡节点', '韩国节点', '美国节点', '欧洲节点', '家宽节点', '其他节点'] },
+    { name: '全局最优', type: 'url-test', url: 'https://www.google.com/generate_204', interval: 300, lazy: true, tolerance: 30, timeout: 2500, hidden: true, 'include-all': true, 'exclude-filter': excludeInfoFilter },
+    { name: '稳定备用', type: 'fallback', url: 'https://www.google.com/generate_204', interval: 120, lazy: true, timeout: 2500, 'max-failed-times': 1, hidden: true, proxies: ['香港节点', '日本节点', '澳门节点', '新加坡节点', '韩国节点', '美国节点', '欧洲节点', '家宽节点', '其他节点'] },
     { name: '家宽节点', type: 'select', 'include-all': true, 'exclude-filter': excludeInfoFilter, filter: regexHOME, icon: 'https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/05icon/home.png' },
     { name: '香港节点', type: 'select', 'include-all': true, 'exclude-filter': excludeInfoFilter, filter: regexHK, icon: 'https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Hongkong(3).png' },
     { name: '日本节点', type: 'select', 'include-all': true, 'exclude-filter': excludeInfoFilter, filter: regexJP, icon: 'https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/01Country/Japan(2).png' },
